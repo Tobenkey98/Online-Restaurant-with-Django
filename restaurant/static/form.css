@@ -1,0 +1,202 @@
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
+
+
+@font-face{
+    font-family: myfont;
+    src: url(Playwrite_IN/static/PlaywriteIN-Regular.ttf);
+}
+.login{
+    background-image:linear-gradient(300deg, rgba(0, 0, 0, 0.785), rgba(0, 0, 0, 0.785)), url(images/Background_2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    /* height: 100%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.soft{
+    font-family: myfont;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+body{
+	margin:0;
+	color:#6a6f8c;
+	background:#c8c8c8;
+	font:600 16px/18px 'Open Sans',sans-serif;
+}
+
+/* .login-wrap{
+	width:100%;
+	margin:auto;
+	max-width:525px;
+	min-height:900px;
+	position:relative;
+	box-shadow:0 12px 15px 0 #1d1d1d65,0 17px 50px 0 #050505c5;
+} */
+.login-html{
+	width:100%;
+	height:90%;
+	border-radius: 40px;
+	position:absolute;
+	padding:90px 70px 50px 70px;
+	background:rgba(247, 245, 244);
+	
+}
+.login-html .sign-in-htm,
+.login-html .sign-up-htm{
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	position:absolute;
+	transform:rotateY(180deg);
+	backface-visibility:hidden;
+	transition:all .4s linear;
+}
+.login-html .sign-in,
+.login-html .sign-up,
+.login-form .group .check{
+	display:none;
+}
+.login-html .tab,
+.login-form .group .label,
+.login-form .group .button{
+	text-transform:uppercase;
+	
+}
+.login-html .tab{
+	font-size:22px;
+	margin-right:15px;
+	padding-bottom:5px;
+	margin:0 15px 10px 0;
+	display:inline-block;
+	border-bottom:2px solid transparent;
+}
+.login-html .sign-in:checked + .tab,
+.login-html .sign-up:checked + .tab{
+	color:#442f00c0;
+	border-color:#e69c00;
+}
+.login-form{
+	min-height:345px;
+	position:relative;
+	perspective:1000px;
+	transform-style:preserve-3d;
+}
+.login-form .group{
+	margin-bottom:15px;
+}
+.login-form .group .label,
+.login-form .group .input,
+.login-form .group .button{
+	width:100%;
+	color:#493200;
+	display:block;
+}
+.login-form .group .input{
+	border: 1px solid #e69c00;
+	font-size: 15px;
+	padding:15px 40px;
+}
+.login-form .group .button{
+	border: none;
+	padding:15px 20px;
+}
+.login-form .group .input,
+.login-form .group .button{
+	outline:none;
+	border-radius:25px;
+	background:rgba(255,255,255,.1);
+}
+/* .login-form .group input[data-type="password"]{
+	 text-security:circle; 
+	-webkit-text-security:circle;
+} */
+.login-form .group .label{
+	color:#aaa;
+	font-size:12px;
+}
+.login-form .group .button{
+	background:#e69c00;
+	color: whitesmoke;
+	transition: .5s;
+}
+.login-form .group .button:hover{
+	border: 1px solid #e69c00;
+	background: transparent;
+	color: black;
+}
+.login-form .group label .icons{
+	width:15px;
+	height:15px;
+	border-radius:2px;
+	position:relative;
+	display:inline-block;
+	background:rgba(255,255,255,.1);
+}
+.login-form .group label .icons:before,
+.login-form .group label .icons:after{
+	content:'';
+	width:10px;
+	height:2px;
+	background:#fff;
+	position:absolute;
+	transition:all .2s ease-in-out 0s;
+}
+.login-form .group label .icons:before{
+	left:3px;
+	width:5px;
+	bottom:6px;
+	transform:scale(0) rotate(0);
+}
+.login-form .group label .icons:after{
+	top:6px;
+	right:0;
+	transform:scale(0) rotate(0);
+}
+.login-form .group .check:checked + label, .icon{
+	color:#e69c00;
+}
+.login-form .group .check:checked + label .icons{
+	background:#e69c00;
+}
+.login-form .group .check:checked + label .icons:before{
+	transform:scale(1) rotate(45deg);
+}
+.login-form .group .check:checked + label .icons:after{
+	transform:scale(1) rotate(-45deg);
+}
+.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm{
+	transform:rotate(0);
+}
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
+	transform:rotate(0);
+}
+
+.hr{
+	height:2px;
+	margin:60px 0 50px 0;
+	background:rgba(255,255,255,.2);
+}
+.foot-lnk{
+	text-align:center;
+	/* margin-bottom: -500px; */
+	color: black;
+}
+.group{
+	position: relative;
+}
+.icon{
+	position: absolute;
+	top: 50%;
+	left: 20px;
+}
+.pass{
+	left: 90%;
+}

@@ -1,0 +1,209 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Soft Restaurant</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-icons-1.11.3/font/bootstrap-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'menu.css' %}">
+</head>
+<style>
+  body{
+    background-color: white;
+  }
+  .explore{
+    background-color: rgba(255, 255, 255, 0.747)!important;
+  }
+  .head{
+    background-color: white;
+    color:  #ffbe33;
+    transition: .5s;
+   
+  }
+   .icon{
+    position:relative;
+  }
+  #header-cart-count{
+    position: absolute;
+    left: -10px;
+    top: -5px;
+    font-size: 10px;
+  } 
+  .head.active{
+    background-color: white;
+    padding: 10px 20px;
+  }
+  .head.active a{
+    color: black !important;
+  }
+  .nav-link:hover, .search .icon:hover{
+      color:#e69c00 !important;
+  }
+  .navbar a{
+      color: black !important;
+      margin: 0 15px !important;
+      transition: .5s;
+      font-weight: bold;
+      font-size: 12px;
+  }
+  @font-face{
+      font-family: myfont;
+      src: url({% static 'Playwrite_IN/static/PlaywriteIN-Regular.ttf' %});
+  }
+  .navbar-brand{
+      font-family: myfont;
+      color:#ffffff;
+      font-size: 20px !important;
+  }
+  .navbar-brand img{
+      border-radius: 50%;
+  }
+  .menu-item {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform: translateY(-5px);
+    
+      height: 100%;
+  }
+  .menu-item.card{
+      height: 100%
+  }
+  
+  .menu-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .menu-item .card-img-top {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+  }
+  .menu-item .image{
+      height: 350px;
+  overflow: hidden;
+
+  }
+  
+  .menu-item .card-title {
+      font-weight: 600;
+  }
+  
+  .menu-item .price {
+      font-weight: 700;
+      color: #ffbe33;
+      font-size: 1.2rem;
+  }
+  
+  .availability-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+  }
+  
+</style>
+<body>
+    <header class="sticky-top head">
+        <nav class="navbar navbar-expand-lg py-3 px-5">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="#"><img src="{% static 'images/Restaurant_logo.jpg' %}" width="50"> Soft Restaurant</a>
+                <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                    <span class="fa fa-bars text-light"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link text-white" href="/home">HOME</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/about">ABOUT</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/contact_us">CONTACT</a></li>
+                    </ul>
+                    <div class="d-flex search text-decoration-none">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'user_account' %}" class="icon text-white"><i class="fa fa-user me-3 mt-2"></i></a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="icon text-white"><i class="fa fa-user me-3 mt-2"></i> Login</a>
+                        {% endif %}
+                        <a href="{% url 'cart' %}" class="icon text-white">
+                            <i class="fa fa-cart-shopping me-3 mt-2"></i>
+                            <span id="header-cart-count" class="badge bg-danger">0</span>
+                        </a>
+                        <a href="#" class="icon text-white"><i class="fa fa-search me-3 mt-2"></i></a>
+                    </div>
+                </div>
+            </div> 
+        </nav>
+    </header>
+
+    <script>
+      const header = document.querySelector('.head')
+
+      window.addEventListener('scroll', ()=>{
+        if(window.scrollY > 40){
+          header.classList.add('active')
+        }else{
+          header.classList.remove('active')
+        }
+      })
+  </script>
+
+    <div class="container-fluid">
+        <header class="py-4 text-center">
+            <h2 class="explore lead fs-2">Explore our menu and order your favorite dishes</h2>
+        </header>
+
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card category-sidebar">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Categories</h4>
+                    </div>
+                    <div class="list-group list-group-flush" id="category-list">
+                        <button class="list-group-item list-group-item-action active" data-category="all">All Items</button>
+                        {% for cat in categories %}
+                        <button class="list-group-item list-group-item-action" data-category="{{ cat.name|lower }}">{{ cat.name }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-9">
+                <div class="row mb-3" id="menu-items">
+                    <!-- Menu items will be populated here by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+       const menuItems = [
+            {% for item in menu_items %}
+            {
+                "id": {{ item.id }},
+                "name": "{{ item.name|escapejs }}",
+                "category": "{{ item.Category.name|lower|escapejs }}",
+                "description": "{{ item.description|default:''|escapejs }}",
+                "price": {{ item.price|floatformat:2 }},
+                "available": {{ item.available|lower }},
+                "image": "{% if item.image %}{{ item.image.url }}{% else %}https://via.placeholder.com/300x200{% endif %}",
+                "is_special": {{ item.is_special|lower }}
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+    </script>
+    <script src="{% static 'menu.js' %}"></script>
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+    
+    
+    
+    
+</body>
+</html>

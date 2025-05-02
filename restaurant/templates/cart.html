@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Soft Restaurant</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'menu.css' %}">
+</head>
+
+<style>
+    .head {
+        background-color: #fab217;
+        transition: .5s;
+        color: #ffbe33;
+    }
+    .icon {
+        position: relative;
+    }
+    #header-cart-count {
+        position: absolute;
+        left: -10px;
+        top: -5px;
+        font-size: 10px;
+    }
+    .head.active {
+        background-color: white;
+        padding: 10px 20px;
+    }
+    .head.active a {
+        color: black !important;
+    }
+    .nav-link:hover, .search .icon:hover {
+        color: #e69c00 !important;
+    }
+    .navbar a {
+        color: white !important;
+        margin: 0 15px !important;
+        transition: .5s;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    @font-face {
+        font-family: myfont;
+        src: url({% static 'Playwrite_IN/static/PlaywriteIN-Regular.ttf' %});
+    }
+    .navbar-brand {
+        font-family: myfont;
+        color: #ffffff;
+        font-size: 20px !important;
+    }
+    .navbar-brand img {
+        border-radius: 50%;
+    }
+    #checkout-link.disabled {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    } 
+    .quantity-controls button {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        font-size: 16px;
+        line-height: 1;
+        background-color: #e69c00;
+        color: white;
+        border: none;
+    }
+    .quantity-controls span {
+        width: 40px;
+        text-align: center;
+    }
+</style>
+<body>
+    <header class="sticky-top head">
+        <nav class="navbar navbar-expand-lg py-3 px-5">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="#"><img src="{% static 'images/Restaurant_logo.jpg' %}" width="50"> Soft Restaurant</a>
+                <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                    <span class="fa fa-bars text-light"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link text-white" href="/home">HOME</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/about">ABOUT</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/contact_us">CONTACT</a></li>
+                    </ul>
+                    <div class="d-flex search text-decoration-none">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'user_account' %}" class="icon text-white"><i class="fa fa-user me-3 mt-2"></i></a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="icon text-white"><i class="fa fa-user me-3 mt-2"></i> Login</a>
+                        {% endif %}
+                        <a href="{% url 'cart' %}" class="icon text-white">
+                            <i class="fa fa-cart-shopping me-3 mt-2"></i>
+                            <span id="header-cart-count" class="badge bg-danger">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div> 
+        </nav>
+    </header>
+
+    <script>
+        const header = document.querySelector('.head')
+  
+        window.addEventListener('scroll', ()=>{
+          if(window.scrollY > 40){
+            header.classList.add('active')
+          }else{
+            header.classList.remove('active')
+          }
+        })
+    </script>
+
+    <div class="container-fluid">
+        <header class="py-4 text-center">
+            <h2 class="lead fs-2">Your Cart</h2>
+        </header>
+
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <table class="table table-striped" id="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items">
+                        <!-- Cart items will be populated here by JS -->
+                    </tbody>
+                </table>
+                <div class="text-end">
+                    <h4>Grand Total: <span id="grand-total">₦0.00</span></h4
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <input type="hidden" id="user-email" value="{% if user.is_authenticated %}{{ user.email|escapejs }}{% else %}guest@example.com{% endif %}">
+                    <a href="#" id="checkout-link" class="btn btn-primary disabled">Checkout</a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center align-items-center">
+            <a href="{% url 'menu' %}" class="btn btn-warning text-white">Back to menu</a>
+        </div>
+    </div>
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="{% static 'cart.js' %}"></script>
+</body>
+</html>

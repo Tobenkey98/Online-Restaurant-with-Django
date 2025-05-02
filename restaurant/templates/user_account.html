@@ -1,0 +1,375 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css'%}">
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/style.css'%}">
+</head>
+<body class="bg-light">
+    <div class="container pt-5">
+        <div class="row">
+            <!-- Profile Section -->
+        <div class="col-md-4">
+            <div class="card mb-4 text-center">
+                <div class="card-body">
+                    
+                    <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}/static/default_profile.jpg{% endif %}"
+                        alt="Profile Picture"
+                        class="rounded-circle img-fluid" 
+                        style="width: 150px; height: 150px; object-fit: cover;">
+
+                    <h5 class="my-3">{{ user_info.name }}</h5>
+                    <p class="text-muted mb-1">@{{ user.username }}</p>
+                    <p class="text-muted mb-4">{{ user_profile.location|default:"Not Provided" }}</p>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-outline-warning text" data-bs-toggle="modal" data-bs-target="#editProfileForm">Edit Profile</button>
+                        
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- User Details & Edit Form -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>User Details</h4>
+                        <hr>
+                        <div class="row mb-2">
+                            <div class="col-sm-3"><strong>Full Name</strong></div>
+                            <div class="col-sm-9 text-muted">
+                                {{ user_info.name|default:"Not Provided" }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3"><strong>Email</strong></div>
+                            <div class="col-sm-9 text-muted">{{ user.email }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3"><strong>Username</strong></div>
+                            <div class="col-sm-9 text-muted">{{ user.username }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3"><strong>Phone</strong></div>
+                            <div class="col-sm-9 text-muted">
+                                {{ user_profile.phone|default:"Not Provided" }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3"><strong>Address</strong></div>
+                            <div class="col-sm-9 text-muted">
+                                {{ user_profile.address|default:"Not Provided" }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3"><strong>Location</strong></div>
+                            <div class="col-sm-9 text-muted">
+                                {{ user_profile.location|default:"Not Provided" }}
+                            </div>
+                        </div>
+                    </div>
+</div>
+
+
+            <!-- Edit Profile Form -->
+            <div class="modal fade" id="editProfileForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog mt-3 ">
+                    <div class="card mb-4 modal-content">
+                    <div class="card-body">
+                        <h5 class="text-center">Update Profile</h5>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="text" name="phone" class="form-control" value="{{ user_profile.phone|default_if_none:'' }}">
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" name="address" class="form-control" value="{{user_profile.address.|default_if_none:'' }}">
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" name="location" class="form-control" value="{{ user_profile.location|default_if_none:'' }}">
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Profile Image</label>
+                                <input type="file" name="profile_image" class="form-control">
+                                
+                            </div>
+                
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-success text-white">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#editProfileForm">Cancel</button>
+                                
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+                </div>
+              </div>
+            
+            
+
+              {% if messages %}
+                <div class="mb-3">
+                    {% for message in messages %}
+                    <div class="alert {% if message.tags == 'info' %}alert-info{% else %}alert-{{ message.tags }}{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+<!-- Notifications -->
+                <div class="mb-4">
+                    {% if notifications %}
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i> <span class="badge bg-danger">{{ notifications|length }}</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+                            {% for notif in notifications %}
+                            {% if notif.user_id == user.id %}
+                            <li class="dropdown-item">{{ notif.message }}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% else %}
+                    <button class="btn btn-warning text-white" disabled><i class="fas fa-bell"></i> <span class="badge bg-secondary">0</span></button>
+                    {% endif %}
+                </div>
+            
+
+            <!-- Order History -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Order History</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr >
+                                    <th>Order ID</th>
+                                    <th>Product</th>
+                                    <th>Date</th>
+                                    <th>Quantity</th>
+                                    <th>Total Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.product_name }}</td>
+                                    <td>{{ order.order_date|date:"Y-m-d" }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>₦{{ order.total_price|floatformat:2 }}</td>
+                                    <td <span class="badge bg-{{ order.status_class }}">
+                                                {{ order.status }}
+                                            </span>
+                                    </td>
+                                    
+
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No orders found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .loading{
+        background-color: white;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: visibility .5s, opacity .5s;
+    }    
+    .loading-hidden{
+        visibility: none;
+        opacity: 0;
+    }
+    .spinner-border{
+        margin-left: 20px;
+    }
+</style>
+
+<div class="loading">
+<div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+</div>
+
+
+
+<script>
+const loading = document.querySelector('.loading');
+window.addEventListener('load', function () {
+    loading.classList.add('loading-hidden');
+
+    loading.addEventListener('transitionend', function () {
+        loading.classList.remove('loading');
+    });
+
+});    
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js'%}"></script>
+    <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js'%}"></script>
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/script.js'%}"></script>
+</body>
+</html>

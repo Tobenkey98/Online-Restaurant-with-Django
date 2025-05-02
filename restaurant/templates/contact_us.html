@@ -1,0 +1,348 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css'%}">
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/style.css'%}">
+    <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
+    <link rel="stylesheet" href="{% static 'restaurant.css'%}">
+</head>
+<body>
+    <div class="bg-box">
+
+        <style>
+            body{
+              background-color: white;
+            }
+            header{
+              background-color: transparent;
+              transition: .5s;
+            }
+            header.active{
+              background-color: white;
+              padding: 10px 20px;
+            }
+            header.active a{
+              color: black !important;
+            }
+            .logoutmodal:hover{
+              background-color: white!important;
+              color: black!important;
+            }
+          </style>
+
+<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="card logoutmodal">
+            <div class="card-body">
+              <h4 class="text-center">Are You sure you want to sign out?</h4>
+                  <div class="text-center">
+                    <a href="/logout" class="btn btn-warning me-5">Yes</a>
+              <a href="/home" class="btn btn-danger ">No</a>
+                  </div>
+            </div>
+          </div>
+        </div>
+  
+    </div>
+  </div>
+
+
+        <!-- header section -->
+        <header class="fixed-top">
+            <nav class="navbar navbar-expand-lg py-3 px-5">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50"> Soft Restaurant</a>
+                  <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="fa fa-bars text-light"></span>
+                  </button>
+                  
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/home">HOME</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/about">ABOUT</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/contact">CONTACT</a>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          MENU
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="appetizer.html">APPETIZER</a></li>
+                          <li><a class="dropdown-item" href="main.html">MAIN COURSES</a></li>
+                          <li><a class="dropdown-item" href="desserts.html">DESSERTS</a></li>
+                          <li><a class="dropdown-item" href="beverages.html">BEVERAGES</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <div class="d-flex search text-decoration-none">
+                          {% if user.is_authenticated %}
+                              
+
+                                <a href="{% url 'user_account'%}" class="icon">
+                                <i class="fa fa-user me-3 mt-2"></i></a>
+                          {% else %}
+                                <a href={% url 'login' %} class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
+                          {% endif %}
+                        {% comment %} <a href="/user_account" class="icon"><i class="fa fa-user me-3 mt-2"></i></a> {% endcomment %}
+                        <a href="#" class="icon"><i class="fa fa-cart-shopping me-3 mt-2"></i></a>
+                        <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a>
+                      <a href="" class="btn btn-outline-warning text-light ms-4"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Sign Out</a>
+
+                     
+
+                    </div>
+                  </div>
+                </div> 
+              </nav>
+        </header>
+         <!-- End of Header Section -->
+          <script>
+              const header = document.querySelector('header')
+
+              window.addEventListener('scroll', ()=>{
+                if(window.scrollY > 40){
+                  header.classList.add('active')
+                }else{
+                  header.classList.remove('active')
+                }
+              })
+          </script>
+          <!-- Slider Section -->
+           <section class="sliding p-4">
+            <div id="carouselExampleIndicators" class="carousel slide mt-4">
+                <ol class="carousel-indicators">
+                  <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></li>
+                  <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></li>
+                  <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7 col-lg-6">
+                                <div class="details ms-5">
+                                    <h1 class="word">
+                                        Your No. 1 Online Restaurant
+                                    </h1>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum ullam quo a ex magnam doloremque dignissimos quia repellat! Architecto, perferendis.</p>
+                                    <div class="btn-box">
+                                        <a href="order.html" class="btn1">
+                                            Order Now
+                                        </a>
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                        
+                                
+        
+                        </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7 col-lg-6">
+                                <div class="details">
+                                    <h1 class="word">
+                                        Your No. 1 Online Restaurant
+                                    </h1>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis deleniti quia vitae, expedita magnam aliquam quas placeat dolore iure nulla?</p>
+                                    <div class="btn-box">
+                                        <a href="order.html" class="btn1">
+                                            Order Now
+                                        </a>
+                                        
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7 col-lg-6">
+                                <div class="details">
+                                    <h1 class="word">
+                                        Your No. 1 Online Restaurant
+                                    </h1>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis deleniti quia vitae, expedita magnam aliquam quas placeat dolore iure nulla?</p>
+                                    <div class="btn-box">
+                                        <a href="order.html" class="btn1">
+                                            Order Now
+                                        </a>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            
+              </div>
+           </section>
+
+        </div>
+        
+    </div>
+
+     <!-- Contact Form -->
+     <section class="contact">
+        <div class="container  p-2">
+          <div class="row">
+              <h3></h3><br><br>
+              <div class="col-md-4">
+                  <div class="first">
+                      <span class="arrow"><i class="fa fa-location-arrow"></i></span>
+                      <div class="locate">
+                          <h4>Location</h4>
+                          <p>5, Main Street, City</p>
+                      </div>
+                  </div>
+                  <div class="second">
+                      <span class="clock"><i class="fa fa-clock"></i></span>
+                      <div class="hours ">
+                          <h4>Open Hours</h4>
+                          <p>Mondays-Saturdays: <br>09:00 AM - 23:00 PM</p>
+                      </div>
+                  </div>
+                  <div class="third">
+                     <span class="envelope"><i class="fa fa-envelope"></i></span> 
+                      <div class="email ">
+                          <h4>Email</h4>
+                          <a href="mailto:holuwartobby96@gmail.com" class="p">holuwartobby96@gmail.com</a>
+                      </div>
+                  </div>
+                  <div class="forth">
+                      <span class="phone"><i class="fa fa-phone"></i></span>
+                      <div class="number ">
+                          <h4>Call</h4>
+                          <a href="tel:+2348107014197" class="n">+2348107014197</a>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-8">
+                  <form action="" method="post" class="">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group mb-4">
+                                  <input id="my-input" class="form-control" type="text" name="" placeholder="Your Name" required>
+                                  <div class="invalid-feedback">Please enter a valid name</div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group mb-4">
+                                  <input id="my-input" class="form-control" type="email" name="" placeholder="Your Email" required>
+                                  <div class="invalid-feedback">Please enter a valid email</div>
+                              </div>
+                          </div>
+                      
+                              <div class="form-group mb-4">
+                                  <input id="my-input" class="form-control" type="text" name="" placeholder="Subject" required>
+                                  <div class="invalid-feedback">Please enter a valid Subject</div>
+                              </div>
+                              <div class="form-group mb-4">
+                                  <textarea id="my-textarea" class="form-control" rows="10" placeholder="Your Message" style="resize: none;" required></textarea>
+                                  <div class="invalid-feedback">Please enter a valid Message</div>
+                              </div>
+                              <div class="text-center mb-4">
+                                  <button type="submit" class="btn btn-warning py-2 px-3 mt-5" name="sub_reg" style="border-radius: 2pc;">Send Message</button>
+                              </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      
+          
+      </div>
+      
+       </section>
+
+       <!-- footer -->
+      <footer class="opin">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="opin-image  align-items-center">
+              <img src="{% static 'images/Restaurant_logo.jpg'%}" alt="">
+              <span class="rest">Soft Restaurant</span>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, in quae iste, quod ducimus eos repellendus libero deserunt atque harum omnis molestias saepe, corrupti nobis non quam voluptates ratione pariatur.</p>
+              </div>
+          </div>
+
+          <div class="col-md-4 mt-5 ms-5">
+            <div class="opin-social">
+              <h4 class="follow mb-5 ">Follow Us</h4>
+              <ul class="list-items">
+                <div class="list_1 mb-3">
+                  <li class="list-item list-unstyled">
+                    <a href="#" ><i class="fab fa-facebook-f "></i></a>
+                    <span class="face">Soft Restaurant</span>
+                  </li>
+                </div>
+                <div class="list_2 mb-3">
+                  <li class="list-item list-unstyled">
+                    <a href="#" ><i class="fab fa-x-twitter"></i></a>
+                    <span class="face">Soft Restaurant</span>
+                  </li>
+                </div>
+                <div class="list_3 mb-3">
+                  <li class="list-item list-unstyled">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <span class="face">@soft Restaurant</span>
+                  </li>
+                </div>
+                <div class="list_4 mb-3">
+                  <li class="list-item list-unstyled">
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <span class="face">@soft Restaurant</span>
+                  </li>
+                </div>
+                
+              </ul>
+
+          </div>
+          
+        </div>
+      </div>
+        </div>
+        
+        
+        <div class="copy text-center p-4">
+        <p>&copy; Copyright Soft Restaurant 2025</p>
+        </div>
+      </footer>
+
+    
+
+
+
+
+
+
+
+
+
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js'%}"></script>
+    <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js'%}"></script>
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/script.js'%}"></script>
+</body>
+</html>

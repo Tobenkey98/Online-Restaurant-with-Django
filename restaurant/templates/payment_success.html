@@ -1,0 +1,53 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+    <style>
+        .success-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .payment-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5 success-container">
+        <div class="alert alert-success text-center">
+            <h2><i class="fas fa-check-circle"></i> Payment Successful!</h2>
+            <div class="my-4">
+                <p class="lead">Thank you for your order!</p>
+                {% if payment %}
+                    <div class="payment-details text-start">
+                        <p><strong>Reference:</strong> {{ payment.reference }}</p>
+                        <p><strong>Amount:</strong> ₦{{ payment.amount|floatformat:2 }}</p>
+                        <p><strong>Date:</strong> {{ payment.created_at|date:"F j, Y H:i" }}</p>
+                    </div>
+                {% endif %}
+                <p class="mt-3">A confirmation has been sent to your email.</p>
+            </div>
+            <div class="mt-4 d-grid gap-2 d-md-block">
+                <a href="{% url 'homepage' %}" class="btn btn-primary me-md-2">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="{% url 'menu' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-utensils"></i> Order Again
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
+</body>
+</html>
