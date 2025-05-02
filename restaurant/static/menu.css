@@ -1,0 +1,97 @@
+/* General Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 2rem;
+}
+
+/* Category Sidebar */
+.category-sidebar {
+    position: sticky;
+    top: 20px;
+}
+
+#category-list .active{
+    background-color: #f8ad0a!important;
+    border: none!important;
+    color: white!important;
+}
+
+/* Menu Item Card */
+.menu-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 1.5rem;
+    height: 100%;
+}
+.menu-item.card{
+    height: 400px;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item .card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.menu-item .card-title {
+    font-weight: 600;
+}
+
+.menu-item .price {
+    font-weight: 700;
+    color: #ffbe33;
+    font-size: 1.2rem;
+}
+
+.availability-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Cart Styles */
+#cart-items {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cart-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-remove {
+    cursor: pointer;
+    color: #dc3545;
+}
+
+/* Category Pills */
+.category-pill {
+    background-color: #6c757d;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .category-sidebar {
+        position: static;
+    }
+}

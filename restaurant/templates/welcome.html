@@ -1,0 +1,233 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %} {% endblock title %}</title>
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/style.css' %}">
+        <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
+        <link rel="stylesheet" href="{% static 'restaurant.css'%}">
+        
+
+    </head>
+     <body>
+         <div class="logo_area">
+
+    <div class="bg-box">
+    <!-- header section -->
+    <header class="">
+        <nav class="navbar navbar-expand-lg py-3 px-5">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg' %}" width="50"> Soft Restaurant</a>
+              <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="fa fa-bars text-light"></span>
+              </button>
+              
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.html"></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="about.html"></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="contact.html"></a>
+                  </li>
+                  <li class="nav-item dropdown d-none">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      
+                    </a>
+                    <ul class="dropdown-menu d-none">
+                      <li><a class="dropdown-item" href="appetizer.html"></a></li>
+                      <li><a class="dropdown-item" href="main.html"></a></li>
+                      <li><a class="dropdown-item" href="desserts.html"></a></li>
+                      <li><a class="dropdown-item" href="beverages.html"></a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <div class="d-flex search text-decoration-none">
+                    <a href="#" class="icon"><i class=""></i></a>
+                    <a href="#" class="icon"><i class=""></i></a>
+                    <a href="#" class="icon"><i class=""></i></a>
+                  <a href="/login" class="btn btn-outline-warning text-light ms-4" type="submit">Register with us</a>
+                </div>
+              </div>
+            </div> 
+          </nav>
+    </header>
+     <!-- End of Header Section -->
+     
+      <!-- Slider Section -->
+       <section class="sliding ">
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-7 col-lg-6">
+                          <div class="details ms-5">
+                              <h1 class="word">
+                                Welcome to Soft Restaurant 🍽️
+                              </h1>
+                              <p>🚀 Delicious Meals, Just a Click Away! 🚀
+                                Order your favorite dishes online and enjoy restaurant-quality food from the comfort of your home.
+                                
+                                🛒 Browse Our Menu & Order Now!</p> <br>
+                              <div class="btn-box">
+                                  <a href="/login" class="btn1">
+                                      Order Now
+                                  </a>
+                              </div>
+                          </div>
+                         
+                      </div>
+          
+                      <!-- <div class="col-md-5 col-lg-6">
+                          <img src="images/Chef_Potrait.png"  alt="">
+                      </div> -->
+                  </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-7 col-lg-6">
+                          <div class="details">
+                              <h1 class="word">
+                                Fresh, Fast & Flavorful! 🍔🍕🥗
+                              </h1>
+                              <p>🔥 Made with Fresh Ingredients
+                                ⏳ Fast & Reliable Order Processing
+                                💳 Secure & Easy Online Payment
+                                
+                                📍 Your next meal is just a tap away!</p>
+                              <div class="btn-box">
+                                  <a href="/login" class="btn1">
+                                      Order Now
+                                  </a>
+                                  
+                              </div>
+                          </div>
+                         
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-7 col-lg-6">
+                          <div class="details">
+                              <h1 class="word">
+                                How It Works? 🛒
+                              </h1>
+                              <p>1️⃣ Browse Our Menu – Choose from a variety of delicious meals. <br>
+                                2️⃣ Place Your Order – Add items to your cart & checkout securely. <br>
+                                3️⃣ Enjoy Your Meal – Pick up or get it delivered to your doorstep! <br>
+                                
+                                🚀 Order Now & Savor the Taste!</p>
+                              <div class="btn-box">
+                                  <a href="/login" class="btn1">
+                                      Order Now
+                                  </a>
+                              </div>
+                          </div>
+                         
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       </section>
+
+    </div>
+    
+  </div>
+
+
+
+
+
+
+  <style>
+    .loading{
+        background-color: white;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: visibility .5s, opacity .5s;
+    }    
+    .loading-hidden{
+        visibility: none;
+        opacity: 0;
+    }
+    .spinner-border{
+        margin-left: 20px;
+    }
+</style>
+
+<div class="loading">
+<div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+</div>
+
+
+
+<script>
+const loading = document.querySelector('.loading');
+window.addEventListener('load', function () {
+    loading.classList.add('loading-hidden');
+
+    loading.addEventListener('transitionend', function () {
+        loading.classList.remove('loading');
+    });
+
+});    
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
+        <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+        <script src="{% static 'bootstrap-5.3.3/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/script.js' %}"></script>
+
+    </body>
+</html>
