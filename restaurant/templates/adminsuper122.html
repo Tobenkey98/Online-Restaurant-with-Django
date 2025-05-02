@@ -1,0 +1,1004 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-icons-1.11.3/font/bootstrap-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_dashboard.css' %}">
+</head>
+<body>
+    <style>
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        padding-top: 1rem;
+        top: 0;
+        z-index: 10000;
+        
+}
+.sidebar a{
+    text-wrap: nowrap;
+}
+    </style>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-warning text-white p-3 position-sticky">
+            <div class="d-flex align-items-center mb-4 px-2">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils-crossed"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+                </div>
+                <h4 class=" food py-4 px-2 m-0 fw-bold">Food Admin</h4>
+            </div>
+            
+            <div class="nav flex-column">
+                <a href="{% url 'adminsuper122' %}?tab=dashboard" class="nav-link {% if active_tab == 'dashboard' %}active{% endif %}" id="v-pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dashboard" role="tab" aria-controls="v-pills-dashboard" aria-selected="{% if active_tab == 'dashboard' %}true{% else %}false{% endif %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                    <span class="fw-bold">Dashboard</span>
+                </a>
+
+                <a href="{% url 'adminsuper122' %}?tab=menu" class="nav-link {% if active_tab == 'menu' %}active{% endif %}" id="v-pills-menu-tab" data-bs-toggle="pill" data-bs-target="#v-pills-menu" role="tab" aria-controls="v-pills-menu" aria-selected="{% if active_tab == 'menu' %}true{% else %}false{% endif %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                    <span class="fw-bold">Menu Management</span>
+                </a>
+
+                <a href="{% url 'adminsuper122' %}?tab=orders" class="nav-link {% if active_tab == 'orders' %}active{% endif %}" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" role="tab" aria-controls="v-pills-orders" aria-selected="{% if active_tab == 'orders' %}true{% else %}false{% endif %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+                    <span class="fw-bold">Order Mangement</span>
+                </a>
+
+                {% comment %} <a href="{% url 'adminsuper122' %}?tab=payments" class="nav-link {% if active_tab == 'payments' %}active{% endif %}" id="v-pills-payments-tab">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="14" x="2" y="5" rx="2"/>
+                        <rect width="4" height="4" x="6" y="9" fill="currentColor"/>
+                        <path d="M18 9h.01"/>
+                        <path d="M18 13h.01"/>
+                    </svg>
+                    <span class="fw-bold">Payments</span>
+                </a> {% endcomment %}
+               
+                <a href="{% url 'adminsuper122' %}?tab=users" class="nav-link {% if active_tab == 'users' %}active{% endif %}" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" role="tab" aria-controls="v-pills-users" aria-selected="{% if active_tab == 'users' %}true{% else %}false{% endif %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span class="fw-bold">Users</span>
+                </a>
+                <a href="{% url 'adminsuper122' %}?tab=profile" class="nav-link {% if active_tab == 'profile' %}active{% endif %}" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="{% if active_tab == 'profile' %}true{% else %}false{% endif %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="fw-bold">Profile</span>
+                </a>
+                <a href="{% url 'adminsuper122' %}?tab=settings" class="nav-link {% if active_tab == 'settings' %}active{% endif %}" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="{% if active_tab == 'settings' %}true{% else %}false{% endif %} ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span class="fw-bold">Settings</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center">
+                        <input type="search" class="form-control" placeholder="Search..." name="q">
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-lg bg-warning text-light position-relative">
+                            <span class="bi bi-bell"></span>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ notification_count }}
+                            </span>
+                        </button>
+                        <div class="d-flex align-items-center ms-5">
+                            <div class="dropdown">
+                                <div class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a href="#" class="text-dark text-decoration-none" id="profileDropdown">
+                                        <img src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}https://via.placeholder.com/150{% endif %}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
+                                        <span>{{ user.full_name|default:user.username }}</span>
+                                    </a>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{% url 'adminsuper122' %}?tab=profile">Profile</a></li>
+                                    <li><a class="dropdown-item text-light bg-danger" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Tab Content -->
+            <section class="tab-content" id="v-pills-tabContent">
+                <!-- Dashboard Tab -->
+                <main class="tab-pane fade {% if active_tab == 'dashboard' %}show active{% endif %}" id="v-pills-dashboard" role="tabpanel" aria-labelledby="v-pills-dashboard-tab" tabindex="0">
+                    <div class="p-4">
+                        <!-- Stats Cards -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag text-success"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                                        </div>
+                                        <div>
+                                            <h6 class="card-subtitle mb-2 text-muted">Total Orders</h6>
+                                            <h2 class="card-title mb-0">{{ total_orders }}</h2>
+                                            <div class="text-success small mt-1">
+                                                <span>↑ {{ order_growth }}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign text-primary"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                        </div>
+                                        <div>
+                                            <h6 class="card-subtitle mb-2 text-muted">Total Revenue</h6>
+                                            <h2 class="card-title mb-0">₦{{ total_revenue }}</h2>
+                                            <div class="text-success small mt-1">
+                                                <span class="mb-0">↑ {{ revenue_growth }}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users text-info"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                        </div>
+                                        <div>
+                                            <h6 class="card-subtitle mb-1 text-muted">Customers</h6>
+                                            <h2 class="card-title mb-0">{{ total_customers }}</h2>
+                                            <div class="text-success small mt-1">
+                                                <span class="mb-0">↑ {{ customer_growth }}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils-crossed text-warning"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+                                        </div>
+                                        <div>
+                                            <h6 class="card-subtitle mb-2 text-muted">Menu Items</h6>
+                                            <h2 class="card-title mb-0">{{ total_menu_items }}</h2>
+                                            <div class="text-success small mt-1">
+                                                <span>↑ {{ menu_growth }}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Orders -->
+                        <div class="card mb-4 px-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Orders</h5>
+                                <a href="{% url 'adminsuper122' %}?tab=orders" class="btn btn-warning text-white btn-sm">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Order ID</th>
+                                            <th>Product Name</th>
+                                            <th>Total Price</th>
+                                            <th>Quantity</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in recent_orders %}
+                                        <tr>
+                                            <td>{{ order.user.username|default_if_none:'Unknown' }}</td>
+                                            <td>{{ order.order_id }}</td>
+                                            <td>{{ order.product_name }}</td>
+                                            <td>₦{{ order.total_price|floatformat:2 }}</td>
+                                            <td>{{ order.quantity }}</td>
+                                            <td>{{ order.order_date|date:"M d, Y H:i" }}</td>
+                                            <td><span class="badge bg-{{ order.status_class }}">{{ order.status }}</span></td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td>Sarah Johnson</td>
+                                            <td>#12345</td>
+                                            <td>Margherita Pizza</td>
+                                            <td>₦45,000</td>
+                                            <td>2</td>
+                                            <td>Mar 08, 2025 14:30</td>
+                                            <td><span class="badge bg-success">Completed</span></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Popular Items -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Popular Menu Items</h5>
+                                <a href="{% url 'adminsuper122' %}?tab=menu" class="btn btn-warning text-white btn-sm">View Menu</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    {% for item in popular_items %}
+                                    <div class="col-md-3">
+                                        <div class="card h-100">
+                                            {% if item.image %}
+                                                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 150px; object-fit: cover;">
+                                            {% else %}
+                                                <div class="text-center py-4 bg-light">
+                                                    <i class="fas fa-utensils fa-3x text-muted"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ item.name }}</h6>
+                                                <p class="card-text text-muted small">Orders: {{ item.num_orders|default:0 }}</p>
+                                                <p class="card-text"><strong>₦{{ item.price|floatformat:2 }}</strong></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="col-12 text-center py-4">
+                                        <p class="text-muted">No popular items yet. Start taking orders!</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Orders -->
+                <div class="tab-pane fade {% if active_tab == 'orders' %}show active{% endif %}" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab" tabindex="0">
+                    <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="p-4">Order Management</h1>
+                        <p class="p-4">Manage all restaurant orders here.</p>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">All orders ({{ orders|length }})</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>User</th>
+                                        <th>Product</th>
+                                        <th>Date</th>
+                                        <th>Total Price</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.user.username }}</td>
+                                        <td>{{ order.product_name }}</td>
+                                        <td>{{ order.order_date|date:"Y-m-d" }}</td>
+                                        <td>₦{{ order.total_price|floatformat:2 }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ order.status_class }}">
+                                                {{ order.status }}
+                                            </span>
+                                        </td>
+                                        <td><button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#orderModal{{ order.id }}">View/Update</button></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8">No orders yet.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% for order in orders %}
+                    <div class="modal fade" id="orderModal{{ order.id }}" tabindex="-1" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order #{{ order.id }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="tab" value="orders">
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <div class="mb-3">
+                                            <label for="status{{ order.id }}" class="form-label">Status</label>
+                                            <select class="form-select" id="status{{ order.id }}" name="status">
+                                                <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                                                <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                                                <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                                <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update Status</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+               
+            {% comment %} <script>
+                    document.getElementById('paymentFilter').addEventListener('change', function() {
+                    const filterValue = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        const paymentStatus = row.querySelector('td:nth-child(8)').textContent.toLowerCase();
+                        if (!filterValue || paymentStatus.includes(filterValue)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            </script> {% endcomment %}
+
+
+
+                <!-- New Payments Tab -->
+        {% comment %} <div class="tab-pane fade {% if active_tab == 'payments' %}show active{% endif %}" id="v-pills-payments" role="tabpanel" aria-labelledby="v-pills-payments-tab" tabindex="0">
+            <!-- Pending Payments Card -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">Pending Verification ({{ pending_payments|length }})</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Payment Ref</th>
+                                <th>Status</th>
+                                <th>Order ID</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in pending_payments %}
+                            <tr>
+                                <td>{{ payment.reference }}</td>
+                                <td>
+                                    {% if payment.status == 'success' %}
+                                        <span class="badge bg-success">Success</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ payment.status|title }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>#{{ payment.order.id }}</td>
+                                <td>₦{{ payment.amount|floatformat:2 }}</td>
+                                <td>{{ payment.order_date|date:"Y-m-d H:i" }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'verify_payment' payment.reference %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="tab" value="payments">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check-circle"></i> Verify
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No payments pending verification</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+            <!-- Verified Payments Card -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Verified Payments ({{ verified_payments|length }})</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Payment Ref</th>
+                                <th>Order ID</th>
+                                <th>Amount</th>
+                                <th>Verified By</th>
+                                <th>Verified At</th>
+                                <th>Gateway Response</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in verified_payments %}
+                            <tr>
+                                <td>{{ payment.reference }}</td>
+                                <td>#{{ payment.order.id }}</td>
+                                <td>₦{{ payment.amount|floatformat:2 }}</td>
+                                <td>{{ payment.verified_by.get_name }}</td>
+                                <td>{{ payment.verified_at|date:"Y-m-d H:i" }}</td>
+                                <td>{{ payment.gateway_response }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No verified payments yet</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> {% endcomment %}
+
+                <!-- Menu -->
+                <div class="tab-pane fade {% if active_tab == 'menu' %}show active{% endif %} px-4" id="v-pills-menu" role="tabpanel" aria-labelledby="v-pills-menu-tab" tabindex="0">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Menu Management</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button type="button" class="btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="#addMenuItemModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus me-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                Add Menu Item
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Filter Section -->
+                    
+                    <form action="GET" class="card mb-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="tab" value="menu">
+                        <div class="card-body">
+                          <div class="row g-3">
+                            <div class="col-md-4">
+                              <label for="filterStatus" class="form-label">Filter by Status</label>
+                              <select id="filterStatus" class="form-select">
+                                <option value="all">All Items</option>
+                                <option value="available">Available Only</option>
+                                <option value="unavailable">Unavailable Only</option>
+                              </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label for="searchItem" class="form-label">Search</label>
+                              <input type="text" class="form-control" id="searchItem" placeholder="Search menu items...">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="filterCategory" class="form-label">Filter by Category</label>
+                              <select id="filterCategory" class="form-select">
+                                <option value="">All Categories</option>
+                                <option value="Appetizers">Appetizers</option>
+                                <option value="Desserts">Desserts</option>
+                                <option value="Main Course">Main Course</option>
+                                <option value="Beverages">Beverages</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                    </form>
+
+                   
+                    <!-- Modal for Adding Menu Item -->
+                    <div class="modal fade px-4" id="addMenuItemModal" tabindex="-1" aria-labelledby="addMenuItemModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addMenuItemModalLabel">Add New Menu Item</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="tab" value="menu">
+                                        <input type="hidden" name="action" value="add">
+                                        <div class="modal-body">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                                    <select class="form-select" id="category" name="category" required>
+                                                        <option value="Appetizers">Appetizers</option>
+                                                        <option value="Desserts">Desserts</option>
+                                                        <option value="Main Course">Main Course</option>
+                                                        <option value="Beverages">Beverages</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="price" class="form-label">Price (₦) <span class="text-danger">*</span></label>
+                                                    <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="image" class="form-label">Image</label>
+                                                    <input type="file" class="form-control" id="image" name="image">
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="description" class="form-label">Description</label>
+                                                    <textarea class="form-control" id="description" name="description"></textarea>
+                                                </div>
+                                                <div class="col-12 form-check">
+                                                    <input type="checkbox" class="form-check-input" id="available" name="available" checked>
+                                                    <label class="form-check-label" for="available">Available</label>
+                                                </div>
+                                                <div class="col-12 form-check">
+                                                    <input type="checkbox" class="form-check-input" id="is_special" name="is_special">
+                                                    <label class="form-check-label" for="is_special">Mark as Special</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-warning text-white">Add Item</button>
+                                            <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Modal -->
+                    {% for item in menu_items %}
+                    <div class="modal fade" id="editMenuItemModal{{ item.id }}" tabindex="-1" aria-labelledby="editMenuItemModalLabel{{ item.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editMenuItemModalLabel{{ item.id }}">Edit {{ item.name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="tab" value="menu">
+                                        <input type="hidden" name="action" value="edit">
+                                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                                        <div class="mb-3">
+                                            <label for="description{{ item.id }}" class="form-label">Description</label>
+                                            <textarea class="form-control" id="description{{ item.id }}" name="description">{{ item.description }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="price{{ item.id }}" class="form-label">Price (₦)</label>
+                                            <input type="number" step="0.01" class="form-control" id="price{{ item.id }}" name="price" value="{{ item.price|floatformat:2 }}">
+                                        </div>
+                                        <button type="submit" class="btn btn-warning">Save Changes</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Menu Items Table -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">All Menu Items ({{ menu_items|length }})</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Available</th>
+                                        <th>Special</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menuTableBody">
+                                    {% for item in menu_items %}
+                                    <tr data-category="{{ item.Category.name|lower }}" data-available="{{ item.available|lower }}">
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.Category.name }}</td>
+                                        <td>₦{{ item.price|floatformat:2 }}</td>
+                                        <td>{{ item.available|yesno:"Yes,No" }}</td>
+                                        <td>{{ item.is_special|yesno:"Yes,No" }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editMenuItemModal{{ item.id }}">Edit</button>
+                                            <form method="post" style="display:inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="tab" value="menu">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete {{ item.name }}?');">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6">No menu items available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users -->
+                <div class="tab-pane fade {% if active_tab == 'users' %}show active{% endif %}" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Our Customers</h1>
+                            <p>View and manage customer activity.</p>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">All Users ({{ user_data|length }})</h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Profile Picture</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Phone Number</th>
+                                            <th>Orders</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for data in user_data %}
+                                        <tr>
+                                            <td><img src="{{ data.profile_picture }}" alt="{{ data.username }}" style="width: 50px; border-radius: 50%;"></td>
+                                            <td>{{ data.username }}</td>
+                                            <td>{{ data.email }}</td>
+                                            <td>{{ data.address }}</td>
+                                            <td>{{ data.phone }}</td>
+                                            <td>{{ data.order_count }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="6">No users found.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile -->
+                <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Admin Profile</h1>
+                            <button type="button" class="btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="#editAdminProfileModal">
+                                Edit Profile
+                            </button>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <img src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}https://via.placeholder.com/150{% endif %}"
+                                            alt="Admin Profile"
+                                            class="rounded-circle img-fluid mb-3"
+                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                        <h5>{{ user.full_name|default:user.username }}</h5>
+                                        <p class="text-muted">@{{ user.username }}</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>Details</h4>
+                                        <hr>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-3"><strong>Full Name</strong></div>
+                                            <div class="col-sm-9 text-muted">{{ user.full_name|default:"Not Provided" }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-3"><strong>Email</strong></div>
+                                            <div class="col-sm-9 text-muted">{{ user.email }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-3"><strong>Username</strong></div>
+                                            <div class="col-sm-9 text-muted">{{ user.username }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-3"><strong>Phone</strong></div>
+                                            <div class="col-sm-9 text-muted">{{ user.phone|default:"Not Provided" }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-3"><strong>Address</strong></div>
+                                            <div class="col-sm-9 text-muted">{{ user.address|default:"Not Provided" }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+        <!-- Edit Profile Modal -->
+                        <div class="modal fade" id="editAdminProfileModal" tabindex="-1" aria-labelledby="editAdminProfileModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editAdminProfileModalLabel">Edit Admin Profile</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="tab" value="profile">
+                                            <div class="mb-3">
+                                                <label class="form-label">Full Name</label>
+                                                <input type="text" name="full_name" class="form-control" value="{{ user.full_name|default:'' }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Phone</label>
+                                                <input type="text" name="phone" class="form-control" value="{{ user.phone|default:'' }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Address</label>
+                                                <textarea name="address" class="form-control">{{ user.address|default:'' }}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Profile Image</label>
+                                                <input type="file" name="profile_image" class="form-control">
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <button type="submit" class="btn btn-success text-white">Save Changes</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="tab-pane fade {% if active_tab == 'settings' %}show active{% endif %}" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Settings</h1>
+                            <button type="button" class="btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="#editSettingsModal">
+                                Edit Settings
+                            </button>
+                        </div>
+                
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <img src="{% static 'images/Restaurant_logo.jpg'%}"
+                                             alt="Restaurant Logo"
+                                             class="img-fluid mb-3"
+                                             style="max-width: 150px; max-height: 150px; object-fit: contain; border-radius: 50%;">
+                                        <h5>{{ settings.name }}</h5>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>Restaurant Details</h4>
+                                        <hr>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>Name</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.name }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>Contact Email</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.contact_email|default:"Not Provided" }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>Phone Number</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.phone_number|default:"Not Provided" }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>Address</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.address|default:"Not Provided" }}</div>
+                                        </div>
+                                        <h4 class="mt-4">Order Settings</h4>
+                                        <hr>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>Default Order Status</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.default_order_status|title }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>Currency Symbol</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.currency_symbol }}</div>
+                                        </div>
+                                        <h4 class="mt-4">Notifications</h4>
+                                        <hr>
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4"><strong>New Order Notifications</strong></div>
+                                            <div class="col-sm-8 text-muted">{{ settings.enable_notifications|yesno:"Enabled,Disabled" }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Edit Settings Modal -->
+                        <div class="modal fade" id="editSettingsModal" tabindex="-1" aria-labelledby="editSettingsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editSettingsModalLabel">Edit Restaurant Settings</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="tab" value="settings">
+                                            <h6>Restaurant Info</h6>
+                                            <div class="mb-3">
+                                                <label class="form-label">Restaurant Name</label>
+                                                <input type="text" name="name" class="form-control" value="{{ settings.name }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Logo</label>
+                                                <input type="file" name="logo" class="form-control">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Contact Email</label>
+                                                <input type="email" name="contact_email" class="form-control" value="{{ settings.contact_email|default:'' }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Phone Number</label>
+                                                <input type="text" name="phone_number" class="form-control" value="{{ settings.phone_number|default:'' }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Address</label>
+                                                <textarea name="address" class="form-control">{{ settings.address|default:'' }}</textarea>
+                                            </div>
+                                            <h6>Order Settings</h6>
+                                            <div class="mb-3">
+                                                <label class="form-label">Default Order Status</label>
+                                                <select name="default_order_status" class="form-select">
+                                                    <option value="pending" {% if settings.default_order_status == 'pending' %}selected{% endif %}>Pending</option>
+                                                    <option value="confirmed" {% if settings.default_order_status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Currency Symbol</label>
+                                                <input type="text" name="currency_symbol" class="form-control" value="{{ settings.currency_symbol }}" maxlength="5">
+                                            </div>
+                                            <h6>Notifications</h6>
+                                            <div class="mb-3 form-check">
+                                                <input type="checkbox" name="enable_notifications" class="form-check-input" id="enable_notifications" {% if settings.enable_notifications %}checked{% endif %}>
+                                                <label class="form-check-label" for="enable_notifications">Enable New Order Notifications</label>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <button type="submit" class="btn btn-success text-white">Save Changes</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="card logoutmodal">
+                    <div class="card-body">
+                        <h4 class="text-center">Are You sure you want to sign out?</h4>
+                        <div class="text-center">
+                            <a href="/admin_logout/" class="btn btn-warning me-5 p-3">Yes</a>
+                            <a href="/adminsuper122" class="btn btn-danger p-3">No</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+    <script src="{% static 'filter.js' %}"></script>
+    <script>
+        document.getElementById('addMenuItemModal').addEventListener('hidden.bs.modal', function () {
+            document.activeElement.blur();
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('JavaScript loaded'); // Debug: Confirm script runs
+        
+            const filterStatus = document.getElementById('filterStatus');
+            const searchItem = document.getElementById('searchItem');
+            const filterCategory = document.getElementById('filterCategory');
+            const tableBody = document.getElementById('menuTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+            const itemCount = document.getElementById('itemCount');
+        
+            if (!filterStatus || !searchItem || !filterCategory || !tableBody) {
+                console.error('Filter elements not found');
+                return;
+            }
+        
+            console.log('Rows found:', rows.length); // Debug: Check rows
+        
+            function filterTable() {
+                const status = filterStatus.value.toLowerCase();
+                const search = searchItem.value.toLowerCase().trim();
+                const category = filterCategory.value.toLowerCase();
+                let visibleCount = 0;
+        
+                console.log('Filtering with:', { status, search, category }); // Debug: Filter values
+        
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const name = row.cells[0].textContent.toLowerCase();
+                    const rowCategory = row.getAttribute('data-category') || '';
+                    const available = row.getAttribute('data-available') === 'true';
+        
+                    const statusMatch = status === 'all' || 
+                                       (status === 'available' && available) || 
+                                       (status === 'unavailable' && !available);
+                    const searchMatch = search === '' || name.includes(search);
+                    const categoryMatch = category === '' || rowCategory === category;
+        
+                    if (statusMatch && searchMatch && categoryMatch) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+        
+                itemCount.textContent = visibleCount;
+                console.log('Visible items:', visibleCount); // Debug: Count
+            }
+        
+            filterStatus.addEventListener('change', function() {
+                console.log('Status filter changed to:', filterStatus.value);
+                filterTable();
+            });
+            searchItem.addEventListener('input', function() {
+                console.log('Search input:', searchItem.value);
+                filterTable();
+            });
+            filterCategory.addEventListener('change', function() {
+                console.log('Category filter changed to:', filterCategory.value);
+                filterTable();
+            });
+        
+            // Initial filter
+            filterTable();
+        });
+        </script>
+
+</body>
+</html>

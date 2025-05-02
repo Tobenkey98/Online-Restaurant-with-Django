@@ -1,0 +1,54 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+    <style>
+        .failure-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .payment-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5 failure-container">
+        <div class="alert alert-danger text-center">
+            <h2><i class="fas fa-times-circle"></i> Payment Failed</h2>
+            <div class="my-4">
+                <p class="lead">We couldn't process your payment.</p>
+                {% if payment %}
+                    <div class="payment-details text-start">
+                        <p><strong>Reference:</strong> {{ payment.reference }}</p>
+                        {% if payment.amount %}
+                            <p><strong>Amount:</strong> ₦{{ payment.amount|floatformat:2 }}</p>
+                        {% endif %}
+                        <p><strong>Date:</strong> {{ payment.created_at|date:"F j, Y H:i" }}</p>
+                    </div>
+                {% endif %}
+                <p>Please try again or contact support if the problem persists.</p>
+            </div>
+            <div class="mt-4 d-grid gap-2 d-md-block">
+                <a href="{% url 'cart' %}" class="btn btn-warning me-md-2">
+                    <i class="fas fa-shopping-cart"></i> Back to Cart
+                </a>
+                <a href="{% url 'menu' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-utensils"></i> Continue Browsing
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
+</body>
+</html>
