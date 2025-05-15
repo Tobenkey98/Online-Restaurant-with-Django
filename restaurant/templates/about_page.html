@@ -1,0 +1,194 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About Us - Soft Restaurant</title>
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/CAOS.file/CAOS.file.v-1.5/style.css' %}">
+        <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
+        <link rel="stylesheet" href="{% static 'restaurant.css'%}">
+    </head>
+    <body>
+        <style>
+            body{
+              background-color: white;
+            }
+            header{
+              background-color: rgba(218, 145, 9, 0.993);
+              transition: .5s;
+            }
+            header.active{
+              background-color: white;
+              padding: 10px 20px;
+            }
+            header.active a{
+              color: black !important;
+            }
+            .logoutmodal:hover{
+              background-color: white!important;
+              color: black!important;
+            }
+          </style>
+        <!-- Header Section -->
+        <header class="fixed-top">
+            <nav class="navbar navbar-expand-lg py-3 px-5">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50"> Soft Restaurant</a>
+                    <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="fa fa-bars text-light"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/home">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/about">ABOUT</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/contact_us">CONTACT</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    MENU
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>
+                                    <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
+                                    <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
+                                    <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- About Hero Section -->
+        <section class="about-hero py-5 mt-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="display-4 fw-bold mb-4">Our Story</h1>
+                        <p class="lead">Welcome to Soft Restaurant, where culinary excellence meets warm hospitality. Our journey began with a simple passion for creating memorable dining experiences.</p>
+                    </div>
+                    <div class="col-md-6" >
+                        <img src="{% static 'images/Restaurant_logo.jpg' %}" alt="Restaurant Interior" class="img-fluid rounded shadow" style="border-radius: 50%;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            const header = document.querySelector('header')
+
+            window.addEventListener('scroll', ()=>{
+              if(window.scrollY > 40){
+                header.classList.add('active')
+              }else{
+                header.classList.remove('active')
+              }
+            })
+        </script>
+
+        <!-- Our Values Section -->
+        <section class="values py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Our Values</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-heart text-warning fa-3x mb-3"></i>
+                                <h3 class="card-title">Passion</h3>
+                                <p class="card-text">We pour our heart into every dish we create, ensuring each meal is a masterpiece.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-leaf text-warning fa-3x mb-3"></i>
+                                <h3 class="card-title">Quality</h3>
+                                <p class="card-text">We source the finest ingredients to deliver exceptional quality in every bite.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users text-warning fa-3x mb-3"></i>
+                                <h3 class="card-title">Community</h3>
+                                <p class="card-text">We believe in creating a welcoming space where everyone feels like family.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="team py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Meet Our Team</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <img src="{% static 'images/chef_1.jfif' %}" class="card-img-top" alt="Chef">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">John Doe</h4>
+                                <p class="card-text text-muted">Head Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <img src="{% static 'images/chef_2.jfif' %}" class="card-img-top" alt="Chef">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">Jane Smith</h4>
+                                <p class="card-text text-muted">Pastry Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <img src="{% static 'images/chef_32.jpg' %}" class="card-img-top" alt="Chef">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">Mike Johnson</h4>
+                                <p class="card-text text-muted">Sous Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <style>
+
+        </style>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-light py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Soft Restaurant</h5>
+                        <p>Creating memorable dining experiences since 2024.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p>&copy; 2024 Soft Restaurant. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
+        <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+    </body>
+</html> 

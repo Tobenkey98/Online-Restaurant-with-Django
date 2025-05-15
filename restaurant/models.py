@@ -14,10 +14,26 @@ class UserInfo(models.Model):
     phone = models.CharField(max_length=500, null=True, blank=True)
     gender = models.CharField(max_length=500, null=True, blank=True)
     username = models.CharField(max_length=500, null=True, blank=True)
+    password = models.CharField(max_length=500, null=True, blank=True)  # Add password field
     dob =  models.DateField(null=True, blank=True)
     status = models.CharField(max_length=500, null=True, blank=True)
     payments = models.IntegerField(null=True, blank=True)
-    reset = models.CharField(max_length=500, null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        # If password is provided and not already hashed, hash it
+        if self.password and not self.password.startswith('pbkdf2_sha256$'):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
+    def set_password(self, raw_password):
+        """Hash and set the password."""
+        self.password = make_password(raw_password)
+        self.save()
+
+    def check_password(self, raw_password):
+        """Check if the provided password matches the stored hash."""
+        return check_password(raw_password, self.password)
+
     class Meta:
         managed = True
         db_table = 'userinfo'
@@ -243,4 +259,15 @@ class Notification(models.Model):
         managed = True
         db_table = 'Notification'
         ordering = ['-created_at']
+    
+
+class PasswordReset(models.Model):
+    reset_id = models.CharField(max_length=100, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    class Meta:
+        managed = True
+        db_table = 'password_reset'
     

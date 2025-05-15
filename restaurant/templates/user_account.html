@@ -86,7 +86,7 @@
                     <div class="card mb-4 modal-content">
                     <div class="card-body">
                         <h5 class="text-center">Update Profile</h5>
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form id="profileForm" action="" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                             
                             <div class="mb-3">
@@ -96,7 +96,7 @@
                         
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
-                                <input type="text" name="address" class="form-control" value="{{user_profile.address.|default_if_none:'' }}">
+                                <input type="text" name="address" class="form-control" value="{{user_profile.address|default_if_none:'' }}">
                             </div>
                         
                             <div class="mb-3">
@@ -112,8 +112,7 @@
                 
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-success text-white">Save Changes</button>
-                                <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#editProfileForm">Cancel</button>
-                                
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             </div>
                             
                         </form>
@@ -121,21 +120,20 @@
                 </div>
                 </div>
               </div>
-            
+                
             
 
               {% if messages %}
-                <div class="mb-3">
+                <script>
                     {% for message in messages %}
-                    <div class="alert {% if message.tags == 'info' %}alert-info{% else %}alert-{{ message.tags }}{% endif %}" role="alert">
-                        {{ message }}
-                    </div>
+                        alert("{{ message }}");
                     {% endfor %}
-                </div>
+                    window.location.reload();
+                </script>
                 {% endif %}
 
 <!-- Notifications -->
-                <div class="mb-4">
+                {% comment %} <div class="mb-4">
                     {% if notifications %}
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -152,7 +150,7 @@
                     {% else %}
                     <button class="btn btn-warning text-white" disabled><i class="fas fa-bell"></i> <span class="badge bg-secondary">0</span></button>
                     {% endif %}
-                </div>
+                </div> {% endcomment %}
             
 
             <!-- Order History -->
@@ -328,10 +326,8 @@
 </div>
 </div>
 
-
-
 <script>
-const loading = document.querySelector('.loading');
+    const loading = document.querySelector('.loading');
 window.addEventListener('load', function () {
     loading.classList.add('loading-hidden');
 
@@ -341,7 +337,71 @@ window.addEventListener('load', function () {
 
 });    
 
+document.getElementById('profileForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            // Update the profile information on the page
+            const phoneElement = document.querySelector('.text-muted:nth-child(1)');
+            const addressElement = document.querySelector('.text-muted:nth-child(2)');
+            const locationElement = document.querySelector('.text-muted:nth-child(3)');
+            
+            if (phoneElement) phoneElement.textContent = formData.get('phone') || 'Not Provided';
+            if (addressElement) addressElement.textContent = formData.get('address') || 'Not Provided';
+            if (locationElement) locationElement.textContent = formData.get('location') || 'Not Provided';
+            
+            // Update profile image if changed
+            if (data.profile_image_url) {
+                const profileImage = document.querySelector('.rounded-circle.img-fluid');
+                if (profileImage) {
+                    profileImage.src = data.profile_image_url;
+                }
+            }
+            
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileForm'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            // Show success message
+            alert(data.message);
+        } else {
+            alert(data.message || 'Error updating profile');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating profile. Please try again.');
+    });
+});
+
+// Handle cancel button
+document.querySelector('[data-bs-dismiss="modal"]').addEventListener('click', function() {
+    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileForm'));
+    if (modal) {
+        modal.hide();
+    }
+});
 </script>
+
+
 
 
 

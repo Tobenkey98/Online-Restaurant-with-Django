@@ -149,3 +149,19 @@ PAYSTACK_PUBLIC_KEY = 'pk_test_ef8447704b77f36fd19bb49697ec3e0e8278aec3'  # Repl
 PAYSTACK_SECRET_KEY = 'sk_test_38c5f2675b3768a4d79f6e3acd8ee19a58b86e19'  # Replace with your test secret key
 PAYSTACK_TEST_MODE = True  # Set to False in production
 BASE_URL = "http://127.0.0.1:8000/"
+
+
+
+
+
+# Email Configuration
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'dayjeedesign@gmail.com'  # Replace with your Gmail address
+# EMAIL_HOST_PASSWORD = 'your-app-password'  # Replace with your Gmail app password
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# For development/testing, you can use console backend instead
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 

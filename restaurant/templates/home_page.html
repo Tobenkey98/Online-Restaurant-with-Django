@@ -91,7 +91,7 @@
                                 {% if user.is_authenticated %}
                                 <a href="{% url 'user_account' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i></a>
                                 {% if notifications %}
-                                <div class="dropdown me-3">
+                                {% comment %} <div class="dropdown me-3">
                                     <a class="icon" href="#" role="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fa fa-bell mt-2 me-3"></i>
                                         <span class="badge bg-danger">{{ notifications|length }}</span>
@@ -103,9 +103,9 @@
                                         {% endif %}
                                         {% endfor %}
                                     </ul>
-                                </div>
+                                </div> {% endcomment %}
                                 {% else %}
-                                <span class="icon me-3"><i class="fa fa-bell mt-2 me-3"></i></span>
+                                {% comment %} <span class="icon me-3"><i class="fa fa-bell mt-2 me-3"></i></span> {% endcomment %}
                                 {% endif %}
                                 {% else %}
                                 <a href="{% url 'login' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
@@ -114,7 +114,7 @@
                                   <i class="fa fa-cart-shopping me-3 mt-2"></i>
                                   
                                 </a>
-                                <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a>
+                                {% comment %} <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a> {% endcomment %}
                                 {% if user.is_authenticated %}
                                 <a href="#" class="btn btn-outline-warning text-light ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
                                 {% endif %}
@@ -140,12 +140,12 @@
               </script>
               <!-- Slider Section -->
                <section class="sliding p-4">
-                <div id="carouselExampleIndicators" class="carousel slide mt-4">
-                    <ol class="carousel-indicators">
+                <div id="carouselExampleSlidesOnly" class="carousel slide mt-4" data-bs-ride="carousel">
+                    {% comment %} <ol class="carousel-indicators">
                       <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></li>
                       <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></li>
                       <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></li>
-                    </ol>
+                    </ol> {% endcomment %}
                     <div class="carousel-inner">
                       <div class="carousel-item active">
                         <div class="container">
@@ -153,9 +153,12 @@
                                 <div class="col-md-7 col-lg-6">
                                     <div class="details ms-5">
                                         <h1 class="word">
-                                            Your No. 1 Online Restaurant
+                                          Welcome to Soft Restaurant 🍽️
                                         </h1>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum ullam quo a ex magnam doloremque dignissimos quia repellat! Architecto, perferendis.</p>
+                                        <p>🚀 Delicious Meals, Just a Click Away! 🚀
+                                          Order your favorite dishes online and enjoy restaurant-quality food from the comfort of your home.
+                                          
+                                          🛒 Browse Our Menu & Order Now!</p> <br>
                                         <div class="btn-box">
                                             <a href="{% url 'menu' %}" class="btn1">
                                                 Order Now
@@ -177,9 +180,13 @@
                                 <div class="col-md-7 col-lg-6">
                                     <div class="details">
                                         <h1 class="word">
-                                            Your No. 1 Online Restaurant
+                                          Fresh, Fast & Flavorful! 🍔🍕🥗
                                         </h1>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis deleniti quia vitae, expedita magnam aliquam quas placeat dolore iure nulla?</p>
+                                        <p>🔥 Made with Fresh Ingredients
+                                          ⏳ Fast & Reliable Order Processing
+                                          💳 Secure & Easy Online Payment
+                                          
+                                          📍 Your next meal is just a tap away!</p>
                                         <div class="btn-box">
                                             <a href="{% url 'menu' %}" class="btn1">
                                                 Order Now
@@ -198,9 +205,13 @@
                                 <div class="col-md-7 col-lg-6">
                                     <div class="details">
                                         <h1 class="word">
-                                            Your No. 1 Online Restaurant
+                                          How It Works? 🛒
                                         </h1>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis deleniti quia vitae, expedita magnam aliquam quas placeat dolore iure nulla?</p>
+                                        <p>1️⃣ Browse Our Menu – Choose from a variety of delicious meals. <br>
+                                          2️⃣ Place Your Order – Add items to your cart & checkout securely. <br>
+                                          3️⃣ Enjoy Your Meal – Pick up or get it delivered to your doorstep! <br>
+                                          
+                                          🚀 Order Now & Savor the Taste!</p>
                                         <div class="btn-box">
                                             <a href="{% url 'menu' %}" class="btn1">
                                                 Order Now
@@ -523,7 +534,7 @@
                           <span class="clock"><i class="fa fa-clock"></i></span>
                           <div class="hours ">
                               <h4>Open Hours</h4>
-                              <p>Mondays-Saturdays: <br>09:00 AM - 23:00 PM</p>
+                              <p>Mondays-Saturdays: <br>11:00 AM - 19:00 PM</p>
                           </div>
                       </div>
                       <div class="third">
