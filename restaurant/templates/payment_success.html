@@ -1,53 +1,68 @@
+{% extends 'base.html' %}
 {% load static %}
-{% load humanize %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Success</title>
-    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
-    <style>
-        .success-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .payment-details {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container py-5 success-container">
-        <div class="alert alert-success text-center">
-            <h2><i class="fas fa-check-circle"></i> Payment Successful!</h2>
-            <div class="my-4">
-                <p class="lead">Thank you for your order!</p>
-                {% if payment %}
-                    <div class="payment-details text-start">
-                        <p><strong>Reference:</strong> {{ payment.reference }}</p>
-                        <p><strong>Amount:</strong> ₦{{ payment.amount|floatformat:2 }}</p>
-                        <p><strong>Date:</strong> {{ payment.created_at|date:"F j, Y H:i" }}</p>
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                     </div>
-                {% endif %}
-                <p class="mt-3">A confirmation has been sent to your email.</p>
-            </div>
-            <div class="mt-4 d-grid gap-2 d-md-block">
-                <a href="{% url 'homepage' %}" class="btn btn-primary me-md-2">
-                    <i class="fas fa-home"></i> Home
-                </a>
-                <a href="{% url 'menu' %}" class="btn btn-outline-primary">
-                    <i class="fas fa-utensils"></i> Order Again
-                </a>
+                    <h2 class="card-title mb-4">Payment Successful!</h2>
+                    <p class="text-muted mb-4">Thank you for your order. Your payment has been processed successfully.</p>
+                    
+                    <div class="order-details text-start mb-4">
+                        <h4 class="mb-3">Order Details</h4>
+                        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                        <p><strong>Payment Reference:</strong> {{ reference }}</p>
+                        <p><strong>Total Amount:</strong> ₦{{ payment.amount|floatformat:2 }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-success">{{ order.status }}</span></p>
+                        <p><strong>Date:</strong> {{ order.order_date|date:"F d, Y H:i" }}</p>
+                    </div>
+
+                    <div class="order-items mb-4">
+                        <h4 class="mb-3">Order Items</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order_items %}
+                                    <tr>
+                                        <td>{{ item.menu_item.name }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>₦{{ item.menu_item.price|floatformat:2 }}</td>
+                                        <td>₦{{ item.total_price|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="delivery-info text-start mb-4">
+                        <h4 class="mb-3">Delivery Information</h4>
+                        <p><strong>Name:</strong> {{ order.user.full_name|default:order.user.username }}</p>
+                        <p><strong>Email:</strong> {{ order.user.email }}</p>
+                        <p><strong>Phone:</strong> {{ order.user.phone|default:"Not provided" }}</p>
+                        <p><strong>Address:</strong> {{ order.user.address|default:"Not provided" }}</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'homepage' %}" class="btn btn-primary me-2">Return to Home</a>
+                        <a href="#" class="btn btn-outline-primary" onclick="window.print()">Print Receipt</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
-</body>
-</html>
+</div>
+{% endblock %}
