@@ -48,11 +48,12 @@
                         <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
 
                         {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
+                            <script>
+                                {% for message in messages %}
+                                    alert("{{ message }}");
+                                {% endfor %}
+                                window.location.reload();
+                            </script>
                         {% endif %} 
 
                         <div class="login-form">
@@ -108,7 +109,7 @@
                                         color: black;
                                     }
                                 </style>
-                                    <a href="#forgot">Forgot Password?</a>
+                                    <a href="{% url 'forgot_password' %}">Forgot Password?</a>
                                 </div>
                             </form>
                             <form class="sign-up-htm" method="POST" action="">
