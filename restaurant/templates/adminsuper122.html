@@ -15,67 +15,63 @@
 </head>
 <body>
     <style>
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        padding-top: 1rem;
-        top: 0;
-        z-index: 10000;
-        
-}
-.sidebar a{
+.sidebars a{
     text-wrap: nowrap;
+    color: whitesmoke;
+    padding: 10px 10px !important;
+}
+.sidebars a:hover{
+    color: white!important;
+}
+.sidebars{
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
 }
     </style>
 
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar bg-warning text-white p-3 position-sticky">
-            <div class="d-flex align-items-center mb-4 px-2">
-                <div class="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils-crossed"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+
+        <div class="sidebars offcanvas offcanvas-start bg-warning" data-bs-theme="dark" data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils-crossed"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+                    </div>
+                    <h4 class=" food m-0 fw-bold text-white">Food Admin</h4>
                 </div>
-                <h4 class=" food py-4 px-2 m-0 fw-bold">Food Admin</h4>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            
+            <div class="offcanvas-body">
             <div class="nav flex-column">
                 <a href="{% url 'adminsuper122' %}?tab=dashboard" class="nav-link {% if active_tab == 'dashboard' %}active{% endif %}" id="v-pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dashboard" role="tab" aria-controls="v-pills-dashboard" aria-selected="{% if active_tab == 'dashboard' %}true{% else %}false{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                    <span class="fw-bold">Dashboard</span>
+                    <span class="fw-bold fs-4">Dashboard</span>
                 </a>
 
                 <a href="{% url 'adminsuper122' %}?tab=menu" class="nav-link {% if active_tab == 'menu' %}active{% endif %}" id="v-pills-menu-tab" data-bs-toggle="pill" data-bs-target="#v-pills-menu" role="tab" aria-controls="v-pills-menu" aria-selected="{% if active_tab == 'menu' %}true{% else %}false{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-                    <span class="fw-bold">Menu Management</span>
+                    <span class="fw-bold fs-4">Menu Management</span>
                 </a>
 
                 <a href="{% url 'adminsuper122' %}?tab=orders" class="nav-link {% if active_tab == 'orders' %}active{% endif %}" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" role="tab" aria-controls="v-pills-orders" aria-selected="{% if active_tab == 'orders' %}true{% else %}false{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-                    <span class="fw-bold">Order Mangement</span>
+                    <span class="fw-bold fs-4">Order Mangement</span>
                 </a>
-
-                {% comment %} <a href="{% url 'adminsuper122' %}?tab=payments" class="nav-link {% if active_tab == 'payments' %}active{% endif %}" id="v-pills-payments-tab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="20" height="14" x="2" y="5" rx="2"/>
-                        <rect width="4" height="4" x="6" y="9" fill="currentColor"/>
-                        <path d="M18 9h.01"/>
-                        <path d="M18 13h.01"/>
-                    </svg>
-                    <span class="fw-bold">Payments</span>
-                </a> {% endcomment %}
                
                 <a href="{% url 'adminsuper122' %}?tab=users" class="nav-link {% if active_tab == 'users' %}active{% endif %}" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" role="tab" aria-controls="v-pills-users" aria-selected="{% if active_tab == 'users' %}true{% else %}false{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span class="fw-bold">Users</span>
+                    <span class="fw-bold fs-4">Users</span>
                 </a>
                 <a href="{% url 'adminsuper122' %}?tab=profile" class="nav-link {% if active_tab == 'profile' %}active{% endif %}" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="{% if active_tab == 'profile' %}true{% else %}false{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <span class="fw-bold">Profile</span>
+                    <span class="fw-bold fs-4">Profile</span>
                 </a>
                 <a href="{% url 'adminsuper122' %}?tab=settings" class="nav-link {% if active_tab == 'settings' %}active{% endif %}" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="{% if active_tab == 'settings' %}true{% else %}false{% endif %} ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                    <span class="fw-bold">Settings</span>
+                    <span class="fw-bold fs-4">Settings</span>
                 </a>
+            </div>
             </div>
         </div>
 
@@ -87,7 +83,8 @@
                     <div class="d-flex align-items-center">
                         {% comment %} <input type="search" class="form-control" placeholder="Search..." name="q"> {% endcomment %}
                     </div>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center justify-content-between">
+                        
                         <button type="button" class="btn btn-lg bg-warning text-light position-relative">
                             <span class="bi bi-bell"></span>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -107,6 +104,10 @@
                                     <li><a class="dropdown-item text-light bg-danger" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</a></li>
                                 </ul>
                             </div>
+
+                            <button class="btn btn-warning ms-5 text-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                <i class="fa fa-bars"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -268,7 +269,7 @@
                 </main>
 
                 <!-- Orders -->
-                <div class="tab-pane fade {% if active_tab == 'orders' %}show active{% endif %}" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab" tabindex="0">
+                <div class=" p-5 tab-pane fade {% if active_tab == 'orders' %}show active{% endif %}" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab" tabindex="0">
                     <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="p-4">Order Management</h1>
                         <p class="p-4">Manage all restaurant orders here.</p>
@@ -380,7 +381,7 @@
                
 
                 <!-- Menu -->
-                <div class="tab-pane fade {% if active_tab == 'menu' %}show active{% endif %} px-4" id="v-pills-menu" role="tabpanel" aria-labelledby="v-pills-menu-tab" tabindex="0">
+                <div class=" p-5 tab-pane fade {% if active_tab == 'menu' %}show active{% endif %} px-4" id="v-pills-menu" role="tabpanel" aria-labelledby="v-pills-menu-tab" tabindex="0">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">Menu Management</h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
@@ -566,7 +567,7 @@
                 </div>
 
                 <!-- Users -->
-                <div class="tab-pane fade {% if active_tab == 'users' %}show active{% endif %}" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">
+                <div class="p-5 tab-pane fade {% if active_tab == 'users' %}show active{% endif %}" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">
                     <div class="p-4">
                         <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h2">Our Customers</h1>
@@ -611,7 +612,7 @@
                 </div>
 
                 <!-- Profile -->
-                <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+                <div class="p-5 tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
                     <div class="p-4">
                         <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h2">Admin Profile</h1>
@@ -700,7 +701,7 @@
                 </div>
 
                 <!-- Settings -->
-                <div class="tab-pane fade {% if active_tab == 'settings' %}show active{% endif %}" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
+                <div class="p-5 tab-pane fade {% if active_tab == 'settings' %}show active{% endif %}" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
                     <div class="p-4">
                         <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h2">Settings</h1>
