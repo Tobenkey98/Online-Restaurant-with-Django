@@ -19,6 +19,7 @@
               <style>
                 body{
                   background-color: white;
+                  overflow-x: hidden !important;
                 }
                 header{
                   background-color: transparent;
@@ -53,16 +54,85 @@
 
   </div>
 </div>
+
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/home"><i class="fa fa-home"></i> HOME</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/about"><i class="fa fa-globe"></i> ABOUT</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/contact_us"><i class="fa fa-phone-square"></i> CONTACT</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-list"></i> MENU
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>
+                      <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
+                      <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
+                      <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <div class="d-flex search text-decoration-none align-items-center">
+                      
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'user_account' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i></a>
+                        {% if notifications %}
+                        {% comment %} <div class="dropdown me-3">
+                            <a class="icon" href="#" role="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-bell mt-2 me-3"></i>
+                                <span class="badge bg-danger">{{ notifications|length }}</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+                                {% for notif in notifications %}
+                                {% if notif.user_id == user.id %}
+                                <li class="dropdown-item">{{ notif.message }}</li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div> {% endcomment %}
+                        {% else %}
+                        {% comment %} <span class="icon me-3"><i class="fa fa-bell mt-2 me-3"></i></span> {% endcomment %}
+                        {% endif %}
+                        {% else %}
+                        <a href="{% url 'login' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
+                        {% endif %}
+                        <a href="{% url 'menu' %}" class="icon">
+                          <i class="fa fa-cart-shopping me-3 mt-2"></i>
+                          
+                        </a>
+                        {% comment %} <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a> {% endcomment %}
+                        {% if user.is_authenticated %}
+                        <a href="#" class="btn btn-outline-warning text-dark ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
+                        {% endif %}
+                    
+                
+
+                </div>
+              </div>
+            </div>
+
+
             <div class="bg-box">
             <!-- header section -->
             <header class="fixed-top">
                 <nav class="navbar navbar-expand-lg py-3 px-5">
                     <div class="container-fluid">
-                      <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50"> Soft Restaurant</a>
-                      <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="fa fa-bars text-light"></span>
-                      </button>
-                      
+                      <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50" class="img-fluid"> Soft Restaurant</a>
+                      <a class="btn d-block d-lg-none d-md-block" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                        <i class="fa fa-bars fa-2xl"></i>
+                      </a>
                       <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                           <li class="nav-item">
@@ -139,7 +209,7 @@
                   })
               </script>
               <!-- Slider Section -->
-               <section class="sliding p-4">
+               <section class="sliding p-4 w-100">
                 <div id="carouselExampleSlidesOnly" class="carousel slide mt-4" data-bs-ride="carousel">
                     {% comment %} <ol class="carousel-indicators">
                       <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></li>
@@ -241,7 +311,7 @@
         <!-- Special food section -->
         <section class="special p-5 ">
           <div class="container">
-            <div class="row justify-content-between">
+            <div class="row justify-content-between g-0">
               <div class="col-md-6 mb-2 row align-items-center first p-4 text-light">
                 <div class="col-md-4 first-image">
                   <img src="{% static 'images/food-removebg-preview.png'%}" class="img-fluid">
@@ -270,8 +340,8 @@
     
     
     <!-- Product section -->
-        <section class="delicious">
-          <div class="container ms-5">
+        <section class="delicious w-100">
+          <div class="container ms-5 w-75">
             <span class="serve">We serve</span><br>
             <span class="meal">The Best meal</span><br><br>
             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos pariatur ipsa at explicabo nemo corrupti deserunt similique tenetur odit incidunt, exercitationem dolor repellendus assumenda corporis perspiciatis fuga sapiente ullam minus?</p>
@@ -361,7 +431,7 @@
 
     </style>
         <!-- Delivery Section -->
-         <section class="delivery bg-warning p-4 my-5">
+         <section class="delivery bg-warning p-4 my-5 g-0">
           <div class="container-fluid">
             <div class="row align-items-center flex-md-row flex-column-  ">
               <div class="col-md-6">
@@ -398,10 +468,10 @@
          </section>
     
          <!-- Food Update -->
-           <section class="update">
+          <section class="update">
             <div class="container ">
-              <div class="row align-items-center justify-content-evenly">
-                <div class="col-md-4 soup animate fade-zoom-down-left ">
+              <div class="row align-items-center justify-content-evenly g-0 overflow-x-hidden">
+                <div class="col-md-4 soup animate fade-zoom-down-left">
                   <div class="card mx-auto">
                       <div class="card-image">
                         <img src="{% static 'images/Egusi_soup.jpg'%}" class="card-img-top" alt="...">
@@ -514,13 +584,13 @@
     
               </div>
             </div>
-          </section> 
+          </section>
     
     
           <!-- Contact Form -->
            <section class="contact">
             <div class="container  p-2">
-              <div class="row">
+              <div class="row g-0">
                   <h3></h3><br><br>
                   <div class="col-md-4">
                       <div class="first">
@@ -588,17 +658,16 @@
           </div>
           
            </section>
-    
            <!-- footer -->
           <footer class="opin">
-          <div class="container">
-            <div class="row">
+           <div class="container">
+            <div class="row g-2">
               <div class="col-md-6">
                 <div class="opin-image  align-items-center">
-                  <img src="{% static 'images/Restaurant_logo.jpg'%}" alt="">
+                  <img src="{% static 'images/Restaurant_logo.jpg'%}" alt="" class="img-fluid">
                   <span class="rest">Soft Restaurant</span>
                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, in quae iste, quod ducimus eos repellendus libero deserunt atque harum omnis molestias saepe, corrupti nobis non quam voluptates ratione pariatur.</p>
-                  </div>
+                </div>
               </div>
     
               <div class="col-md-4 mt-5 ms-5">
@@ -635,8 +704,7 @@
               </div>
               
             </div>
-          </div>
-            </div>
+          </div> 
             
             
             <div class="copy text-center p-4">
