@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
     <link rel="stylesheet" href="{% static 'menu.css' %}">
+    
 </head>
 
 <style>
@@ -25,6 +26,16 @@
         top: -5px;
         font-size: 10px;
     }
+    #offcanvas-cart-count{
+        position: absolute;
+        left: 10px;
+        top: -5px;
+        font-size: 15px;
+    }
+    .menus{
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
     .head.active {
         background-color: white;
         padding: 10px 20px;
@@ -32,6 +43,12 @@
     .head.active a {
         color: black !important;
     }
+    .line{
+        background-color: #ffffff!important;
+        color: black;
+        border-color: #fab217!important;
+    }
+    
     .nav-link:hover, .search .icon:hover {
         color: #e69c00 !important;
     }
@@ -81,7 +98,7 @@
 </style>
 <body>
 
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="menus offcanvas offcanvas-start bg-warning text-white fs-2 fw-bold" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -97,56 +114,25 @@
             <li class="nav-item">
               <a class="nav-link" href="/contact_us"><i class="fa fa-phone-square"></i> CONTACT</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-list"></i> 
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/menu"></a></li>
-                <li><a class="dropdown-item" href="/menu"></a></li>
-                <li><a class="dropdown-item" href="/menu"></a></li>
-                <li><a class="dropdown-item" href="/menu"></a></li>
-              </ul>
-            </li>
+           
           </ul>
-          <div class="d-flex search text-decoration-none align-items-center">
-                
-                  {% if user.is_authenticated %}
-                  <a href="{% url 'user_account' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i></a>
-                  {% if notifications %}
-                  {% comment %} <div class="dropdown me-3">
-                      <a class="icon" href="#" role="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="fa fa-bell mt-2 me-3"></i>
-                          <span class="badge bg-danger">{{ notifications|length }}</span>
-                      </a>
-                      <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-                          {% for notif in notifications %}
-                          {% if notif.user_id == user.id %}
-                          <li class="dropdown-item">{{ notif.message }}</li>
-                          {% endif %}
-                          {% endfor %}
-                      </ul>
-                  </div> {% endcomment %}
-                  {% else %}
-                  {% comment %} <span class="icon me-3"><i class="fa fa-bell mt-2 me-3"></i></span> {% endcomment %}
-                  {% endif %}
-                  {% else %}
-                  <a href="{% url 'login' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
-                  {% endif %}
-                  <a href="{% url 'menu' %}" class="icon">
-                    <i class="fa fa-cart-shopping me-3 mt-2"></i>
-                    
-                  </a>
-                  {% comment %} <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a> {% endcomment %}
-                  {% if user.is_authenticated %}
-                  <a href="#" class="btn btn-outline-warning text-dark ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
-                  {% endif %}
-              
-          
+                <div class="d-flex search text-decoration-none align-items-center">
+                        
+                        {% comment %} {% if user.is_authenticated %}
+                        <a href="{% url 'user_account' %}" class="icon text-white"><i class="fa fa-user me-3 mt-2"></i></a>/
+                        {% endif %} {% endcomment %}
+                        <a href="{% url 'cart' %}" class="icon text-white">
+                            <i class="fa fa-cart-shopping me-3 mt-2"></i>
+                            <span id="offcanvas-cart-count" class="badge bg-danger">0</span>
+                        </a>
+                        
+                        {% if user.is_authenticated %}
+                        <a href="#" class=" line btn btn-outline  ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
+                        {% endif %}
 
-          </div>
+                </div>
         </div>
-      </div>
+    </div> 
 
 
     <header class="sticky-top head">

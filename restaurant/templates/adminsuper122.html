@@ -294,7 +294,7 @@
                                 </thead>
                                 <tbody>
                                     {% for order in orders %}
-                                    <tr>
+                                    <tr data-order-id="{{ order.id }}">
                                         <td>#{{ order.id }}</td>
                                         <td>{{ order.user.username }}</td>
                                         <td>
@@ -302,7 +302,7 @@
                                                 {{ item.menu_item.name }} (x{{ item.quantity }})<br>
                                             {% endfor %}
                                         </td>
-                                        <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                                        <td>{{ order.order_date|date:"d/m/Y H:i" }}</td>
                                         <td>₦{{ order.total_price|floatformat:2 }}</td>
                                         <td>
                                             <span class="badge {% if order.status == 'Pending' %}bg-warning
@@ -314,7 +314,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#orderModal{{ order.id }}">
+                                            <button type="button" class="btn btn-outline-warning " data-bs-toggle="modal" data-bs-target="#orderModal{{ order.id }}">
                                                 Update Status
                                             </button>
                                         </td>
@@ -353,13 +353,13 @@
                                             </span>
                                         </p>
                                     </div>
-                                    <form method="post">
+                                    <form method="post" class="status-update-form" data-order-id="{{ order.id }}">
                                         {% csrf_token %}
                                         <input type="hidden" name="tab" value="orders">
                                         <input type="hidden" name="order_id" value="{{ order.id }}">
                                         <div class="mb-3">
                                             <label for="status{{ order.id }}" class="form-label">Update Status</label>
-                                            <select class="form-select" id="status{{ order.id }}" name="status">
+                                            <select class="form-select status-select" id="status{{ order.id }}" name="status">
                                                 <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
                                                 <option value="Confirmed" {% if order.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
                                                 <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
@@ -844,6 +844,7 @@
     <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
     <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
     <script src="{% static 'filter.js' %}"></script>
+    
     <script>
         document.getElementById('addMenuItemModal').addEventListener('hidden.bs.modal', function () {
             document.activeElement.blur();
@@ -851,33 +852,21 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('JavaScript loaded'); // Debug: Confirm script runs
-        
+        document.addEventListener('DOMContentLoaded', function() {
+        // Menu Filtering
             const filterStatus = document.getElementById('filterStatus');
             const searchItem = document.getElementById('searchItem');
             const filterCategory = document.getElementById('filterCategory');
-            const tableBody = document.getElementById('menuTableBody');
-            const rows = tableBody.getElementsByTagName('tr');
-            const itemCount = document.getElementById('itemCount');
-        
-            if (!filterStatus || !searchItem || !filterCategory || !tableBody) {
-                console.error('Filter elements not found');
-                return;
-            }
-        
-            console.log('Rows found:', rows.length); // Debug: Check rows
-        
-            function filterTable() {
+        const menuTableBody = document.getElementById('menuTableBody');
+
+        if (filterStatus && searchItem && filterCategory && menuTableBody) {
+            function filterMenuItems() {
                 const status = filterStatus.value.toLowerCase();
                 const search = searchItem.value.toLowerCase().trim();
                 const category = filterCategory.value.toLowerCase();
-                let visibleCount = 0;
+                const rows = menuTableBody.getElementsByTagName('tr');
         
-                console.log('Filtering with:', { status, search, category }); // Debug: Filter values
-        
-                for (let i = 0; i < rows.length; i++) {
-                    const row = rows[i];
+                for (let row of rows) {
                     const name = row.cells[0].textContent.toLowerCase();
                     const rowCategory = row.getAttribute('data-category') || '';
                     const available = row.getAttribute('data-available') === 'true';
@@ -888,35 +877,206 @@
                     const searchMatch = search === '' || name.includes(search);
                     const categoryMatch = category === '' || rowCategory === category;
         
-                    if (statusMatch && searchMatch && categoryMatch) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    row.style.display = (statusMatch && searchMatch && categoryMatch) ? '' : 'none';
                 }
-        
-                itemCount.textContent = visibleCount;
-                console.log('Visible items:', visibleCount); // Debug: Count
             }
-        
-            filterStatus.addEventListener('change', function() {
-                console.log('Status filter changed to:', filterStatus.value);
-                filterTable();
+
+            filterStatus.addEventListener('change', filterMenuItems);
+            searchItem.addEventListener('input', filterMenuItems);
+            filterCategory.addEventListener('change', filterMenuItems);
+        }
+
+        // Menu Item AJAX Operations
+        // Add Menu Item
+        const addMenuItemForm = document.querySelector('#addMenuItemModal form');
+        if (addMenuItemForm) {
+            addMenuItemForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton.disabled) return; // Prevent double submission
+                
+                submitButton.disabled = true;
+                const originalButtonText = submitButton.innerHTML;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+
+                try {
+                    const formData = new FormData(this);
+                    formData.append('action', 'add');
+                    
+                    const response = await fetch('{% url "adminsuper122" %}?tab=menu', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showToast(data.message || 'Menu item added successfully');
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addMenuItemModal'));
+                        modal.hide();
+                        // Clear the form
+                        this.reset();
+                        // Reload the page after a short delay
+                        setTimeout(() => {
+                            window.location.href = '{% url "adminsuper122" %}?tab=menu';
+                        }, 1000);
+                    } else {
+                        showToast(data.error || 'Error adding menu item', 'error');
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonText;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('Error adding menu item', 'error');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
             });
-            searchItem.addEventListener('input', function() {
-                console.log('Search input:', searchItem.value);
-                filterTable();
+        }
+
+        // Edit Menu Item
+        document.querySelectorAll('[id^="editMenuItemModal"] form').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton.disabled) return; // Prevent double submission
+                
+                submitButton.disabled = true;
+                const originalButtonText = submitButton.innerHTML;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...';
+
+                try {
+                    const formData = new FormData(this);
+                    formData.append('action', 'edit');
+                    
+                    const response = await fetch('{% url "adminsuper122" %}?tab=menu', {
+                    method: 'POST',
+                        body: formData,
+                    headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showToast(data.message || 'Menu item updated successfully');
+                        const modalId = this.closest('.modal').id;
+                        const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        modal.hide();
+                        // Reload the page after a short delay
+                        setTimeout(() => {
+                            window.location.href = '{% url "adminsuper122" %}?tab=menu';
+                        }, 1000);
+                    } else {
+                        showToast(data.error || 'Error updating menu item', 'error');
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonText;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('Error updating menu item', 'error');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+                });
             });
-            filterCategory.addEventListener('change', function() {
-                console.log('Category filter changed to:', filterCategory.value);
-                filterTable();
+
+        // Delete Menu Item
+        document.querySelectorAll('form[action="delete"]').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton.disabled) return; // Prevent double submission
+                
+                if (!confirm('Are you sure you want to delete this menu item?')) {
+                    return;
+                }
+
+                submitButton.disabled = true;
+                const originalButtonText = submitButton.innerHTML;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...';
+
+                try {
+                    const formData = new FormData(this);
+                    formData.append('action', 'delete');
+                    
+                    const response = await fetch('{% url "adminsuper122" %}?tab=menu', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showToast(data.message || 'Menu item deleted successfully');
+                        // Reload the page after a short delay
+                        setTimeout(() => {
+                            window.location.href = '{% url "adminsuper122" %}?tab=menu';
+                        }, 1000);
+                    } else {
+                        showToast(data.error || 'Error deleting menu item', 'error');
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonText;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('Error deleting menu item', 'error');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
             });
-        
-            // Initial filter
-            filterTable();
         });
-        </script>
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toastContainer = document.createElement('div');
+            toastContainer.style.position = 'fixed';
+            toastContainer.style.top = '20px';
+            toastContainer.style.right = '20px';
+            toastContainer.style.zIndex = '9999';
+
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+            document.body.appendChild(toastContainer);
+
+            const bsToast = new bootstrap.Toast(toast, {
+                animation: true,
+                autohide: true,
+                delay: 3000
+            });
+
+            bsToast.show();
+
+            toast.addEventListener('hidden.bs.toast', () => {
+                document.body.removeChild(toastContainer);
+            });
+        }
+    });
+    </script>
 
 </body>
 </html>
