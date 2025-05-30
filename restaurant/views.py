@@ -314,109 +314,180 @@ def adminsuper122(request):
             Notification.objects.filter(admin=admin, is_read=False).update(is_read=True)
             messages.success(request, "All notifications marked as read.")
             return redirect(f"{request.path}?tab=notifications")
+        
         elif tab == 'orders':
-            order_id = request.POST.get('order_id')
-            status = request.POST.get('status')
-            
-            logger.info(f"Attempting to update order {order_id} to status {status}")
-            
-            if not order_id or not status:
-                messages.error(request, "Order ID and status are required!")
-                return redirect(f"{request.path}?tab=orders")
-            
-            if status not in ['Pending', 'Confirmed', 'Completed', 'Cancelled']:
-                messages.error(request, "Invalid status value!")
-                return redirect(f"{request.path}?tab=orders")
-            
-            try:
-                order = Order.objects.get(id=order_id)
-                old_status = order.status
-                
-                # Only update if status has changed
-                if old_status != status:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                try:
+                    data = json.loads(request.body)
+                    order_id = data.get('order_id')
+                    status = data.get('status')
+                    
+                    if not order_id or not status:
+                        return JsonResponse({
+                            'success': False,
+                            'error': 'Missing required fields'
+                        }, status=400)
+                    
+                    order = Order.objects.get(id=order_id)
                     order.status = status
                     order.save()
-                    logger.info(f"Order {order_id} status updated from {old_status} to {status}")
                     
-                    # Send notification to user
-                    request.session.setdefault('notifications', [])
-                    request.session['notifications'].append({
-                        'user_id': order.user_id,
-                        'message': f"Your order #{order.order_id} status has been updated to {status}."
+                    return JsonResponse({
+                        'success': True,
+                        'status': status,
+                        'order_id': order_id,
+                        'message': f'Order #{order_id} status updated to {status}'
                     })
-                    request.session.modified = True
-                    
-                    # Send email notification if user has email
-                    if order.user.email:
-                        try:
-                            send_mail(
-                                f'Order #{order.order_id} Status Update',
-                                f'Your order status has been updated to {status}.',
-                                settings.DEFAULT_FROM_EMAIL,
-                                [order.user.email],
-                                fail_silently=True,
-                            )
-                            logger.info(f"Email notification sent for order {order_id}")
-                        except Exception as e:
-                            logger.error(f"Failed to send email notification: {str(e)}")
-                    
+                except Order.DoesNotExist:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Order not found'
+                    }, status=404)
+                except json.JSONDecodeError:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Invalid JSON data'
+                    }, status=400)
+                except Exception as e:
+                    return JsonResponse({
+                        'success': False,
+                        'error': str(e)
+                    }, status=500)
+            else:
+                order_id = request.POST.get('order_id')
+                status = request.POST.get('status')
+                
+                try:
+                    if not order_id or not status:
+                        raise ValueError('Missing required fields')
+                        
+                    order = Order.objects.get(id=order_id)
+                    order.status = status
+                    order.save()
                     messages.success(request, f"Order #{order.order_id} status updated to {status}!")
-                else:
-                    messages.info(request, f"Order #{order.order_id} is already {status}")
-                    
-            except Order.DoesNotExist:
-                logger.error(f"Order not found: {order_id}")
-                messages.error(request, "Order not found!")
-            except Exception as e:
-                logger.error(f"Error updating order {order_id}: {str(e)}")
-                messages.error(request, f"Error updating order: {str(e)}")
-            
-            return redirect(f"{request.path}?tab=orders")
+                except Order.DoesNotExist:
+                    messages.error(request, "Order not found!")
+                except ValueError as e:
+                    messages.error(request, str(e))
+                except Exception as e:
+                    messages.error(request, f"Error updating order status: {str(e)}")
+                
+                return redirect(f"{request.path}?tab=orders")
         elif tab == 'menu':
             action = request.POST.get('action')
             
-            if action == 'add':
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 try:
-                    # Create new menu item
-                    menu_item = MenuItem(
-                        name=request.POST.get('name'),
-                        Category=Category.objects.get(name=request.POST.get('category')),
-                        price=request.POST.get('price'),
-                        description=request.POST.get('description', ''),
-                        available=True if request.POST.get('available') == 'on' else False,
-                        is_special=True if request.POST.get('is_special') == 'on' else False
-                    )
+                    if action == 'add':
+                        name = request.POST.get('name')
+                        # Check if menu item with same name exists
+                        if MenuItem.objects.filter(name=name).exists():
+                            return JsonResponse({
+                                'success': False,
+                                'error': f'A menu item with the name "{name}" already exists. Please use a different name.'
+                            }, status=400)
+                            
+                        try:
+                            menu_item = MenuItem(
+                                name=name,
+                                Category=Category.objects.get(name=request.POST.get('category')),
+                                price=request.POST.get('price'),
+                                description=request.POST.get('description', ''),
+                                available=True if request.POST.get('available') == 'on' else False,
+                                is_special=True if request.POST.get('is_special') == 'on' else False
+                            )
+                            
+                            if 'image' in request.FILES:
+                                menu_item.image = request.FILES['image']
+                            
+                            menu_item.save()
+                            return JsonResponse({
+                                'success': True,
+                                'message': f"Menu item '{menu_item.name}' added successfully!"
+                            })
+                        except Exception as e:
+                            return JsonResponse({
+                                'success': False,
+                                'error': f'Error saving menu item: {str(e)}'
+                            }, status=500)
                     
-                    # Handle image upload if provided
-                    if 'image' in request.FILES:
-                        menu_item.image = request.FILES['image']
+                    elif action == 'edit':
+                        item_id = request.POST.get('item_id')
+                        menu_item = MenuItem.objects.get(id=item_id)
+                        menu_item.description = request.POST.get('description')
+                        menu_item.price = request.POST.get('price')
+                        menu_item.save()
+                        return JsonResponse({
+                            'success': True,
+                            'message': f"Menu item '{menu_item.name}' updated successfully!"
+                        })
                     
-                    menu_item.save()
-                    messages.success(request, f"Menu item '{menu_item.name}' added successfully!")
+                    elif action == 'delete':
+                        item_id = request.POST.get('item_id')
+                        menu_item = MenuItem.objects.get(id=item_id)
+                        menu_item.delete()
+                        return JsonResponse({
+                            'success': True,
+                            'message': "Menu item deleted successfully!"
+                        })
+                    
+                except MenuItem.DoesNotExist:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Menu item not found'
+                    }, status=404)
+                except Category.DoesNotExist:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Category not found'
+                    }, status=404)
                 except Exception as e:
-                    messages.error(request, "Error adding menu item. Please try again.")
+                    return JsonResponse({
+                        'success': False,
+                        'error': str(e)
+                    }, status=500)
+            else:
+                # Handle regular form submissions (non-AJAX)
+                if action == 'add':
+                    try:
+                        menu_item = MenuItem(
+                            name=request.POST.get('name'),
+                            Category=Category.objects.get(name=request.POST.get('category')),
+                            price=request.POST.get('price'),
+                            description=request.POST.get('description', ''),
+                            available=True if request.POST.get('available') == 'on' else False,
+                            is_special=True if request.POST.get('is_special') == 'on' else False
+                        )
+                        
+                        if 'image' in request.FILES:
+                            menu_item.image = request.FILES['image']
+                        
+                        menu_item.save()
+                        messages.success(request, f"Menu item '{menu_item.name}' added successfully!")
+                    except Exception as e:
+                        messages.error(request, f"Error adding menu item: {str(e)}")
                 
-            elif action == 'edit':
-                try:
-                    item_id = request.POST.get('item_id')
-                    menu_item = MenuItem.objects.get(id=item_id)
-                    menu_item.description = request.POST.get('description')
-                    menu_item.price = request.POST.get('price')
-                    menu_item.save()
-                    messages.success(request, f"Menu item '{menu_item.name}' updated successfully!")
-                except:
-                    messages.error(request, "Error updating menu item. Please try again.")
+                elif action == 'edit':
+                    try:
+                        item_id = request.POST.get('item_id')
+                        menu_item = MenuItem.objects.get(id=item_id)
+                        menu_item.description = request.POST.get('description')
+                        menu_item.price = request.POST.get('price')
+                        menu_item.save()
+                        messages.success(request, f"Menu item '{menu_item.name}' updated successfully!")
+                    except Exception as e:
+                        messages.error(request, f"Error updating menu item: {str(e)}")
                 
-            elif action == 'delete':
-                try:
-                    item_id = request.POST.get('item_id')
-                    menu_item = MenuItem.objects.get(id=item_id)
-                    menu_item.delete()
-                    messages.success(request, f"Menu item deleted successfully!")
-                except:
-                    messages.error(request, "Error deleting menu item. Please try again.")
-            
-            return redirect(f"{request.path}?tab=menu")
+                elif action == 'delete':
+                    try:
+                        item_id = request.POST.get('item_id')
+                        menu_item = MenuItem.objects.get(id=item_id)
+                        menu_item.delete()
+                        messages.success(request, "Menu item deleted successfully!")
+                    except Exception as e:
+                        messages.error(request, f"Error deleting menu item: {str(e)}")
+                
+                return redirect(f"{request.path}?tab=menu")
 
     # Fetch all data
     total_orders = Order.objects.count()
@@ -782,4 +853,72 @@ def reset_password(request, token):
         logger.error(f"Error during password reset: {str(e)}")
         messages.error(request, 'An error occurred while resetting your password. Please try again.')
         return redirect('login')
+
+@csrf_exempt
+def update_order_status(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            order_id = data.get('order_id')
+            status = data.get('status')
+            
+            logger.info(f"Attempting to update order {order_id} to status {status}")
+            
+            if not order_id or not status:
+                return JsonResponse({'success': False, 'error': 'Order ID and status are required'})
+            
+            if status not in ['Pending', 'Confirmed', 'Completed', 'Cancelled']:
+                return JsonResponse({'success': False, 'error': 'Invalid status value'})
+            
+            order = Order.objects.get(id=order_id)
+            old_status = order.status
+            
+            # Only update if status has changed
+            if old_status != status:
+                order.status = status
+                order.save()
+                logger.info(f"Order {order_id} status updated from {old_status} to {status}")
+                
+                # Send notification to user
+                request.session.setdefault('notifications', [])
+                request.session['notifications'].append({
+                    'user_id': order.user_id,
+                    'message': f"Your order #{order.order_id} status has been updated to {status}."
+                })
+                request.session.modified = True
+                
+                # Send email notification if user has email
+                if order.user.email:
+                    try:
+                        send_mail(
+                            f'Order #{order.order_id} Status Update',
+                            f'Your order status has been updated to {status}.',
+                            settings.DEFAULT_FROM_EMAIL,
+                            [order.user.email],
+                            fail_silently=True,
+                        )
+                        logger.info(f"Email notification sent for order {order_id}")
+                    except Exception as e:
+                        logger.error(f"Failed to send email notification: {str(e)}")
+                
+                return JsonResponse({
+                    'success': True,
+                    'message': f'Order #{order.order_id} status updated to {status}',
+                    'status': status
+                })
+            else:
+                return JsonResponse({
+                    'success': True,
+                    'message': f'Order #{order.order_id} is already {status}',
+                    'status': status
+                })
+                
+        except Order.DoesNotExist:
+            logger.error(f"Order not found: {order_id}")
+            return JsonResponse({'success': False, 'error': 'Order not found'})
+        except Exception as e:
+            logger.error(f"Error updating order {order_id}: {str(e)}")
+            return JsonResponse({'success': False, 'error': str(e)})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 

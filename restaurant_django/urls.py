@@ -38,6 +38,7 @@ urlpatterns = [
     path('user_account/', views.user_account_page, name='user_account'),
      path('forgot-password/', views.forgot_password, name='forgot_password'),
     path('reset-password/<str:token>/', views.reset_password, name='reset_password'),
+    path('update_order_status/', views.update_order_status, name='update_order_status'),
 
     # path('review/<int:order_id>/', views.review_page, name='review'),
     # path('edit_order/<int:order_id>/', views.edit_order_page, name='edit_order'),

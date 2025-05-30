@@ -54,11 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
 // Update cart count badge
 function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const cartCountElement = document.getElementById('header-cart-count');
-    if (cartCountElement) {
-        const totalItems = cart.length; // Count unique items
-        cartCountElement.textContent = totalItems;
-    }
+    const cartCountElements = [
+        document.getElementById('header-cart-count'),
+        document.getElementById('offcanvas-cart-count')
+    ];
+    
+    cartCountElements.forEach(element => {
+        if (element) {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            element.textContent = totalItems;
+            element.style.display = totalItems > 0 ? 'block' : 'none';
+        }
+    });
 }
 
 // Show green toast notification
