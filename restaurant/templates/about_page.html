@@ -8,200 +8,270 @@
         <title>About Us - Soft Restaurant</title>
         <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
-        <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/CAOS.file/CAOS.file.v-1.5/style.css' %}">
         <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
         <link rel="stylesheet" href="{% static 'restaurant.css'%}">
+        <style>
+            body {
+                background-color: white;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            
+            /* Navbar Styles */
+            .navbar {
+                transition: all 0.3s ease;
+            }
+            
+            .scrolled {
+                background-color: white !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                padding: 10px 0;
+            }
+            
+            .scrolled .navbar-brand,
+            .scrolled .nav-link,
+            .scrolled .navbar-toggler-icon {
+                color: #333 !important;
+            }
+            
+            .navbar-brand img {
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+            
+            .nav-link {
+                font-weight: 500;
+                margin: 0 10px;
+                position: relative;
+            }
+            
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: #ffbe33;
+                transition: width 0.3s ease;
+            }
+            
+            .nav-link:hover::after,
+            .nav-link.active::after {
+                width: 100%;
+            }
+            
+            /* Hero Section */
+            .about-hero {
+                padding: 100px 0;
+                background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('{% static "images/Background_2.jpg" %}');
+                background-size: cover;
+                background-position: center;
+                color: white;
+            }
+            
+            /* Values Section */
+            .values .card {
+                transition: transform 0.3s ease;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            
+            .values .card:hover {
+                transform: translateY(-10px);
+            }
+            
+            .values i {
+                transition: all 0.3s ease;
+            }
+            
+            .values .card:hover i {
+                transform: scale(1.2);
+            }
+            
+            /* Team Section */
+            .team .card {
+                border: none;
+                border-radius: 10px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .team .card-img-top {
+                height: 300px;
+                object-fit: cover;
+            }
+            
+            .team .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+            
+            /* Responsive Adjustments */
+            @media (max-width: 991.98px) {
+                .about-hero {
+                    padding: 80px 0;
+                    text-align: center;
+                }
+                
+                .navbar-collapse {
+                    background-color: white;
+                    padding: 20px;
+                    margin-top: 15px;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                }
+                
+                .nav-link {
+                    color: #333 !important;
+                    padding: 10px 0 !important;
+                }
+            }
+            
+            @media (max-width: 767.98px) {
+                .about-hero {
+                    padding: 60px 0;
+                }
+                
+                .values .card,
+                .team .card {
+                    margin-bottom: 30px;
+                }
+            }
+        </style>
     </head>
     <body>
-        <style>
-            body{
-              background-color: white;
-            }
-            header{
-              background-color: rgba(218, 145, 9, 0.993);
-              transition: .5s;
-            }
-            header.active{
-              background-color: white;
-              padding: 10px 20px;
-            }
-            header.active a{
-              color: black !important;
-            }
-            .logoutmodal:hover{
-              background-color: white!important;
-              color: black!important;
-            }
-          </style>
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/home"><i class="fa fa-home"></i> HOME</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/about"><i class="fa fa-globe"></i> ABOUT</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/contact_us"><i class="fa fa-phone-square"></i> CONTACT</a>
-            </li>
-            <!-- <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-list"></i> MENU
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>-
-                <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
-                <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
-                <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
-              </ul>
-            </li>
-          </ul> -->
-          <div class="d-flex search text-decoration-none align-items-center">
-                
-                  {% if user.is_authenticated %}
-                  <a href="{% url 'user_account' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i></a>
-                  {% if notifications %}
-                  {% comment %} <div class="dropdown me-3">
-                      <a class="icon" href="#" role="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="fa fa-bell mt-2 me-3"></i>
-                          <span class="badge bg-danger">{{ notifications|length }}</span>
-                      </a>
-                      <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-                          {% for notif in notifications %}
-                          {% if notif.user_id == user.id %}
-                          <li class="dropdown-item">{{ notif.message }}</li>
-                          {% endif %}
-                          {% endfor %}
-                      </ul>
-                  </div> {% endcomment %}
-                  {% else %}
-                  {% comment %} <span class="icon me-3"><i class="fa fa-bell mt-2 me-3"></i></span> {% endcomment %}
-                  {% endif %}
-                  {% else %}
-                  <a href="{% url 'login' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
-                  {% endif %}
-                  <a href="{% url 'menu' %}" class="icon">
-                    <i class="fa fa-cart-shopping me-3 mt-2"></i>
-                    
-                  </a>
-                  {% comment %} <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a> {% endcomment %}
-                  {% if user.is_authenticated %}
-                  <a href="#" class="btn btn-outline-warning text-dark ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
-                  {% endif %}
-              
-          
-
-          </div>
-        </div>
-      </div>
-
-
-
-
-
-
-
-
-
-
         <!-- Header Section -->
-        <header class="fixed-top">
-            <nav class="navbar navbar-expand-lg py-3 px-5">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50"> Soft Restaurant</a>
-                    <a class="btn d-block d-lg-none d-md-block" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                        <i class="fa fa-bars fa-2xl"></i>
-                      </a>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgba(218, 145, 9, 0.993);">
+            <div class="container">
+                <a class="navbar-brand" href="/home">
+                    <img src="{% static 'images/Restaurant_logo.jpg' %}" width="40" height="40">
+                    Soft Restaurant
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contact_us">Contact</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                Menu
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/menu">Appetizers</a></li>
+                                <li><a class="dropdown-item" href="/menu">Main Courses</a></li>
+                                <li><a class="dropdown-item" href="/menu">Desserts</a></li>
+                                <li><a class="dropdown-item" href="/menu">Beverages</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                     
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/home">HOME</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="/about">ABOUT</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/contact_us">CONTACT</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    MENU
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>
-                                    <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
-                                    <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
-                                    <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                    {% comment %} <div class="d-flex">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'user_account' %}" class="btn btn-outline-light me-2">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <a href="{% url 'menu' %}" class="btn btn-outline-light me-2 position-relative">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                </span>
+                            </a>
+                            <a href="#" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                Sign Out
+                            </a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-light">
+                                Login
+                            </a>
+                        {% endif %}
+                    </div> {% endcomment %}
                 </div>
-            </nav>
-        </header>
+            </div>
+        </nav>
 
         <!-- About Hero Section -->
-        <section class="about-hero py-5 mt-5">
+        <section class="about-hero">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h1 class="display-4 fw-bold mb-4">Our Story</h1>
-                        <p class="lead">Welcome to Soft Restaurant, where culinary excellence meets warm hospitality. Our journey began with a simple passion for creating memorable dining experiences.</p>
+                    <div class="col-lg-6">
+                        <h1 class="display-3 fw-bold mb-4">Our Story</h1>
+                        <p class="lead mb-4">Welcome to Soft Restaurant, where culinary excellence meets warm hospitality. Our journey began with a simple passion for creating memorable dining experiences.</p>
+                        <a href="/menu" class="btn btn-warning btn-lg px-4">Explore Our Menu</a>
                     </div>
-                    <div class="col-md-6" >
-                        <img src="{% static 'images/Restaurant_logo.jpg' %}" alt="Restaurant Interior" class="img-fluid rounded shadow" style="border-radius: 50%;">
+                    <div class="col-lg-6 mt-5 mt-lg-0">
+                        <img src="{% static 'images/restaurant-about.jpeg' %}" alt="Restaurant Interior" class="img-fluid rounded shadow-lg">
                     </div>
                 </div>
             </div>
         </section>
 
-        <script>
-            const header = document.querySelector('header')
-
-            window.addEventListener('scroll', ()=>{
-              if(window.scrollY > 40){
-                header.classList.add('active')
-              }else{
-                header.classList.remove('active')
-              }
-            })
-        </script>
+        <!-- Our Mission Section -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 order-lg-2">
+                        <h2 class="display-5 fw-bold mb-4">Our Mission</h2>
+                        <p class="lead">To deliver exceptional dining experiences through innovative cuisine, impeccable service, and a warm atmosphere that keeps our guests coming back.</p>
+                        <p>We source only the finest ingredients from local producers and combine them with culinary expertise to create dishes that delight all senses.</p>
+                    </div>
+                    <div class="col-lg-6 order-lg-1 mt-5 mt-lg-0">
+                        <img src="{% static 'images/kitchen-team.jpeg' %}" alt="Our Kitchen" class="img-fluid rounded shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Our Values Section -->
-        <section class="values py-5 bg-light">
+        <section class="values py-5">
             <div class="container">
-                <h2 class="text-center mb-5">Our Values</h2>
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold">Our Core Values</h2>
+                    <p class="lead text-muted">The principles that guide everything we do</p>
+                </div>
+                
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center">
-                                <i class="fas fa-heart text-warning fa-3x mb-3"></i>
-                                <h3 class="card-title">Passion</h3>
-                                <p class="card-text">We pour our heart into every dish we create, ensuring each meal is a masterpiece.</p>
+                        <div class="card h-100 border-0 shadow-sm text-center p-4">
+                            <div class="card-body">
+                                <div class="icon-box bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-heart text-warning fa-2x"></i>
+                                </div>
+                                <h3 class="h4">Passion</h3>
+                                <p class="text-muted">We pour our heart into every dish we create, ensuring each meal is prepared with love and attention to detail.</p>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center">
-                                <i class="fas fa-leaf text-warning fa-3x mb-3"></i>
-                                <h3 class="card-title">Quality</h3>
-                                <p class="card-text">We source the finest ingredients to deliver exceptional quality in every bite.</p>
+                        <div class="card h-100 border-0 shadow-sm text-center p-4">
+                            <div class="card-body">
+                                <div class="icon-box bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-leaf text-warning fa-2x"></i>
+                                </div>
+                                <h3 class="h4">Quality</h3>
+                                <p class="text-muted">We source the finest seasonal ingredients to deliver exceptional quality and freshness in every bite.</p>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center">
-                                <i class="fas fa-users text-warning fa-3x mb-3"></i>
-                                <h3 class="card-title">Community</h3>
-                                <p class="card-text">We believe in creating a welcoming space where everyone feels like family.</p>
+                        <div class="card h-100 border-0 shadow-sm text-center p-4">
+                            <div class="card-body">
+                                <div class="icon-box bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-users text-warning fa-2x"></i>
+                                </div>
+                                <h3 class="h4">Community</h3>
+                                <p class="text-muted">We believe in creating a welcoming space where everyone feels valued and part of our restaurant family.</p>
                             </div>
                         </div>
                     </div>
@@ -210,34 +280,43 @@
         </section>
 
         <!-- Team Section -->
-        <section class="team py-5">
+        <section class="team py-5 bg-light">
             <div class="container">
-                <h2 class="text-center mb-5">Meet Our Team</h2>
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold">Meet Our Team</h2>
+                    <p class="lead text-muted">The talented individuals behind your dining experience</p>
+                </div>
+                
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="card border-0 shadow-sm">
-                            <img src="{% static 'images/chef_1.jfif' %}" class="card-img-top" alt="Chef">
+                        <div class="card border-0 shadow-sm h-100">
+                            <img src="{% static 'images/chef_1.jfif' %}" class="card-img-top" alt="Head Chef">
                             <div class="card-body text-center">
                                 <h4 class="card-title">John Doe</h4>
-                                <p class="card-text text-muted">Head Chef</p>
+                                <p class="text-warning fw-bold">Head Chef</p>
+                                <p class="card-text">With over 15 years of culinary experience, John brings creativity and expertise to every dish.</p>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-4">
-                        <div class="card border-0 shadow-sm">
-                            <img src="{% static 'images/chef_2.jfif' %}" class="card-img-top" alt="Chef">
+                        <div class="card border-0 shadow-sm h-100">
+                            <img src="{% static 'images/chef_2.jfif' %}" class="card-img-top" alt="Pastry Chef">
                             <div class="card-body text-center">
                                 <h4 class="card-title">Jane Smith</h4>
-                                <p class="card-text text-muted">Pastry Chef</p>
+                                <p class="text-warning fw-bold">Pastry Chef</p>
+                                <p class="card-text">Jane's desserts are works of art that provide the perfect sweet ending to your meal.</p>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-4">
-                        <div class="card border-0 shadow-sm">
-                            <img src="{% static 'images/chef_32.jpg' %}" class="card-img-top" alt="Chef">
+                        <div class="card border-0 shadow-sm h-100">
+                            <img src="{% static 'images/chef_3.jfif' %}" class="card-img-top" alt="Sous Chef">
                             <div class="card-body text-center">
                                 <h4 class="card-title">Mike Johnson</h4>
-                                <p class="card-text text-muted">Sous Chef</p>
+                                <p class="text-warning fw-bold">Sous Chef</p>
+                                <p class="card-text">Mike ensures every dish meets our high standards before it reaches your table.</p>
                             </div>
                         </div>
                     </div>
@@ -245,26 +324,175 @@
             </div>
         </section>
 
-        <style>
-
-        </style>
+        <!-- Testimonials Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold">What Our Guests Say</h2>
+                    <p class="lead text-muted">Hear from our satisfied customers</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100 p-4">
+                            <div class="card-body">
+                                <div class="mb-3 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="card-text mb-4">"The food at Soft Restaurant is absolutely incredible! Every dish is packed with flavor and beautifully presented."</p>
+                                <div class="d-flex align-items-center">
+                                    <img src="{% static 'images/testimonial-1.jpg' %}" class="rounded-circle me-3" width="50" height="50">
+                                    <div>
+                                        <h6 class="mb-0">Sarah Williams</h6>
+                                        <small class="text-muted">Regular Customer</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100 p-4">
+                            <div class="card-body">
+                                <div class="mb-3 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="card-text mb-4">"The service is impeccable and the atmosphere is so welcoming. Our new favorite restaurant in town!"</p>
+                                <div class="d-flex align-items-center">
+                                    <img src="{% static 'images/testimonial-2.jpg' %}" class="rounded-circle me-3" width="50" height="50">
+                                    <div>
+                                        <h6 class="mb-0">Michael Brown</h6>
+                                        <small class="text-muted">Food Critic</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100 p-4">
+                            <div class="card-body">
+                                <div class="mb-3 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <p class="card-text mb-4">"I hosted my birthday dinner here and the team went above and beyond to make it special. Highly recommend!"</p>
+                                <div class="d-flex align-items-center">
+                                    <img src="{% static 'images/testimonial-3.jpg' %}" class="rounded-circle me-3" width="50" height="50">
+                                    <div>
+                                        <h6 class="mb-0">Emily Davis</h6>
+                                        <small class="text-muted">Event Host</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Footer -->
-        <footer class="bg-dark text-light py-4">
+        <footer class="bg-dark text-white py-5">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5>Soft Restaurant</h5>
-                        <p>Creating memorable dining experiences since 2024.</p>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="mb-4">
+                            <img src="{% static 'images/Restaurant_logo.jpg' %}" width="50" class="rounded-circle me-2">
+                            <span class="h4 fw-bold">Soft Restaurant</span>
+                        </div>
+                        <p>Creating memorable dining experiences through exceptional food, service, and atmosphere since 2024.</p>
+                        <div class="social-icons mt-4">
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-yelp"></i></a>
+                        </div>
                     </div>
-                    <div class="col-md-6 text-md-end">
-                        <p>&copy; 2024 Soft Restaurant. All rights reserved.</p>
+                    
+                    <div class="col-lg-2 col-md-4">
+                        <h5 class="fw-bold mb-4">Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="/home" class="text-white text-decoration-none">Home</a></li>
+                            <li class="mb-2"><a href="/about" class="text-white text-decoration-none">About</a></li>
+                            <li class="mb-2"><a href="/menu" class="text-white text-decoration-none">Menu</a></li>
+                            <li class="mb-2"><a href="/contact" class="text-white text-decoration-none">Contact</a></li>
+                            <li><a href="#" class="text-white text-decoration-none">Reservations</a></li>
+                        </ul>
                     </div>
+                    
+                    <div class="col-lg-3 col-md-4">
+                        <h5 class="fw-bold mb-4">Contact Us</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-warning"></i> 5, Main Street, City</li>
+                            <li class="mb-2"><i class="fas fa-phone-alt me-2 text-warning"></i> +234 810 701 4197</li>
+                            <li class="mb-2"><i class="fas fa-envelope me-2 text-warning"></i> contact@softrestaurant.com</li>
+                            <li><i class="fas fa-clock me-2 text-warning"></i> Mon-Sat: 11AM - 9PM</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4">
+                        <h5 class="fw-bold mb-4">Newsletter</h5>
+                        <p>Subscribe to receive updates and special offers.</p>
+                        <form class="mt-3">
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Your Email">
+                                <button class="btn btn-warning" type="button">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="border-top border-secondary mt-4 pt-4 text-center">
+                    <p class="mb-0">&copy; 2025 Soft Restaurant. All rights reserved.</p>
                 </div>
             </div>
         </footer>
 
+        <!-- Logout Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center p-5">
+                        <h4 class="mb-4">Are you sure you want to sign out?</h4>
+                        <div class="d-flex justify-content-center">
+                            <a href="/logout" class="btn btn-warning me-3 px-4">Yes</a>
+                            <button class="btn btn-secondary px-4" data-bs-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
         <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+        
+        <script>
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        </script>
     </body>
-</html> 
+</html>
