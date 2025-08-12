@@ -3,784 +3,952 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Homepage</title>
-        <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
-        <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/CAOS.file/CAOS.file.v-1.5/style.css' %}">
-        <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
-        <link rel="stylesheet" href="{% static 'restaurant.css'%}">
-        
-    </head>
-    <body>
-        <div class="logo_area">
-              <style>
-                body{
-                  background-color: white;
-                  overflow-x: hidden !important;
-                }
-                header{
-                  background-color: transparent;
-                  transition: .5s;
-                }
-                header.active{
-                  background-color: white;
-                  padding: 10px 20px;
-                }
-                header.active a{
-                  color: black !important;
-                }
-                .logoutmodal:hover{
-                  background-color: white!important;
-                  color: black!important;
-                }
-                #offcanvas-cart-count{
-                  position: absolute;
-                  left: 10px;
-                  top: -5px;
-                  font-size: 15px;
-                }
-                .menus{
-                  border-top-right-radius: 30px;
-                  border-bottom-right-radius: 30px;
-                }
-              </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soft Restaurant - Home</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'restaurant.css'%}">
+    <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
+    <style>
+        /* Loading Animation */
+        .loading {
+            background-color: white;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
 
-<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered ">
-      <div class="modal-content">
-        <div class="card logoutmodal">
-          <div class="card-body">
-            <h4 class="text-center">Are You sure you want to sign out?</h4>
-                <div class="text-center">
-                  <a href="/logout" class="btn btn-warning me-5">Yes</a>
-            <a href="/home" class="btn btn-danger ">No</a>
+        .loader {
+            width: 150px;
+            height: 150px;
+            position: relative;
+        }
+
+        .plate {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #f8f8f8;
+            border: 5px solid #ffbe33;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: rotate 3s linear infinite;
+        }
+
+        .food {
+            position: relative;
+            width: 60%;
+            height: 60%;
+        }
+
+        .circle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ffbe33;
+        }
+
+        .circle:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .circle:nth-child(2) {
+            bottom: 0;
+            left: 20%;
+        }
+
+        .circle:nth-child(3) {
+            bottom: 0;
+            right: 20%;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: transparent;
+            transition: .5s;
+        }
+        
+        header.active {
+            background-color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        header.active a {
+            color: black !important;
+        }
+        
+        header.active .navbar-brand {
+            color: black !important;
+        }
+        
+        /* Menu Preview Section */
+        .menu-preview {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .menu-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .category {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .category h4 {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .items-popup {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .category:hover .items-popup {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-10px);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        body {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Card hover effects */
+        .card {
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        /* Button hover effect */
+        .btn-warning {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-warning:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e69c00;
+            border-radius: inherit;
+            z-index: -2;
+        }
+        
+        .btn-warning:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: white;
+            transition: all 0.3s;
+            border-radius: inherit;
+            z-index: -1;
+        }
+        
+        .btn-warning:hover {
+            color: #e69c00 !important;
+        }
+        
+        .btn-warning:hover:before {
+            width: 100%;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sliding .details h1 {
+                font-size: 2.5rem;
+                margin-top: 60px;
+            }
+            
+            .special .first, .special .col-md-6 {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .foodrow {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .No_1, .soup {
+                width: 90%;
+                margin: 10px auto;
+            }
+            
+            .menu-preview .col-lg-6 {
+                margin-top: 30px;
+            }
+            
+            .contact .col-md-4, .contact .col-md-8 {
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .opin-image img {
+                margin: 20px auto;
+                display: block;
+            }
+            
+            .rest {
+                margin-left: 0;
+                text-align: center;
+                display: block;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1rem !important;
+            }
+            
+            .sliding .details {
+                margin-bottom: 80px !important;
+            }
+            
+            .sliding .details h1 {
+                font-size: 2rem;
+            }
+            
+            .first-text h4 {
+                font-size: 1.5rem;
+            }
+            
+            .menu-preview h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Animation -->
+    <div class="loading">
+        <div class="loader">
+            <div class="plate">
+                <div class="food">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
                 </div>
+            </div>
+        </div>
+        <p>Preparing your dining experience...</p>
+    </div>
+
+    <!-- Header Section -->
+    <div class="bg-box">
+        <header class="fixed-top">
+            <nav class="navbar navbar-expand-lg py-3 px-4">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/home">
+                        <img src="{% static 'images/Restaurant_logo.jpg'%}" width="50" class="img-fluid rounded-circle me-2"> 
+                        Soft Restaurant
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars text-white"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/home">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about">ABOUT</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/contact_us">CONTACT</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    MENU
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>
+                                    <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
+                                    <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
+                                    <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="d-flex align-items-center">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'user_account' %}" class="nav-link me-3"><i class="fa fa-user"></i></a>
+                                <a href="{% url 'menu' %}" class="nav-link me-3 position-relative">
+                                    <i class="fa fa-cart-shopping"></i>
+                                    <span id="offcanvas-cart-count" class="badge bg-danger">0</span>
+                                </a>
+                                <a href="#" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-warning text-white">Login</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Logout Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h4>Are you sure you want to sign out?</h4>
+                            <div class="mt-4">
+                                <a href="/logout" class="btn btn-warning me-3">Yes</a>
+                                <a href="/home" class="btn btn-secondary">No</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Slider Section -->
+        <section class="sliding p-4 w-100">
+            <div id="carouselExampleSlidesOnly" class="carousel slide mt-4" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-6">
+                                    <div class="details ms-md-5 mt-5">
+                                        <h1>Welcome to Soft Restaurant 🍽️</h1>
+                                        <p>🚀 Delicious Meals, Just a Click Away! 🚀
+                                        Order your favorite dishes online and enjoy restaurant-quality food from the comfort of your home.</p>
+                                        <div class="btn-box mt-4">
+                                            <a href="{% url 'menu' %}" class="btn btn-warning btn-lg px-4 py-2">
+                                                Order Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-6">
+                                    <div class="details ms-md-5 mt-5">
+                                        <h1>Fresh, Fast & Flavorful! 🍔🍕🥗</h1>
+                                        <p>🔥 Made with Fresh Ingredients
+                                        ⏳ Fast & Reliable Order Processing
+                                        💳 Secure & Easy Online Payment</p>
+                                        <div class="btn-box mt-4">
+                                            <a href="{% url 'menu' %}" class="btn btn-warning btn-lg px-4 py-2">
+                                                Order Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-6">
+                                    <div class="details ms-md-5 mt-5">
+                                        <h1>How It Works? 🛒</h1>
+                                        <p>1️⃣ Browse Our Menu – Choose from a variety of delicious meals.<br>
+                                        2️⃣ Place Your Order – Add items to your cart & checkout securely.<br>
+                                        3️⃣ Enjoy Your Meal – Pick up or get it delivered to your doorstep!</p>
+                                        <div class="btn-box mt-4">
+                                            <a href="{% url 'menu' %}" class="btn btn-warning btn-lg px-4 py-2">
+                                                Order Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Special Offers Section -->
+    <section class="special p-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="row align-items-center bg-dark p-4 rounded text-light h-100">
+                        <div class="col-md-4 first-image">
+                            <img src="{% static 'images/food-removebg-preview.png'%}" class="img-fluid">
+                        </div>
+                        <div class="col-md-8 first-text">
+                            <h4>Tasty Pizza</h4>
+                            <h3 class="mt-3">20% off</h3>
+                            <a href="/menu" class="btn btn-warning mt-3 text-white">Order Now <i class="fa fa-cart-shopping"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="row align-items-center bg-dark p-4 rounded text-light h-100">
+                        <div class="col-md-4 first-image">
+                            <img src="{% static 'images/Delish_sides.jpg'%}" class="img-fluid">
+                        </div>
+                        <div class="col-md-8 first-text">
+                            <h4>Tasty Chicken</h4>
+                            <h3 class="mt-3">20% off</h3>
+                            <a href="/menu" class="btn btn-warning mt-3 text-white">Order Now <i class="fa fa-cart-shopping"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="delicious w-100 py-5">
+        <div class="container">
+            <span class="serve">We serve</span><br>
+            <span class="meal">The Best meal</span><br><br>
+            <p class="w-75">At Soft Restaurant, we're passionate about creating memorable dining experiences. Our chefs use only the freshest ingredients to craft dishes that delight the senses and satisfy the soul. From traditional favorites to innovative creations, every meal is prepared with care and attention to detail.</p>
+        </div>
+    </section>
+
+    <!-- Menu Categories Section -->
+    <section class="food-card py-5 bg-light">
+        <div class="container">
+            <div class="foodrow">
+                <div class="No_1 mx-1 animate slide-left">
+                    <div class="image">
+                        <img src="{% static 'images/cheeseburger.jpg' %}" class="img-fluid" alt="Appetizers">
+                    </div>
+                    <div class="text-content">
+                        <h5 class="card-title">Appetizers</h5>
+                        <p class="card-text">Start your meal with our delicious selection of appetizers, perfect for sharing or enjoying on your own.</p>
+                        <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="No_1 animate slide-left delay-1">
+                    <div class="image">
+                        <img src="{% static 'images/Cupcakes.jpg'%}" class="img-fluid" alt="Desserts">
+                    </div>
+                    <div class="text-content">
+                        <h5 class="card-title">Desserts</h5>
+                        <p class="card-text">Indulge in our sweet creations that provide the perfect ending to your dining experience.</p>
+                        <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="No_1 animate slide-left delay-2">
+                    <div class="image">
+                        <img src="{% static 'images/Jollof Rice.jpg'%}" class="img-fluid" alt="Main Course">
+                    </div>
+                    <div class="text-content">
+                        <h5 class="card-title">Main Course</h5>
+                        <p class="card-text">Our hearty main dishes are prepared with care and feature the finest ingredients available.</p>
+                        <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="No_1 animate slide-left delay-3">
+                    <div class="image">
+                        <img src="{% static 'images/Drinks.jpg'%}" class="img-fluid" alt="Beverages">
+                    </div>
+                    <div class="text-content">
+                        <h5 class="card-title">Beverages</h5>
+                        <p class="card-text">Complement your meal with our selection of refreshing drinks, from classic to contemporary.</p>
+                        <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Menu Preview Section (Replaces Delivery Section) -->
+    <section class="menu-preview bg-warning p-5 my-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-4 fw-bold text-white mb-4">Explore Our Menu</h2>
+                    <p class="lead text-white mb-4">Hover over the categories to see popular items</p>
+                    
+                    <div class="menu-categories">
+                        <div class="category" data-category="appetizers">
+                            <h4>Appetizers</h4>
+                            <div class="items-popup">
+                                <img src="{% static 'images/cheeseburger.jpg' %}" alt="Appetizer" class="img-thumbnail mb-2">
+                                <p>Spring Rolls, Bruschetta, Chicken Wings</p>
+                            </div>
+                        </div>
+                        
+                        <div class="category" data-category="mains">
+                            <h4>Main Courses</h4>
+                            <div class="items-popup">
+                                <img src="{% static 'images/Jollof Rice.jpg' %}" alt="Main Course" class="img-thumbnail mb-2">
+                                <p>Jollof Rice, Grilled Salmon, Beef Steak</p>
+                            </div>
+                        </div>
+                        
+                        <div class="category" data-category="desserts">
+                            <h4>Desserts</h4>
+                            <div class="items-popup">
+                                <img src="{% static 'images/Cupcakes.jpg' %}" alt="Dessert" class="img-thumbnail mb-2">
+                                <p>Chocolate Cake, Ice Cream, Fruit Salad</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="/menu" class="btn btn-light btn-lg mt-4">View Full Menu</a>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="menu-display text-center">
+                        <img src="{% static 'images/food-removebg-preview.png' %}" alt="Featured Dish" class="img-fluid floating" style="max-height: 400px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Food Update Section -->
+    <section class="food-update py-5">
+        <div class="container text-center">
+            <div class="update-text">
+                <span class="up">Our</span> <span class="text-warning">Food</span> <span class="up">Update</span>
+            </div>
+            <p class="lead">Here are the Specials for this month</p>
+        </div>
+    </section>
+
+    <!-- Monthly Specials Section -->
+    <section class="update py-4">
+        <div class="container">
+            <div class="row justify-content-center g-4">
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-left">
+                    <div class="card h-100 mx-auto">
+                        <div class="card-image">
+                            <img src="{% static 'images/Egusi_soup.jpg'%}" class="card-img-top" alt="Egusi Soup">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Special Egusi Soup</h5>
+                            <p class="card-text">It goes along with any swallow of your choice</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-left">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/Basmati.jpg'%}" class="card-img-top" alt="Basmati Rice">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Basmati Rice</h5>
+                            <p class="card-text">Fragrant basmati rice served with your choice of protein and sauce.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-left">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/Spring_rolls.jpg'%}" class="card-img-top" alt="Spring Rolls">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Spring Rolls</h5>
+                            <p class="card-text">Crispy vegetable spring rolls with sweet chili dipping sauce.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-right">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/Milkshake.jpg'%}" class="card-img-top" alt="Milkshake">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Milkshake</h5>
+                            <p class="card-text">Creamy milkshakes available in chocolate, vanilla, and strawberry.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-right">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/Afang.jpg'%}" class="card-img-top" alt="Afang Soup">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Afang Soup</h5>
+                            <p class="card-text">Traditional Nigerian soup made with afang leaves and assorted meats.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-right">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/Ofada_Rice.jpg'%}" class="card-img-top" alt="Ofada Rice">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Ofada Rice</h5>
+                            <p class="card-text">Local rice served with specially prepared sauce and assorted meats.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-right">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/cake.jpg'%}" class="card-img-top" alt="Birthday Cake">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Happy Birthday Cake</h5>
+                            <p class="card-text">Custom birthday cakes available in various flavors and sizes.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-xl-3 soup animate fade-zoom-down-right">
+                    <div class="card h-100">
+                        <div class="card-image">
+                            <img src="{% static 'images/Cocktail.jpg'%}" class="card-img-top" alt="Cocktail">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="word"><i class="fa fa-calendar me-2"></i> 29/01/2025</h5>
+                            <h5 class="card-title">Cocktail</h5>
+                            <p class="card-text">Refreshing cocktails made with premium spirits and fresh ingredients.</p>
+                            <a href="/menu" class="btn btn-warning text-white"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Redesigned Contact Section -->
+<section class="contact-section py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 fw-bold">Get In Touch</h2>
+      <p class="lead">We'd love to hear from you</p>
+      <div class="divider mx-auto bg-warning"></div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Contact Info -->
+      <div class="col-lg-4">
+        <div class="contact-info-card p-4 rounded shadow-sm h-100">
+          <div class="contact-item d-flex mb-4">
+            <div class="icon-box bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="fas fa-map-marker-alt fa-lg"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-1">Location</h5>
+              <p class="mb-0">5, Main Street, City</p>
+            </div>
+          </div>
+
+          <div class="contact-item d-flex mb-4">
+            <div class="icon-box bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="fas fa-clock fa-lg"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-1">Open Hours</h5>
+              <p class="mb-0">Mon-Sat: 11:00 AM - 7:00 PM</p>
+              <p class="mb-0">Sunday: Closed</p>
+            </div>
+          </div>
+
+          <div class="contact-item d-flex mb-4">
+            <div class="icon-box bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="fas fa-envelope fa-lg"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-1">Email</h5>
+              <a href="mailto:contact@softrestaurant.com" class="text-decoration-none">contact@softrestaurant.com</a>
+            </div>
+          </div>
+
+          <div class="contact-item d-flex">
+            <div class="icon-box bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="fas fa-phone-alt fa-lg"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-1">Call Us</h5>
+              <a href="tel:+2348107014197" class="text-decoration-none">+234 810 701 4197</a>
+            </div>
           </div>
         </div>
       </div>
 
-  </div>
-</div>
-
-
-            <div class="menus offcanvas offcanvas-start bg-warning text-white fs-2 fw-bold" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-              <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/home"><i class="fa fa-home"></i> HOME</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/about"><i class="fa fa-globe"></i> ABOUT</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/contact_us"><i class="fa fa-phone-square"></i> CONTACT</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-list"></i> MENU
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>
-                      <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
-                      <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
-                      <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
-                    </ul>
-                  </li>
-                </ul>
-                <div class="d-flex search text-decoration-none align-items-center">
-                      
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'user_account' %}" class="icon text-light"><i class="fa fa-user me-3 mt-2"></i></a
-                        
-                        git
-                       
-                        {% endif %}
-                        
-                        
-                        <a href="{% url 'menu' %}" class="icon text-light">
-                          <i class="fa fa-cart-shopping me-3 mt-2"></i>
-                          
-                        </a>
-                        
-                        {% if user.is_authenticated %}
-                        <a href="#" class="btn btn-outline-warning text-dark ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
-                        {% endif %}
-                    
-                
-
-                </div>
-              </div>
-            </div>
-
-
-            <div class="bg-box">
-            <!-- header section -->
-            <header class="fixed-top">
-                <nav class="navbar navbar-expand-lg py-3 px-5">
-                    <div class="container-fluid">
-                      <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50" class="img-fluid"> Soft Restaurant</a>
-                      <a class="btn d-block d-lg-none d-md-block" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                        <i class="fa fa-bars fa-2xl"></i>
-                      </a>
-                      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                          <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/home">HOME</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="/about">ABOUT</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="/contact_us">CONTACT</a>
-                          </li>
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              MENU
-                            </a>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="/menu">APPETIZER</a></li>
-                              <li><a class="dropdown-item" href="/menu">MAIN COURSES</a></li>
-                              <li><a class="dropdown-item" href="/menu">DESSERTS</a></li>
-                              <li><a class="dropdown-item" href="/menu">BEVERAGES</a></li>
-                            </ul>
-                          </li>
-                        </ul>
-                        <div class="d-flex search text-decoration-none align-items-center">
-                              
-                                {% if user.is_authenticated %}
-                                <a href="{% url 'user_account' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i></a>
-                                {% if notifications %}
-                                {% comment %} <div class="dropdown me-3">
-                                    <a class="icon" href="#" role="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa fa-bell mt-2 me-3"></i>
-                                        <span class="badge bg-danger">{{ notifications|length }}</span>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-                                        {% for notif in notifications %}
-                                        {% if notif.user_id == user.id %}
-                                        <li class="dropdown-item">{{ notif.message }}</li>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                </div> {% endcomment %}
-                                {% else %}
-                                {% comment %} <span class="icon me-3"><i class="fa fa-bell mt-2 me-3"></i></span> {% endcomment %}
-                                {% endif %}
-                                {% else %}
-                                <a href="{% url 'login' %}" class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
-                                {% endif %}
-                                <a href="{% url 'menu' %}" class="icon">
-                                  <i class="fa fa-cart-shopping me-3 mt-2"></i>
-                                  
-                                </a>
-                                {% comment %} <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a> {% endcomment %}
-                                {% if user.is_authenticated %}
-                                <a href="#" class="btn btn-outline-warning text-light ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Out</a>
-                                {% endif %}
-                            
-                         
-
-                        </div>
-                      </div>
-                    </div> 
-                  </nav>
-            </header>
-             <!-- End of Header Section -->
-              <script>
-                  const header = document.querySelector('header')
-
-                  window.addEventListener('scroll', ()=>{
-                    if(window.scrollY > 40){
-                      header.classList.add('active')
-                    }else{
-                      header.classList.remove('active')
-                    }
-                  })
-              </script>
-              <!-- Slider Section -->
-               <section class="sliding p-4 w-100">
-                <div id="carouselExampleSlidesOnly" class="carousel slide mt-4" data-bs-ride="carousel">
-                    {% comment %} <ol class="carousel-indicators">
-                      <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></li>
-                      <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></li>
-                      <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></li>
-                    </ol> {% endcomment %}
-                    <div class="carousel-inner">
-                      <div class="carousel-item active">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-6">
-                                    <div class="details ms-5">
-                                        <h1 class="word">
-                                          Welcome to Soft Restaurant 🍽️
-                                        </h1>
-                                        <p>🚀 Delicious Meals, Just a Click Away! 🚀
-                                          Order your favorite dishes online and enjoy restaurant-quality food from the comfort of your home.
-                                          
-                                          🛒 Browse Our Menu & Order Now!</p> <br>
-                                        <div class="btn-box">
-                                            <a href="{% url 'menu' %}" class="btn1">
-                                                Order Now
-                                            </a>
-                                        </div>
-                                    </div>
-                                   
-                                </div>
-    
-                            
-                                    
-            
-                            </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-6">
-                                    <div class="details">
-                                        <h1 class="word">
-                                          Fresh, Fast & Flavorful! 🍔🍕🥗
-                                        </h1>
-                                        <p>🔥 Made with Fresh Ingredients
-                                          ⏳ Fast & Reliable Order Processing
-                                          💳 Secure & Easy Online Payment
-                                          
-                                          📍 Your next meal is just a tap away!</p>
-                                        <div class="btn-box">
-                                            <a href="{% url 'menu' %}" class="btn1">
-                                                Order Now
-                                            </a>
-                                            
-                                        </div>
-                                    </div>
-                                   
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-6">
-                                    <div class="details">
-                                        <h1 class="word">
-                                          How It Works? 🛒
-                                        </h1>
-                                        <p>1️⃣ Browse Our Menu – Choose from a variety of delicious meals. <br>
-                                          2️⃣ Place Your Order – Add items to your cart & checkout securely. <br>
-                                          3️⃣ Enjoy Your Meal – Pick up or get it delivered to your doorstep! <br>
-                                          
-                                          🚀 Order Now & Savor the Taste!</p>
-                                        <div class="btn-box">
-                                            <a href="{% url 'menu' %}" class="btn1">
-                                                Order Now
-                                            </a>
-                                        </div>
-                                    </div>
-                                   
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                
-                  </div>
-               </section>
-    
-            </div>
-            
-        </div>
-    
-    
-    
-    
-    
-    
-    
-        <!-- Special food section -->
-        <section class="special p-5 ">
-          <div class="container">
-            <div class="row justify-content-between g-0">
-              <div class="col-md-6 mb-2 row align-items-center first p-4 text-light">
-                <div class="col-md-4 first-image">
-                  <img src="{% static 'images/food-removebg-preview.png'%}" class="img-fluid">
-                </div>
-                <div class="col-md-6 first-text">
-                  <h4>Tasty Pizza</h4>
-                  <h3 class="mt-3">20% off</h3>
-                  <a href="#" class="btn btn-warning mt-4 text-white">Order Now <i class="fa fa-cart-shopping"></i></a>
-                </div>
-              </div>
-    
-              
-                <div class="col-md-6 mb-2 row  align-items-center  first p-4 text-light">
-                  <div class="col-md-4 first-image">
-                    <img src="{% static 'images/Delish_sides.jpg'%}" class="img-fluid">
-                  </div>
-                  <div class="col-md-6 first-text">
-                    <h4>Tasty Chicken</h4>
-                    <h3 class="mt-3">20% off</h3>
-                    <a href="#" class="btn btn-warning mt-4 text-white">Order Now <i class="fa fa-cart-shopping"></i></a>
-                  </div>
-                
-            </div>
-          </div>
-        </section>
-    
-    
-    <!-- Product section -->
-        <section class="delicious w-100">
-          <div class="container ms-5 w-75">
-            <span class="serve">We serve</span><br>
-            <span class="meal">The Best meal</span><br><br>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos pariatur ipsa at explicabo nemo corrupti deserunt similique tenetur odit incidunt, exercitationem dolor repellendus assumenda corporis perspiciatis fuga sapiente ullam minus?</p>
-          </div>
-        </section>
-    
-    
-        <!-- Menu Section -->
-        <section class="food-card">
-          <div class="container">
-            <div class="foodrow">
-              
-              <div class="No_1 mx-1 animate slide-left">
-                <div class="image">
-                  <img src="{% static 'images/cheeseburger.jpg' %}" class="img-fluid" alt="...">
-                </div>
-                <div class="text-content">
-                  <h5 class="card-title">Appetizers</h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed placeat veniam iste autem perspiciatis similique.</p>
-                  <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
-                </div>
-              </div>
-    
-              <div class="No_1 animate slide-left delay-1">
-                <div class="image">
-                  <img src="{% static 'images/Cupcakes.jpg'%}" class="img-fluid" alt="...">
-                </div>
-                <div class="text-content">
-                  <h5 class="card-title">Desserts</h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed placeat veniam iste autem perspiciatis similique.</p>
-                  <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
-                </div>
-              </div>
-    
-              <div class="No_1 animate slide-left delay-2">
-                <div class="image">
-                  <img src="{% static 'images/Jollof Rice.jpg'%}" class="img-fluid" alt="...">
-                </div>
-                <div class="text-content">
-                  <h5 class="card-title">Main Course</h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed placeat veniam iste autem perspiciatis similique.</p>
-                  <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
-                </div>
-              </div>
-    
-              <div class="No_1 animate slide-left delay-3">
-                <div class="image">
-                  <img src="{% static 'images/Drinks.jpg'%}" class="img-fluid" alt="...">
-                </div>
-                <div class="text-content">
-                  <h5 class="card-title">Beverages</h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed placeat veniam iste autem perspiciatis similique.</p>
-                  <a href="/menu" class="btn btn-warning text-white">View more <i class="fa fa-arrow-right"></i></a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </section>
-    <style>
-      .buttoninput{
-          margin-top: -30px;
-      }
-      .delivery .set a{
-          margin: 20px 5px;
-          padding: 10px;
-          font-weight: bold;
-      }
-          .delivery .best{
-        font-size: 30px;
-        color: #ffff;
-      }
-        .delivery p{
-          font-size: 25px;
-          color: #ffff;
-          margin-top: 20px;
-          padding: 20px;
-      }
-      .delivery .starve{
-        color: white;
-        font-size: 60px;
-        /* font-family: comibyte; */
-        font-weight: 600;
-        padding: 20px ;
-      }
-
-
-    </style>
-        <!-- Delivery Section -->
-         <section class="delivery bg-warning p-4 my-5 g-0">
-          <div class="container-fluid">
-            <div class="row align-items-center flex-md-row flex-column-  ">
+      <!-- Contact Form -->
+      <div class="col-lg-8">
+        <div class="contact-form-card p-4 rounded shadow-sm h-100">
+          <form class="needs-validation" novalidate>
+            <div class="row g-3">
               <div class="col-md-6">
-                <span class="starve">
-                    Hungry??
-                </span>
-                <p><span class="text-danger"></span> Let’s Satisfy Your <span class="best"> Cravings! 🍽️</span></p>
-                <div class="set">
-                  <a class="icon_deliver text-decoration-none"><i class="fa fa-shopping-cart"></i> order</a><br><br>
-                  <div class="d-flex align-items-center buttoninput">
-                    <input type="text" class="form-control" placeholder="Discover delicious meals...">
-                    <a href="#"  class="btn btn-warning text-white"><i class="fas fa-search"></i> Search</a>
-                  </div>
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" class="form-control py-2" id="name" required>
+                <div class="invalid-feedback">
+                  Please enter your name
                 </div>
-            </div>
-    
-            <div class="col-md-6">
-              <div class="image-food">
-                <img src="{% static 'images/Jollof_rice__4_-removebg-preview.png'%}" class="img-fluid">
-      
-            </div>
-            </div>
-          </div>
-         </section>
-    
-         <!-- Update Section -->
-         <section class="food-update">
-            <div class="container">
-              <div class="update-text"><span class="up">Our</span> <span class="text-warning"> Food</span><span class="up"> Update</span>
               </div>
-              <p>Here are the Specials for this month</p>
-    
-            </div>
-         </section>
-    
-         <!-- Food Update -->
-          <section class="update">
-            <div class="container ">
-              <div class="row align-items-center justify-content-evenly g-0 overflow-x-hidden">
-                <div class="col-md-4 soup animate fade-zoom-down-left">
-                  <div class="card mx-auto">
-                      <div class="card-image">
-                        <img src="{% static 'images/Egusi_soup.jpg'%}" class="card-img-top" alt="...">
-                      </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Special Egusi Soup</h5>
-                      <p class="card-text">It goes along with any swallow of your choice</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-                <div class="col-md-4 soup animate fade-zoom-down-left">
-                  <div class="card">
-                      <div class="card-image">
-                        <img src="{% static 'images/Basmati.jpg'%}" class="card-img-top" alt="...">
-                      </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Basmati Rice</h5>
-                      <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam, distinctio.</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-                <div class="col-md-4 soup animate fade-zoom-down-left">
-                  <div class="card">
-                        <div class="card-image">
-                          <img src="{% static 'images/Spring_rolls.jpg'%}" class="card-img-top" alt="...">
-                        </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Spring Rolls</h5>
-                      <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis, magnam?</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-                <div class="col-md-4 soup animate fade-zoom-down-left">
-                  <div class="card">
-                        <div class="card-image">
-                          <img src="{% static 'images/Milkshake.jpg'%}" class="card-img-top" alt="...">
-                        </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Milkshake</h5>
-                      <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, necessitatibus.</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-                <div class="col-md-4 soup animate fade-zoom-down-right  ">
-                  <div class="card">
-                        <div class="card-image">
-                          <img src="{% static 'images/Afang.jpg'%}" class="card-img-top" alt="...">
-                        </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Afang Soup</h5>
-                      <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, necessitatibus.</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 soup animate fade-zoom-down-right ">
-                  <div class="card">
-                        <div class="card-image">
-                          <img src="{% static 'images/Ofada_Rice.jpg'%}" class="card-img-top" alt="...">
-                        </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Ofada Rice</h5>
-                      <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, necessitatibus.</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-                <div class="col-md-4 soup animate fade-zoom-down-right ">
-                  <div class="card">
-                        <div class="card-image">
-                          <img src="{% static 'images/cake.jpg'%}" class="card-img-top" alt="...">
-                        </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Happy Birthday Cake</h5>
-                      <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, necessitatibus.</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-                <div class="col-md-4 soup animate fade-zoom-down-right">
-                  <div class="card">
-                        <div class="card-image">
-                          <img src="{% static 'images/Cocktail.jpg'%}" class="card-img-top" alt="...">
-                        </div>
-                    <div class="card-body">
-                      <h5 class="ms-3 word "><i class="fa fa-calendar"></i> 29/01/2025</h5>
-                      <h5 class="card-title">Cocktail</h5>
-                      <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, necessitatibus.</p>
-                      <a href="#" class="btn btn-warning text-white fs-5"><i class="fa fa-cart-shopping"></i> Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-    
-              </div>
-            </div>
-          </section>
-    
-    
-          <!-- Contact Form -->
-           <section class="contact">
-            <div class="container  p-2">
-              <div class="row g-0">
-                  <h3></h3><br><br>
-                  <div class="col-md-4">
-                      <div class="first">
-                          <span class="arrow"><i class="fa fa-location-arrow"></i></span>
-                          <div class="locate">
-                              <h4>Location</h4>
-                              <p>5, Main Street, City</p>
-                          </div>
-                      </div>
-                      <div class="second">
-                          <span class="clock"><i class="fa fa-clock"></i></span>
-                          <div class="hours ">
-                              <h4>Open Hours</h4>
-                              <p>Mondays-Saturdays: <br>11:00 AM - 19:00 PM</p>
-                          </div>
-                      </div>
-                      <div class="third">
-                         <span class="envelope"><i class="fa fa-envelope"></i></span> 
-                          <div class="email ">
-                              <h4>Email</h4>
-                              <a href="mailto:holuwartobby96@gmail.com" class="p">holuwartobby96@gmail.com</a>
-                          </div>
-                      </div>
-                      <div class="forth">
-                          <span class="phone"><i class="fa fa-phone"></i></span>
-                          <div class="number ">
-                              <h4>Call</h4>
-                              <a href="tel:+2348107014197" class="n">+2348107014197</a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-md-8">
-                      <form action="" method="post" class="">
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <div class="form-group mb-4">
-                                      <input id="my-input" class="form-control" type="text" name="" placeholder="Your Name" required>
-                                      <div class="invalid-feedback">Please enter a valid name</div>
-                                  </div>
-                              </div>
-                              <div class="col-md-6">
-                                  <div class="form-group mb-4">
-                                      <input id="my-input" class="form-control" type="email" name="" placeholder="Your Email" required>
-                                      <div class="invalid-feedback">Please enter a valid email</div>
-                                  </div>
-                              </div>
-                          
-                                  <div class="form-group mb-4">
-                                      <input id="my-input" class="form-control" type="text" name="" placeholder="Subject" required>
-                                      <div class="invalid-feedback">Please enter a valid Subject</div>
-                                  </div>
-                                  <div class="form-group mb-4">
-                                      <textarea id="my-textarea" class="form-control" rows="10" placeholder="Your Message" style="resize: none;" required></textarea>
-                                      <div class="invalid-feedback">Please enter a valid Message</div>
-                                  </div>
-                                  <div class="text-center mb-4">
-                                      <button type="submit" class="btn btn-warning py-2 px-3 mt-5" name="sub_reg" style="border-radius: 2pc;">Send Message</button>
-                                  </div>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-          
-              
-          </div>
-          
-           </section>
-           <!-- footer -->
-          <footer class="opin">
-           <div class="container">
-            <div class="row g-2">
               <div class="col-md-6">
-                <div class="opin-image  align-items-center">
-                  <img src="{% static 'images/Restaurant_logo.jpg'%}" alt="" class="img-fluid">
-                  <span class="rest">Soft Restaurant</span>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, in quae iste, quod ducimus eos repellendus libero deserunt atque harum omnis molestias saepe, corrupti nobis non quam voluptates ratione pariatur.</p>
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" class="form-control py-2" id="email" required>
+                <div class="invalid-feedback">
+                  Please enter a valid email
                 </div>
               </div>
-    
-              <div class="col-md-4 mt-5 ms-5">
-                <div class="opin-social">
-                  <h4 class="follow mb-5 ">Follow Us</h4>
-                  <ul class="list-items">
-                    <div class="list_1 mb-3">
-                      <li class="list-item list-unstyled">
-                        <a href="#" ><i class="fab fa-facebook-f "></i></a>
-                        <span class="face">Soft Restaurant</span>
-                      </li>
-                    </div>
-                    <div class="list_2 mb-3">
-                      <li class="list-item list-unstyled">
-                        <a href="#" ><i class="fab fa-x-twitter"></i></a>
-                        <span class="face">Soft Restaurant</span>
-                      </li>
-                    </div>
-                    <div class="list_3 mb-3">
-                      <li class="list-item list-unstyled">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <span class="face">@soft Restaurant</span>
-                      </li>
-                    </div>
-                    <div class="list_4 mb-3">
-                      <li class="list-item list-unstyled">
-                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                        <span class="face">@soft Restaurant</span>
-                      </li>
-                    </div>
-                    
-                  </ul>
-    
+              <div class="col-12">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" class="form-control py-2" id="subject" required>
+                <div class="invalid-feedback">
+                  Please enter a subject
+                </div>
               </div>
-              
+              <div class="col-12">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control py-2" id="message" rows="5" required></textarea>
+                <div class="invalid-feedback">
+                  Please enter your message
+                </div>
+              </div>
+              <div class="col-12 text-center">
+                <button class="btn btn-warning btn-lg px-4 py-2 mt-3" type="submit">
+                  <i class="fas fa-paper-plane me-2"></i> Send Message
+                </button>
+              </div>
             </div>
-          </div> 
-            
-            
-            <div class="copy text-center p-4">
-            <p>&copy; Copyright Soft Restaurant 2025</p>
-            </div>
-          </footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-          <style>
-            .loading{
-                background-color: white;
-                height: 100vh;
-                width: 100%;
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 1000;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: visibility .5s, opacity .5s;
-            }    
-            .loading-hidden{
-                visibility: none;
-                opacity: 0;
-            }
-            .spinner-border{
-                margin-left: 20px;
-            }
-        </style>
-    
-    <div class="loading">
-        <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
+          </form>
         </div>
-        <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+      </div>
     </div>
-    
-        
-    
-    <script>
-        const loading = document.querySelector('.loading');
-        window.addEventListener('load', function () {
-            loading.classList.add('loading-hidden');
-    
-            loading.addEventListener('transitionend', function () {
-                loading.classList.remove('loading');
-            });
-    
-        });    
-    
-    </script>
-    
-        
+  </div>
+</section>
 
+<!-- Redesigned Footer -->
+<footer class="footer-section bg-dark text-white pt-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- About Column -->
+      <div class="col-lg-4">
+        <div class="footer-about">
+          <div class="d-flex align-items-center mb-3">
+            <img src="{% static 'images/Restaurant_logo.jpg' %}" alt="Soft Restaurant" class="img-fluid rounded-circle me-3" width="60">
+            <h3 class="fw-bold mb-0">Soft Restaurant</h3>
+          </div>
+          <p class="mb-4">Delivering exceptional dining experiences with delicious food, excellent service, and a warm atmosphere that keeps our customers coming back.</p>
+          <div class="social-icons">
+            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-pinterest-p fa-lg"></i></a>
+          </div>
+        </div>
+      </div>
 
+      <!-- Quick Links Column -->
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-links">
+          <h5 class="fw-bold mb-3">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="/home" class="text-white text-decoration-none">Home</a></li>
+            <li class="mb-2"><a href="/about" class="text-white text-decoration-none">About Us</a></li>
+            <li class="mb-2"><a href="/menu" class="text-white text-decoration-none">Our Menu</a></li>
+            <li class="mb-2"><a href="/contact" class="text-white text-decoration-none">Contact</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
 
+      <!-- Contact Info Column -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-contact">
+          <h5 class="fw-bold mb-3">Contact Info</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2 d-flex">
+              <i class="fas fa-map-marker-alt me-2 mt-1 text-warning"></i>
+              <span>5, Main Street, City</span>
+            </li>
+            <li class="mb-2 d-flex">
+              <i class="fas fa-phone-alt me-2 mt-1 text-warning"></i>
+              <span>+234 810 701 4197</span>
+            </li>
+            <li class="mb-2 d-flex">
+              <i class="fas fa-envelope me-2 mt-1 text-warning"></i>
+              <span>contact@softrestaurant.com</span>
+            </li>
+            <li class="d-flex">
+              <i class="fas fa-clock me-2 mt-1 text-warning"></i>
+              <span>Mon-Sat: 11AM - 7PM</span>
+            </li>
+          </ul>
+        </div>
+      </div>
 
+      <!-- Newsletter Column -->
+      <div class="col-lg-3">
+        <div class="footer-newsletter">
+          <h5 class="fw-bold mb-3">Newsletter</h5>
+          <p>Subscribe to our newsletter for updates and special offers.</p>
+          <form class="mt-3">
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" placeholder="Your Email" aria-label="Your Email">
+              <button class="btn btn-warning" type="button">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-4 mt-4 border-top border-secondary">
+      <p class="mb-0">&copy; 2025 Soft Restaurant. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
 
+    <!-- JavaScript Libraries -->
     <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
     <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
-    <script src="{% static 'bootstrap-5.3.2-dist/CAOS.file/CAOS.file.v-1.5/script.js' %}"></script>
-    </body>
     
+    <!-- Custom JavaScript -->
+    <script>
+        // Parallax effect for header
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            const header = document.querySelector('.bg-box');
+            header.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
+            
+            // Sticky header effect
+            if(scrollPosition > 40) {
+                document.querySelector('header').classList.add('active');
+            } else {
+                document.querySelector('header').classList.remove('active');
+            }
+        });
+
+        // Animate elements when they come into view
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.animate');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if(elementPosition < windowHeight - 100) {
+                    element.classList.add('animated');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Menu category interaction
+        document.querySelectorAll('.category').forEach(category => {
+            category.addEventListener('mouseenter', function() {
+                const categoryType = this.getAttribute('data-category');
+                const display = document.querySelector('.menu-display img');
+                // You could change the image based on category here
+            });
+        });
+
+        // Modern loading screen
+        window.addEventListener('load', function() {
+            const loading = document.querySelector('.loading');
+            loading.style.opacity = '0';
+            loading.style.visibility = 'hidden';
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+            }, 500);
+        });
+    </script>
+</body>
 </html>
