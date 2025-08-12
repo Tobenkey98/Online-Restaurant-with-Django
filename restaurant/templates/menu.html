@@ -18,6 +18,79 @@
       
 </head>
 <style>
+  /* Loading Animation */
+  .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+  }
+  
+  .loader {
+      width: 150px;
+      height: 150px;
+      position: relative;
+      margin-bottom: 20px;
+  }
+  
+  .plate {
+      width: 100%;
+      height: 100%;
+      background-color: #f8f9fa;
+      border-radius: 50%;
+      border: 5px solid #ffbe33;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .food {
+      position: relative;
+      width: 80px;
+      height: 80px;
+  }
+  
+  .circle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #ff6b6b;
+      animation: bounce 1.5s infinite ease-in-out;
+  }
+  
+  .circle:nth-child(1) {
+      top: 0;
+      left: 30px;
+      animation-delay: 0s;
+  }
+  
+  .circle:nth-child(2) {
+      top: 30px;
+      left: 0;
+      animation-delay: 0.2s;
+  }
+  
+  .circle:nth-child(3) {
+      top: 30px;
+      right: 0;
+      animation-delay: 0.4s;
+  }
+  
+  @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+  }
+
   body{
     background-color: white;
   }
@@ -28,9 +101,8 @@
     background-color: white;
     color:  #ffbe33;
     transition: .5s;
-   
   }
-   .icon{
+  .icon{
     position:relative;
   }
   #header-cart-count{
@@ -39,12 +111,6 @@
     top: -5px;
     font-size: 10px;
   } 
-  #offcanvas-cart-count{
-    position: absolute;
-    left: 10px;
-    top: -5px;
-    font-size: 15px;
-  }
   .menus{
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
@@ -81,7 +147,6 @@
   .menu-item {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       transform: translateY(-5px);
-    
       height: 100%;
   }
   .menu-item.card{
@@ -100,8 +165,7 @@
   }
   .menu-item .image{
       height: 350px;
-  overflow: hidden;
-
+      overflow: hidden;
   }
   
   .menu-item .card-title {
@@ -119,53 +183,86 @@
       top: 10px;
       right: 10px;
   }
+
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+      .navbar-collapse {
+          background-color: white;
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 15px;
+      }
+      
+      .navbar-nav {
+          margin-bottom: 15px;
+      }
+      
+      .search {
+          margin-top: 15px;
+      }
+      
+      .menu-item .image {
+          height: 250px;
+      }
+  }
   
+  @media (max-width: 768px) {
+      .category-sidebar {
+          margin-bottom: 30px;
+      }
+      
+      .menu-item .image {
+          height: 200px;
+      }
+      
+      .navbar-brand {
+          font-size: 1rem !important;
+      }
+      
+      .navbar-brand img {
+          width: 40px;
+          height: 40px;
+      }
+  }
+  
+  @media (max-width: 576px) {
+      .menu-item .image {
+          height: 150px;
+      }
+      
+      .explore {
+          font-size: 1.25rem !important;
+      }
+      
+      .navbar a {
+          margin: 0 10px !important;
+          font-size: 11px !important;
+      }
+  }
 </style>
 <body>
 
-
-    <div class="menus offcanvas offcanvas-start bg-warning text-white fs-2 fw-bold" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-          <div class="offcanvas-body">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/home"><i class="fa fa-home"></i> HOME</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/about"><i class="fa fa-globe"></i> ABOUT</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/contact_us"><i class="fa fa-phone-square"></i> CONTACT</a>
-              </li>
-              
-            </ul>
-                <div class="d-flex search text-decoration-none align-items-center">
-                 {% comment %} {% if user.is_authenticated %}
-                  <a href="{% url 'user_account' %}" class="icon text-white"><i class="fa fa-user me-3 mt-2"></i></a>/
-                  {% endif %} {% endcomment %}
-                        
-                        <a href="{% url 'cart' %}" class="icon text-white">
-                          <i class="fa fa-cart-shopping me-3 mt-2"></i>
-                          <span id="offcanvas-cart-count" class="badge bg-danger">0</span>
-                        </a>
-
-
+    <!-- Loading Animation -->
+    <div class="loading-overlay" id="loading">
+        <div class="loader">
+            <div class="plate">
+                <div class="food">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
                 </div>
-          </div>
+            </div>
+        </div>
+        <p class="fs-5">Preparing your dining experience...</p>
     </div>
 
-
     <header class="sticky-top head">
-        <nav class="navbar navbar-expand-lg py-3 px-5">
+        <nav class="navbar navbar-expand-lg py-3 px-3 px-lg-5">
             <div class="container-fluid">
-                {% comment %} <a class="navbar-brand text-white" href="#"><img src="{% static 'images/Restaurant_logo.jpg' %}" width="50"> Soft Restaurant</a> {% endcomment %}
                 <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50" class="img-fluid"> Soft Restaurant</a>
-                      <a class="btn d-block d-lg-none d-md-block" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                        <i class="fa fa-bars fa-2xl"></i>
-                      </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link text-white" href="/home">HOME</a></li>
@@ -199,7 +296,7 @@
           header.classList.remove('active')
         }
       })
-  </script>
+    </script>
 
     <div class="container-fluid">
         <header class="py-4 text-center">
@@ -251,7 +348,17 @@
     <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
     <script src="{% static 'cart_utils.js' %}"></script>
     
-    
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loading').style.display = 'none';
+                }, 500);
+            }, 1200);
+        });
+    </script>
     
 </body>
 </html>

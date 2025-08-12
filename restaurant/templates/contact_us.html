@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,8 +108,30 @@
             background-color: white !important;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             padding: 0.5rem 0;
+        }
+
+        .navbar.scrolled .navbar-brand,
+        .navbar.scrolled .nav-link,
+        .navbar.scrolled .navbar-toggler,
+        .navbar.scrolled .dropdown-toggle,
+        .navbar.scrolled .dropdown-item,
+        .navbar.scrolled .fa,
+        .navbar.scrolled .fas,
+        .navbar.scrolled .bi {
             color: black !important;
         }
+
+        .navbar .navbar-brand,
+        .navbar .nav-link,
+        .navbar .navbar-toggler,
+        .navbar .dropdown-toggle,
+        .navbar .dropdown-item,
+        .navbar .fa,
+        .navbar .fas,
+        .navbar .bi {
+            color: white !important;
+        }
+        
         
 
         .navbar-brand {
@@ -418,8 +441,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link " href="/home">Home</a>
                     </li>
@@ -429,20 +452,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/contact">Contact</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" data-bs-toggle="dropdown">
-                            Menu
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="appetizer.html">Appetizers</a></li>
-                            <li><a class="dropdown-item" href="main.html">Main Courses</a></li>
-                            <li><a class="dropdown-item" href="desserts.html">Desserts</a></li>
-                            <li><a class="dropdown-item" href="beverages.html">Beverages</a></li>
-                        </ul>
-                    </li>
                 </ul>
                 <div class="d-flex ms-lg-3">
-                    {% if user.is_authenticated %}
+                    {% comment %} {% if user.is_authenticated %}
                         <a href="{% url 'user_account' %}" class="btn btn-outline-light me-2">
                             <i class="fas fa-user"></i>
                         </a>
@@ -453,7 +465,7 @@
                     {% endif %}
                     <a href="#" class="btn btn-outline-light">
                         <i class="fas fa-shopping-cart"></i>
-                    </a>
+                    </a> {% endcomment %}
                 </div>
             </div>
         </div>
