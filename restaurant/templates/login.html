@@ -9,41 +9,228 @@
         <title>{% block title %} {% endblock title %}</title>
         <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
-        <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/style.css' %}">
         <link rel="stylesheet" href="{% static 'restaurant.css'%}">
         <link rel="stylesheet" href="{% static 'form.css'%}">
+        <style>
+            /* Loading Animation */
+            .loading {
+                background-color: white;
+                height: 100vh;
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 1000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                transition: opacity 0.5s, visibility 0.5s;
+            }
+
+            .loader {
+                width: 150px;
+                height: 150px;
+                position: relative;
+            }
+
+            .plate {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background-color: #f8f8f8;
+                border: 5px solid #ffbe33;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                animation: rotate 3s linear infinite;
+            }
+
+            .food {
+                position: relative;
+                width: 60%;
+                height: 60%;
+            }
+
+            .circle {
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background-color: #ffbe33;
+            }
+
+            .circle:nth-child(1) {
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .circle:nth-child(2) {
+                bottom: 0;
+                left: 20%;
+            }
+
+            .circle:nth-child(3) {
+                bottom: 0;
+                right: 20%;
+            }
+
+            @keyframes rotate {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .loading p {
+                margin-top: 20px;
+                font-size: 1.2rem;
+                color: #333;
+                font-weight: 500;
+            }
+
+            /* Login Container */
+            .login {
+                background-image: linear-gradient(300deg, rgba(0, 0, 0, 0.785), rgba(0, 0, 0, 0.785)), url('{% static "images/Background_2.jpg" %}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                min-height: 100vh;
+                position: relative;
+                padding: 20px 0;
+            }
+
+            /* Form Container */
+            .login-container {
+                display: flex;
+                align-items: center;
+                min-height: calc(100vh - 40px);
+                
+            }
+
+            .login-image {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .login-image img {
+                max-width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .login-form-container {
+                position: relative;
+                z-index: 2;
+            }
+
+            .login-wrap {
+                width: 100%;
+                max-width: 525px;
+                min-height: 650px;
+                position: relative;
+                box-shadow: 0 12px 15px 0 #1d1d1d65, 0 17px 50px 0 #050505c5;
+                margin: 0 auto;
+            }
+
+            .login-html {
+                width: 100%;
+                height: 100%;
+                border-radius: 40px;
+                position: absolute;
+                padding: 90px 70px 50px 70px;
+                background: rgba(247, 245, 244);
+            }
+
+            /* Responsive adjustments */
+            @media (min-width: 992px) {
+                .login-image {
+                    padding-right: 50px;
+                }
+                .login-form-container {
+                    padding-left: 50px;
+                }
+            }
+
+            @media (max-width: 991.98px) {
+                .login-container {
+                    flex-direction: column;
+                }
+                .login-image {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1;
+                    opacity: 0.2;
+                }
+                .login-form-container {
+                    width: 100%;
+                    padding: 20px;
+                    z-index: 2;
+                }
+                .login-wrap {
+                    min-height: auto;
+                }
+                .login-html {
+                    padding: 60px 40px;
+                    background: rgba(247, 245, 244, 0.9);
+                }
+            }
+
+            @media (max-width: 767.98px) {
+                .login-html {
+                    padding: 50px 30px;
+                    border-radius: 30px;
+                }
+                .container-fluid.mt-2 {
+                    text-align: center;
+                }
+            }
+
+            @media (max-width: 575.98px) {
+                .login-html {
+                    padding: 40px 20px;
+                }
+                .login-html .tab {
+                    font-size: 18px;
+                }
+            }
+        </style>
     </head>
     
 <body>
+    <!-- Loading Animation -->
+    <div class="loading">
+        <div class="loader">
+            <div class="plate">
+                <div class="food">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Preparing your dining experience...</p>
+    </div>
+
     <div class="login">
-            <style>
-                .login-wrap{
-            width:100%;
-            margin:auto;
-            max-width:525px;
-            min-height:850px;
-            position:relative;
-            box-shadow:0 12px 15px 0 #1d1d1d65,0 17px 50px 0 #050505c5;
-        }
-            </style>
-     
         <div class="container-fluid mt-2 px-5">
-            <img src="{% static 'images/Restaurant_logo.jpg' %}" width="70" style="border-radius: 100%;" >
+            <img src="{% static 'images/Restaurant_logo.jpg' %}" width="70" style="border-radius: 100%;">
             <span class="soft text-white">Soft Foods</span>
         </div>
-        <div class="row align-items-center">
-            <div class="col-md-4">
-                <img src="{% static 'images/Premium.png' %}" width="550">
-             </div>
 
-             <div class="col-md-8">
+        <div class="container login-container">
+            <!-- Image Column - Hidden on small screens (shown as background) -->
+            <div class="col-lg-6 login-image d-none d-lg-flex">
+                <img src="{% static 'images/Premium.png' %}" alt="Premium Food" class="img-fluid">
+            </div>
+
+            <!-- Form Column -->
+            <div class="col-lg-6 login-form-container">
                 <div class="login-wrap">
                     <div class="login-html">
-                        <style>
-                            .login-html .tab{
-                                color: black;
-                            }
-                        </style>
                         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
                         <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
 
@@ -54,11 +241,10 @@
                                 {% endfor %}
                                 window.location.reload();
                             </script>
-                        {% endif %} 
+                        {% endif %}
 
                         <div class="login-form">
-                            
-                
+                            <!-- Sign In Form -->
                             <form method="POST" class="sign-in-htm" action="">
                                 {% csrf_token %}
                                 <div class="group">
@@ -77,54 +263,33 @@
                                     <span id="toggle_password" class="icon pass">
                                         <i id="eye_icon" class="fa fa-eye-slash"></i>
                                     </span>
-                                    <script>
-                                        document.querySelector('#toggle_password').addEventListener('click', function () {
-                                            const passwordField = document.querySelector('#pass');
-                                            const eyeIcon = document.querySelector('#eye_icon');
-                                            if (passwordField.type === 'password') {
-                                                passwordField.type = 'text';
-                                                eyeIcon.classList.remove('fa-eye-slash');
-                                                eyeIcon.classList.add('fa-eye');
-                                            } else {
-                                                passwordField.type = 'password';
-                                                eyeIcon.classList.remove('fa-eye');
-                                                eyeIcon.classList.add('fa-eye-slash');
-                                            }
-                                        });
-                                    </script>
                                 </div>
                                 <div class="group">
                                     <input id="check" type="checkbox" class="check" name="check" checked>
-                                    <label for="check"><span class="icons"></span>  Keep me Signed in</label>
+                                    <label for="check"><span class="icons"></span> Keep me Signed in</label>
                                 </div>
                                 <div class="group">
                                     <input type="submit" class="button" value="Sign In">
                                 </div>
                                 <div class="hr"></div>
                                 <div class="foot-lnk">
-                                <style>
-                                    .foot-lnk{
-                                        text-align:center;
-                                         margin-bottom: -500px;
-                                        color: black;
-                                    }
-                                </style>
                                     <a href="{% url 'forgot_password' %}">Forgot Password?</a>
                                 </div>
                             </form>
+
+                            <!-- Sign Up Form -->
                             <form class="sign-up-htm" method="POST" action="">
-                                 {% csrf_token %}
+                                {% csrf_token %}
                                 <div class="group">
-                                    <label for="user" class="label">Full Name</label>
-                                    <input id="user" type="text" name="get_name" class="input form-control">
+                                    <label for="fullname" class="label">Full Name</label>
+                                    <input id="fullname" type="text" name="get_name" class="input form-control">
                                     <span class="icon">
                                         <i class="fa fa-user"></i>
                                     </span>
                                 </div>
-
                                 <div class="group">
-                                    <label for="user" class="label">Username</label>
-                                    <input id="user" type="text" name="get_username" class="input form-control">
+                                    <label for="newuser" class="label">Username</label>
+                                    <input id="newuser" type="text" name="get_username" class="input form-control">
                                     <span class="icon">
                                         <i class="fa fa-user"></i>
                                     </span>
@@ -137,149 +302,71 @@
                                     </span>
                                 </div>
                                 <div class="group">
-                                    <label for="pass" class="label">Password</label>
-                                    <input id="pass2" type="password" name="get_password" class="input form-control" data-type="password">
-                                    <span  class="icon">
-                                        <i  class="fa fa-lock"></i>
+                                    <label for="newpass" class="label">Password</label>
+                                    <input id="newpass" type="password" name="get_password" class="input form-control" data-type="password">
+                                    <span class="icon">
+                                        <i class="fa fa-lock"></i>
                                     </span>
                                     <span id="toggle_password2" class="icon pass">
-                                        <i id="eye_icon" class="fa fa-eye-slash eye"></i>
+                                        <i id="eye_icon2" class="fa fa-eye-slash"></i>
                                     </span>
-                                    <script>
-                                        document.querySelector('#toggle_password2').addEventListener('click', function () {
-                                            const passwordField = document.querySelector('#pass2');
-                                            const eyeIcon2 = document.querySelector('#eye_icon.eye');
-                                            if (passwordField.type === 'password') {
-                                                passwordField.type = 'text';
-                                                eyeIcon2.classList.remove('fa-eye-slash');
-                                                eyeIcon2.classList.add('fa-eye');
-                                            } else {
-                                                passwordField.type = 'password';
-                                                eyeIcon2.classList.remove('fa-eye');
-                                                eyeIcon2.classList.add('fa-eye-slash');
-                                            }
-                                        });
-                                    </script>
                                 </div>
                                 <div class="group">
-                                    <label for="pass" class="label">Confirm Password</label>
-                                    <input id="pass3" type="password" name="confirm_password" class="input form-control" data-type="password">
+                                    <label for="confirmpass" class="label">Confirm Password</label>
+                                    <input id="confirmpass" type="password" name="confirm_password" class="input form-control" data-type="password">
                                     <span class="icon">
                                         <i class="fa fa-lock"></i>
                                     </span>
                                     <span id="toggle_password3" class="icon pass">
-                                        <i id="eye_icon" class="fa fa-eye-slash eyes"></i>
+                                        <i id="eye_icon3" class="fa fa-eye-slash"></i>
                                     </span>
-                                    <script>
-                                        document.querySelector('#toggle_password3').addEventListener('click', function () {
-                                            const passwordField = document.querySelector('#pass3');
-                                            const eyeIcon3 = document.querySelector('#eye_icon.eyes');
-                                            if (passwordField.type === 'password') {
-                                                passwordField.type = 'text';
-                                                eyeIcon3.classList.remove('fa-eye-slash');
-                                                eyeIcon3.classList.add('fa-eye');
-                                            } else {
-                                                passwordField.type = 'password';
-                                                eyeIcon3.classList.remove('fa-eye');
-                                                eyeIcon3.classList.add('fa-eye-slash');
-                                            }
-                                          });
-                                    </script>
                                 </div>
-                                
                                 <div class="group">
                                     <input type="submit" class="button" value="Sign Up">
                                 </div>
                                 <div class="hr"></div>
                                 <div class="foot-lnk2">
-                                    <style>
-                                        .foot-lnk2{
-                                            text-align:center;
-                                            margin-top: -90px;
-                                            color: black;
-
-                                        }
-                                                
-                                            
-                                    </style>
-                                    <label for="tab-1">Already Member?</a>
+                                    <label for="tab-1">Already Member?</label>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-             </div>
+            </div>
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <style>
-        .loading{
-            background-color: white;
-            height: 100vh;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: visibility .5s, opacity .5s;
-        }    
-        .loading-hidden{
-            visibility: none;
-            opacity: 0;
-        }
-        .spinner-border{
-            margin-left: 20px;
-        }
-    </style>
-
-<div class="loading">
-    <div class="spinner-border text-warning" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-    <div class="spinner-border text-warning" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-    <div class="spinner-border text-warning" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</div>
-
-    
-
-<script>
-    const loading = document.querySelector('.loading');
-    window.addEventListener('load', function () {
-        loading.classList.add('loading-hidden');
-
-        loading.addEventListener('transitionend', function () {
-            loading.classList.remove('loading');
+    <script>
+        // Loading animation
+        const loading = document.querySelector('.loading');
+        window.addEventListener('load', function() {
+            loading.style.opacity = '0';
+            loading.style.visibility = 'hidden';
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+            }, 500);
         });
 
-    });    
+        // Password toggle functionality
+        document.querySelectorAll('[id^="toggle_password"]').forEach((toggle, index) => {
+            toggle.addEventListener('click', function() {
+                const passwordField = document.querySelector(`#${this.id.replace('toggle', 'pass')}`);
+                const eyeIcon = document.querySelector(`#eye_icon${index > 0 ? index+1 : ''}`);
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+                } else {
+                    passwordField.type = 'password';
+                    eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+                }
+            });
+        });
 
-</script>
-
-
-
+        
+    </script>
 
     <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
     <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
-    <script src="{% static 'bootstrap-5.3.2-dist/CAOS.file/CAOS.file.v-1.5/script.js' %}"></script>
 </body>
 </html>

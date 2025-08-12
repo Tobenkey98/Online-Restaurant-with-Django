@@ -1,430 +1,648 @@
 {% load static %}
-{% load humanize %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
-    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css'%}">
-    <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css'%}">
-    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/style.css'%}">
-    <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
-    <link rel="stylesheet" href="{% static 'restaurant.css'%}">
+    <title>Contact Us | Soft Restaurant</title>
+    <link href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fontawesome-free-6.6.0-web/css/all.min.css' %}" rel="stylesheet">
+    <style>
+        /* Custom Variables */
+        :root {
+            --primary: #FFC107;
+            --primary-dark: #FFA000;
+            --dark: #212529;
+            --light: #F8F9FA;
+            --transition: all 0.3s ease;
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .plate {
+            width: 100%;
+            height: 100%;
+            background-color: var(--light);
+            border-radius: 50%;
+            border: 5px solid var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .food {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .circle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #FF6B6B;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        .circle:nth-child(1) {
+            top: 0;
+            left: 30px;
+            animation-delay: 0s;
+        }
+
+        .circle:nth-child(2) {
+            top: 30px;
+            left: 0;
+            animation-delay: 0.2s;
+        }
+
+        .circle:nth-child(3) {
+            top: 30px;
+            right: 0;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            transition: var(--transition);
+            padding: 1rem 0;
+        }
+
+        .navbar.scrolled {
+            background-color: white !important;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 0;
+            color: black !important;
+        }
+        
+
+        .navbar-brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+
+        .nav-link.active {
+            color: var(--primary) !important;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 1rem;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover:after,
+        .nav-link.active:after {
+            width: calc(100% - 2rem);
+        }
+
+        /* Hero Section */
+        .contact-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('{% static "/images/Background_2.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 0 4rem;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-hero h1 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .contact-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .contact-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            height: 100%;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .contact-info p {
+            color: #6c757d;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+        }
+
+        .form-control {
+            height: 50px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+        }
+
+        textarea.form-control {
+            height: auto;
+            min-height: 150px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Map Section */
+        .map-section {
+            padding-bottom: 5rem;
+        }
+
+        .map-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            height: 400px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .footer-logo span {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .footer p {
+            color: #adb5bd;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: #adb5bd;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .contact-hero {
+                padding: 7rem 0 3rem;
+                background-attachment: scroll;
+            }
+            
+            .contact-info {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .contact-hero {
+                padding: 6rem 0 2rem;
+            }
+            
+            .contact-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="bg-box">
-
-        <style>
-            body{
-              background-color: white;
-            }
-            header{
-              background-color: transparent;
-              transition: .5s;
-            }
-            header.active{
-              background-color: white;
-              padding: 10px 20px;
-            }
-            header.active a{
-              color: black !important;
-            }
-            .logoutmodal:hover{
-              background-color: white!important;
-              color: black!important;
-            }
-          </style>
-
-<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered ">
-        <div class="modal-content">
-          <div class="card logoutmodal">
-            <div class="card-body">
-              <h4 class="text-center">Are You sure you want to sign out?</h4>
-                  <div class="text-center">
-                    <a href="/logout" class="btn btn-warning me-5">Yes</a>
-              <a href="/home" class="btn btn-danger ">No</a>
-                  </div>
+    <!-- Loading Animation -->
+    <div class="loading-overlay" id="loading">
+        <div class="loader">
+            <div class="plate">
+                <div class="food">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
             </div>
-          </div>
         </div>
-  
+        <p class="fs-5 mt-3">Preparing your dining experience...</p>
     </div>
-  </div>
 
-
-        <!-- header section -->
-        <header class="fixed-top">
-            <nav class="navbar navbar-expand-lg py-3 px-5">
-                <div class="container-fluid">
-                  <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg'%}" width="50"> Soft Restaurant</a>
-                  <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="fa fa-bars text-light"></span>
-                  </button>
-                  
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                      <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/home">HOME</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="/about">ABOUT</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="/contact">CONTACT</a>
-                      </li>
-                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          MENU
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/home">
+                <img src="{% static 'images/Restaurant_logo.jpg' %}" alt="Soft Restaurant Logo">
+                Soft Restaurant
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link " href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/contact">Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" data-bs-toggle="dropdown">
+                            Menu
                         </a>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="appetizer.html">APPETIZER</a></li>
-                          <li><a class="dropdown-item" href="main.html">MAIN COURSES</a></li>
-                          <li><a class="dropdown-item" href="desserts.html">DESSERTS</a></li>
-                          <li><a class="dropdown-item" href="beverages.html">BEVERAGES</a></li>
+                            <li><a class="dropdown-item" href="appetizer.html">Appetizers</a></li>
+                            <li><a class="dropdown-item" href="main.html">Main Courses</a></li>
+                            <li><a class="dropdown-item" href="desserts.html">Desserts</a></li>
+                            <li><a class="dropdown-item" href="beverages.html">Beverages</a></li>
                         </ul>
-                      </li>
-                    </ul>
-                    <div class="d-flex search text-decoration-none">
-                          {% if user.is_authenticated %}
-                              
-
-                                <a href="{% url 'user_account'%}" class="icon">
-                                <i class="fa fa-user me-3 mt-2"></i></a>
-                          {% else %}
-                                <a href={% url 'login' %} class="icon"><i class="fa fa-user me-3 mt-2"></i> Login</a>
-                          {% endif %}
-                        {% comment %} <a href="/user_account" class="icon"><i class="fa fa-user me-3 mt-2"></i></a> {% endcomment %}
-                        <a href="#" class="icon"><i class="fa fa-cart-shopping me-3 mt-2"></i></a>
-                        <a href="#" class="icon"><i class="fa fa-search me-3 mt-2"></i></a>
-                      <a href="" class="btn btn-outline-warning text-light ms-4"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Sign Out</a>
-
-                     
-
-                    </div>
-                  </div>
-                </div> 
-              </nav>
-        </header>
-         <!-- End of Header Section -->
-          <script>
-              const header = document.querySelector('header')
-
-              window.addEventListener('scroll', ()=>{
-                if(window.scrollY > 40){
-                  header.classList.add('active')
-                }else{
-                  header.classList.remove('active')
-                }
-              })
-          </script>
-          <!-- Slider Section -->
-           <section class="sliding p-4">
-            <div id="carouselExampleIndicators" class="carousel slide mt-4">
-                <ol class="carousel-indicators">
-                  <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></li>
-                  <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></li>
-                  <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></li>
-                </ol>
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="details ms-5">
-                                    <h1 class="word">
-                                        Your No. 1 Online Restaurant
-                                    </h1>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum ullam quo a ex magnam doloremque dignissimos quia repellat! Architecto, perferendis.</p>
-                                    <div class="btn-box">
-                                        <a href="order.html" class="btn1">
-                                            Order Now
-                                        </a>
-                                    </div>
-                                </div>
-                               
-                            </div>
-
-                        
-                                
-        
-                        </div>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="details">
-                                    <h1 class="word">
-                                        Your No. 1 Online Restaurant
-                                    </h1>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis deleniti quia vitae, expedita magnam aliquam quas placeat dolore iure nulla?</p>
-                                    <div class="btn-box">
-                                        <a href="order.html" class="btn1">
-                                            Order Now
-                                        </a>
-                                        
-                                    </div>
-                                </div>
-                               
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="details">
-                                    <h1 class="word">
-                                        Your No. 1 Online Restaurant
-                                    </h1>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis deleniti quia vitae, expedita magnam aliquam quas placeat dolore iure nulla?</p>
-                                    <div class="btn-box">
-                                        <a href="order.html" class="btn1">
-                                            Order Now
-                                        </a>
-                                    </div>
-                                </div>
-                               
-                            </div>
-                        </div>
-                    </div>
-                  </div>
+                    </li>
+                </ul>
+                <div class="d-flex ms-lg-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'user_account' %}" class="btn btn-outline-light me-2">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-light me-2">
+                            <i class="fas fa-user"></i> Login
+                        </a>
+                    {% endif %}
+                    <a href="#" class="btn btn-outline-light">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
                 </div>
-            
-              </div>
-           </section>
-
+            </div>
         </div>
-        
-    </div>
+    </nav>
 
-     <!-- Contact Form -->
-     <section class="contact py-5">
+    <!-- Hero Section -->
+    <section class="contact-hero">
         <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-md-8 text-center">
-                    <h2 class="display-4 fw-bold">Get In Touch</h2>
-                    <p class="lead text-muted">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
-                </div>
+            <h1 class="display-4 fw-bold">Get In Touch</h1>
+            <p>We're here to answer your questions and make your dining experience exceptional. Reach out anytime!</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Information</h2>
             </div>
+            
             <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="contact-info bg-light p-4 rounded-3 h-100">
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="icon-box bg-warning rounded-circle p-3 me-3">
-                                <i class="fas fa-map-marker-alt text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Our Location</h5>
-                                <p class="mb-0 text-muted">5, Main Street, City</p>
-                            </div>
+                <!-- Contact Info Cards -->
+                <div class="col-md-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="icon-box bg-warning rounded-circle p-3 me-3">
-                                <i class="fas fa-clock text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Open Hours</h5>
-                                <p class="mb-0 text-muted">Monday - Saturday<br>09:00 AM - 23:00 PM</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="icon-box bg-warning rounded-circle p-3 me-3">
-                                <i class="fas fa-envelope text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Email Us</h5>
-                                <a href="mailto:holuwartobby96@gmail.com" class="text-muted text-decoration-none">holuwartobby96@gmail.com</a>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box bg-warning rounded-circle p-3 me-3">
-                                <i class="fas fa-phone text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Call Us</h5>
-                                <a href="tel:+2348107014197" class="text-muted text-decoration-none">+2348107014197</a>
-                            </div>
+                        <div class="contact-info">
+                            <h3>Our Location</h3>
+                            <p>123 Gourmet Street<br>Foodie City, FC 10101</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8">
-                    <div class="contact-form bg-white p-4 rounded-3 shadow-sm">
-                        <form action="" method="post" class="needs-validation" novalidate>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" placeholder="Your Name" required>
-                                        <label for="name">Your Name</label>
-                                        <div class="invalid-feedback">Please enter your name</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Your Email" required>
-                                        <label for="email">Your Email</label>
-                                        <div class="invalid-feedback">Please enter a valid email</div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="subject" placeholder="Subject" required>
-                                        <label for="subject">Subject</label>
-                                        <div class="invalid-feedback">Please enter a subject</div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" id="message" placeholder="Your Message" style="height: 150px" required></textarea>
-                                        <label for="message">Your Message</label>
-                                        <div class="invalid-feedback">Please enter your message</div>
-                                    </div>
-                                </div>
-                                <div class="col-12 text-center">
-                                    <button type="submit" class="btn btn-warning btn-lg px-5 py-3 rounded-pill">
-                                        Send Message <i class="fas fa-paper-plane ms-2"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                
+                <div class="col-md-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-info">
+                            <h3>Opening Hours</h3>
+                            <p>
+                                Monday - Friday: 11am - 10pm<br>
+                                Saturday - Sunday: 10am - 11pm
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row mt-5">
-                <div class="col-12">
-                    <div class="map-container rounded-3 overflow-hidden shadow-sm">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30591910525!2d-74.25986432970718!3d40.697149422113014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1647043087964!5m2!1sen!2s" 
-                            width="100%" 
-                            height="450" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy">
-                        </iframe>
+                
+                <div class="col-md-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-info">
+                            <h3>Contact Info</h3>
+                            <p>
+                                <a href="tel:+1234567890" class="text-decoration-none text-muted">(123) 456-7890</a><br>
+                                <a href="mailto:info@softrestaurant.com" class="text-decoration-none text-muted">info@softrestaurant.com</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <style>
-        .contact {
-            background-color: #f8f9fa;
-        }
-        .icon-box {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .form-floating > .form-control:focus ~ label,
-        .form-floating > .form-control:not(:placeholder-shown) ~ label {
-            color: #ffc107;
-        }
-        .form-control:focus {
-            border-color: #ffc107;
-            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
-        }
-        .btn-warning {
-            transition: all 0.3s ease;
-        }
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
-        }
-    </style>
+    <!-- Contact Form Section -->
+    <section class="contact-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="contact-form">
+                        <h2 class="mb-4">Send Us a Message</h2>
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="message" class="form-label">Your Message</label>
+                                <textarea class="form-control" id="message" rows="5" required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    Send Message <i class="fas fa-paper-plane ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2155732918656!2d-73.9878449245256!3d40.75798597138939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1623251234567!5m2!1sen!2sus" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-logo d-flex align-items-center">
+                        <img src="{% static 'images/Restaurant_logo.jpg' %}" alt="Soft Restaurant Logo">
+                        <span>Soft Restaurant</span>
+                    </div>
+                    <p>Delivering exceptional dining experiences with the finest ingredients and impeccable service since 2010.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-yelp"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                            <li><a href="#">Menu</a></li>
+                            <li><a href="#">Reservations</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-links">
+                        <h4>Newsletter</h4>
+                        <p>Subscribe to our newsletter for special offers and updates.</p>
+                        <form class="mt-3">
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Your email" required>
+                                <button class="btn btn-primary" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p class="mb-0">&copy; 2025 Soft Restaurant. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js' %}"></script>
     <script>
-        // Form validation
-        (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingOverlay = document.getElementById('loading');
+                loadingOverlay.style.opacity = '0';
+                setTimeout(function() {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }, 1200);
+        });
     </script>
-
-       <!-- footer -->
-      <footer class="opin">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="opin-image  align-items-center">
-              <img src="{% static 'images/Restaurant_logo.jpg'%}" alt="">
-              <span class="rest">Soft Restaurant</span>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, in quae iste, quod ducimus eos repellendus libero deserunt atque harum omnis molestias saepe, corrupti nobis non quam voluptates ratione pariatur.</p>
-              </div>
-          </div>
-
-          <div class="col-md-4 mt-5 ms-5">
-            <div class="opin-social">
-              <h4 class="follow mb-5 ">Follow Us</h4>
-              <ul class="list-items">
-                <div class="list_1 mb-3">
-                  <li class="list-item list-unstyled">
-                    <a href="#" ><i class="fab fa-facebook-f "></i></a>
-                    <span class="face">Soft Restaurant</span>
-                  </li>
-                </div>
-                <div class="list_2 mb-3">
-                  <li class="list-item list-unstyled">
-                    <a href="#" ><i class="fab fa-x-twitter"></i></a>
-                    <span class="face">Soft Restaurant</span>
-                  </li>
-                </div>
-                <div class="list_3 mb-3">
-                  <li class="list-item list-unstyled">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <span class="face">@soft Restaurant</span>
-                  </li>
-                </div>
-                <div class="list_4 mb-3">
-                  <li class="list-item list-unstyled">
-                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                    <span class="face">@soft Restaurant</span>
-                  </li>
-                </div>
-                
-              </ul>
-
-          </div>
-          
-        </div>
-      </div>
-        </div>
-        
-        
-        <div class="copy text-center p-4">
-        <p>&copy; Copyright Soft Restaurant 2025</p>
-        </div>
-      </footer>
-
-    
-
-
-
-
-
-
-
-
-
-
-    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js'%}"></script>
-    <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js'%}"></script>
-    <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/script.js'%}"></script>
 </body>
 </html>
