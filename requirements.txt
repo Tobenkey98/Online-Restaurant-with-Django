@@ -46,5 +46,6 @@ tzdata==2025.1
 urllib3==2.3.0
 weasyprint==65.1
 webencodings==0.5.1
+whitenoise==6.9.0
 zope.interface==7.2
 zopfli==0.2.3.post1
