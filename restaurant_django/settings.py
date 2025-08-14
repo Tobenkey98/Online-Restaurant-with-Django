@@ -82,20 +82,20 @@ WSGI_APPLICATION = 'restaurant_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
 from dotenv import load_dotenv
 load_dotenv()
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('AIVEN_DB_NAME'),
-        'USER': os.getenv('AIVEN_DB_USER'),
-        'PASSWORD': os.getenv('AIVEN_DB_PASSWORD'),
-        'HOST': os.getenv('AIVEN_DB_HOST'),
-        'PORT': os.getenv('AIVEN_DB_PORT'),
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.mysql'),
+        'NAME': os.getenv('DB_NAME', 'mydbname'),
+        'USER': os.getenv('DB_USER', 'mydbuser'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'mypassword'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),  # always a string
+        'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
-            'ssl': {'ssl-mode': os.getenv('AIVEN_DB_SSL_MODE', 'REQUIRED')},
+            # Optional: SSL mode for cloud DBs, safe to ignore locally
+            'ssl': {'ssl-mode': os.getenv('DB_SSL_MODE', 'REQUIRED')},
         },
     }
 }
