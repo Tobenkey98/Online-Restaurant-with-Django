@@ -47,6 +47,14 @@ INSTALLED_APPS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://soft-restaurant.onrender.com",
+    "http://127.0.0.1:8000"
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
