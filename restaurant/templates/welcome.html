@@ -15,49 +15,42 @@
         
 
     </head>
-     <body>
+     <body style="overflow: hidden;">
+
+      <Style>
+        .details{
+          height: 600px;
+        }
+
+        @media (max-width: 500px){
+          .navbar{
+            padding: 10px 0 !important;
+          }
+          .navbar .navbar-brand img{
+            width: 40px;
+          }
+
+        }
+      </Style>
          <div class="logo_area">
 
-    <div class="bg-box">
+    <div class="bg-box" style="height: 145vh;">
     <!-- header section -->
     <header class="">
         <nav class="navbar navbar-expand-lg py-3 px-5">
             <div class="container-fluid">
-              <a class="navbar-brand" href="#"><img src="{% static 'images/Restaurant_logo.jpg' %}" width="50"> Soft Restaurant</a>
-              <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="fa fa-bars text-light"></span>
+              <a class="navbar-brand text-white" href="#"><img src="{% static 'images/Restaurant_logo.jpg' %}" width="50"> Soft Restaurant</a>
+              <button class="btn btn-outline-warning" type="button">
+                <a href="/login"> <span class="fa fa-arrow-circle-right text-light"></span> </a>
               </button>
               
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html"></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="about.html"></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="contact.html"></a>
-                  </li>
-                  <li class="nav-item dropdown d-none">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      
-                    </a>
-                    <ul class="dropdown-menu d-none">
-                      <li><a class="dropdown-item" href="appetizer.html"></a></li>
-                      <li><a class="dropdown-item" href="main.html"></a></li>
-                      <li><a class="dropdown-item" href="desserts.html"></a></li>
-                      <li><a class="dropdown-item" href="beverages.html"></a></li>
-                    </ul>
-                  </li>
-                </ul>
-                <div class="d-flex search text-decoration-none">
-                    <a href="#" class="icon"><i class=""></i></a>
-                    <a href="#" class="icon"><i class=""></i></a>
-                    <a href="#" class="icon"><i class=""></i></a>
+             
+                
+      
+                <div class="d-none d-md-flex search text-decoration-none">
                   <a href="/login" class="btn btn-outline-warning text-light ms-4" type="submit">Register with us</a>
                 </div>
-              </div>
+              
             </div> 
           </nav>
     </header>
@@ -73,12 +66,12 @@
                       <div class="col-md-7 col-lg-6">
                           <div class="details ms-5">
                               <h1 class="word">
-                                Welcome to Soft Restaurant 🍽️
+                                Welcome to Soft Restaurant 
                               </h1>
-                              <p>🚀 Delicious Meals, Just a Click Away! 🚀
+                              <p>Delicious Meals, Just a Click Away! 
                                 Order your favorite dishes online and enjoy restaurant-quality food from the comfort of your home.
                                 
-                                🛒 Browse Our Menu & Order Now!</p> <br>
+                                 Browse Our Menu & Order Now!</p> <br>
                               <div class="btn-box">
                                   <a href="/login" class="btn1">
                                       Order Now
@@ -100,11 +93,11 @@
                       <div class="col-md-7 col-lg-6">
                           <div class="details">
                               <h1 class="word">
-                                Fresh, Fast & Flavorful! 🍔🍕🥗
+                                Fresh, Fast & Flavorful! 
                               </h1>
-                              <p>🔥 Made with Fresh Ingredients
-                                ⏳ Fast & Reliable Order Processing
-                                💳 Secure & Easy Online Payment
+                              <p>Made with Fresh Ingredients
+                                Fast & Reliable Order Processing
+                               Secure & Easy Online Payment
                                 
                                 📍 Your next meal is just a tap away!</p>
                               <div class="btn-box">

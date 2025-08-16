@@ -204,19 +204,47 @@
         });
 
         // Password toggle functionality
-        document.querySelectorAll('[id^="toggle_password"]').forEach((toggle, index) => {
-            toggle.addEventListener('click', function() {
-                const passwordField = document.querySelector(`#${this.id.replace('toggle', 'pass')}`);
-                const eyeIcon = document.querySelector(`#eye_icon${index > 0 ? index+1 : ''}`);
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-                } else {
-                    passwordField.type = 'password';
-                    eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-                }
-            });
+        document.querySelector('#toggle_password').addEventListener('click', function() {
+            const passwordField = document.getElementById('newpass');
+            const eyeIcon = document.getElementById('eye_icon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
         });
+        document.querySelector('#toggle_password2').addEventListener('click', function() {
+            const passwordField = document.getElementById('newpass');
+            const eyeIcon = document.getElementById('eye_icon2');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        });
+
+        document.querySelector('#toggle_password3').addEventListener('click', function() {
+            const passwordField = document.getElementById('confirmpass');
+            const eyeIcon = document.getElementById('eye_icon3');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        });
+
     </script>
 
     <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>

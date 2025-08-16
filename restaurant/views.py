@@ -150,7 +150,7 @@ def homepage(request):
 def contact_us_page(request):
     return render(request, 'contact_us.html')
 
-
+@login_required(login_url='/login')
 def about_page(request):
     return render(request, 'about_page.html')
 
@@ -562,7 +562,9 @@ def menu_page(request):
         'menu_items': menu_items,
         'categories': categories,
     })
-
+    
+    
+@login_required(login_url='/login')
 def cart_page(request):
     return render(request, 'cart.html', {})
 
