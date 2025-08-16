@@ -8,6 +8,7 @@
     <title>Contact Us | Soft Restaurant</title>
     <link href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'fontawesome-free-6.6.0-web/css/all.min.css' %}" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
     <style>
         /* Custom Variables */
         :root {
@@ -440,13 +441,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-<<<<<<< HEAD
             <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
                 <ul class="navbar-nav mb-2 mb-lg-0">
-=======
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
->>>>>>> 16d553ffb30a72dabcca779d01a4a32cdd053ca6
                     <li class="nav-item">
                         <a class="nav-link " href="/home">Home</a>
                     </li>
@@ -456,26 +452,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/contact">Contact</a>
                     </li>
-<<<<<<< HEAD
                 </ul>
                 <div class="d-flex ms-lg-3">
                     {% comment %} {% if user.is_authenticated %}
-=======
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" data-bs-toggle="dropdown">
-                            Menu
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="appetizer.html">Appetizers</a></li>
-                            <li><a class="dropdown-item" href="main.html">Main Courses</a></li>
-                            <li><a class="dropdown-item" href="desserts.html">Desserts</a></li>
-                            <li><a class="dropdown-item" href="beverages.html">Beverages</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="d-flex ms-lg-3">
-                    {% if user.is_authenticated %}
->>>>>>> 16d553ffb30a72dabcca779d01a4a32cdd053ca6
                         <a href="{% url 'user_account' %}" class="btn btn-outline-light me-2">
                             <i class="fas fa-user"></i>
                         </a>
@@ -486,11 +465,7 @@
                     {% endif %}
                     <a href="#" class="btn btn-outline-light">
                         <i class="fas fa-shopping-cart"></i>
-<<<<<<< HEAD
                     </a> {% endcomment %}
-=======
-                    </a>
->>>>>>> 16d553ffb30a72dabcca779d01a4a32cdd053ca6
                 </div>
             </div>
         </div>

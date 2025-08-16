@@ -10,308 +10,389 @@
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css'%}">
     <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css'%}">
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/style.css'%}">
+    <link rel="icon" href="{% static 'images/Restaurant_logo.jpg' %}">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --accent-color: #eeb31dff;
+            --dark-color: #5a5c69;
+            --light-color: #f8f9fc;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-card {
+            background: linear-gradient(180deg, var(--accent-color) 10%, var(--light-color) 100%);
+        }
+        
+        .profile-card .card-body {
+            padding: 2rem;
+        }
+        
+        .profile-img {
+            border: 5px solid white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);
+        }
+        
+        .btn-edit {
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+        
+        .user-details .card-body {
+            padding: 2rem;
+        }
+        
+        .user-details h4 {
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .user-details hr {
+            border-top: 2px solid var(--primary-color);
+            opacity: 0.2;
+            margin: 1.5rem 0;
+        }
+        
+        .order-history .card-body {
+            padding: 2rem;
+        }
+        
+        .order-history .card-title {
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .order-history h4{
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--secondary-color);
+        }
+        
+        .badge-warning {
+            background-color: var(--accent-color);
+        }
+        
+        .badge-danger {
+            background-color: #e74a3b;
+        }
+        
+        .loading {
+            background-color: white;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: visibility .5s, opacity .5s;
+        }    
+        
+        .loading-hidden {
+            visibility: none;
+            opacity: 0;
+        }
+        
+        .spinner-border {
+            margin-left: 20px;
+            color: var(--accent-color);
+        }
+        
+        @media (max-width: 768px) {
+            .profile-card .card-body {
+                padding: 1.5rem;
+            }
+            
+            .user-details .card-body,
+            .order-history .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container pt-5">
+<body>
+    <div class="container py-5">
         <div class="row">
             <!-- Profile Section -->
-        <div class="col-md-4">
-            <div class="card mb-4 text-center">
-                <div class="card-body">
-                    
-                    <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}/static/default_profile.jpg{% endif %}"
-                        alt="Profile Picture"
-                        class="rounded-circle img-fluid" 
-                        style="width: 150px; height: 150px; object-fit: cover;">
+            <div class="col-lg-4">
+                <div class="card profile-card mb-4">
+                    <div class="card-body text-center">
+                        <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}/static/default_profile.jpg{% endif %}"
+                            alt="Profile Picture"
+                            class="rounded-circle img-fluid profile-img mb-3" 
+                            style="width: 150px; height: 150px; object-fit: cover;">
 
-                    <h5 class="my-3">{{ user_info.name }}</h5>
-                    <p class="text-muted mb-1">@{{ user.username }}</p>
-                    <p class="text-muted mb-4">{{ user_profile.location|default:"Not Provided" }}</p>
-                    <div class="text-center">
-                        <button type="button" class="btn btn-outline-warning text" data-bs-toggle="modal" data-bs-target="#editProfileForm">Edit Profile</button>
-                        
+                        <h4 class="text-black mb-2">{{ user_info.name }}</h4>
+                        <p class="text-black mb-1">@{{ user.username }}</p>
+                        <p class="text-black mb-4">
+                            <i class="fas fa-map-marker-alt me-1"></i> 
+                            {{ user_profile.location|default:"Not Provided" }}
+                        </p>
+                        <button type="button" class="btn btn-edit rounded-pill" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fas fa-edit me-1"></i> Edit Profile
+                        </button>
                     </div>
-
-                    
                 </div>
             </div>
-        </div>
 
-        <!-- User Details & Edit Form -->
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card mb-4">
+            <!-- User Details & Order History -->
+            <div class="col-lg-8">
+                <!-- User Details -->
+                <div class="card user-details mb-4">
                     <div class="card-body">
-                        <h4>User Details</h4>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4><i class="fas fa-user-circle me-2"></i> User Details</h4>
+                        </div>
                         <hr>
-                        <div class="row mb-2">
-                            <div class="col-sm-3"><strong>Full Name</strong></div>
-                            <div class="col-sm-9 text-muted">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 col-md-3 fw-bold text-dark">Full Name</div>
+                            <div class="col-sm-8 col-md-9">
                                 {{ user_info.name|default:"Not Provided" }}
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-3"><strong>Email</strong></div>
-                            <div class="col-sm-9 text-muted">{{ user.email }}</div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 col-md-3 fw-bold text-dark">Email</div>
+                            <div class="col-sm-8 col-md-9">{{ user.email }}</div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-3"><strong>Username</strong></div>
-                            <div class="col-sm-9 text-muted">{{ user.username }}</div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 col-md-3 fw-bold text-dark">Username</div>
+                            <div class="col-sm-8 col-md-9">{{ user.username }}</div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-3"><strong>Phone</strong></div>
-                            <div class="col-sm-9 text-muted">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 col-md-3 fw-bold text-dark">Phone</div>
+                            <div class="col-sm-8 col-md-9">
+                                <i class="fas fa-phone me-1"></i> 
                                 {{ user_profile.phone|default:"Not Provided" }}
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-3"><strong>Address</strong></div>
-                            <div class="col-sm-9 text-muted">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 col-md-3 fw-bold text-dark">Address</div>
+                            <div class="col-sm-8 col-md-9">
+                                <i class="fas fa-home me-1"></i> 
                                 {{ user_profile.address|default:"Not Provided" }}
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-3"><strong>Location</strong></div>
-                            <div class="col-sm-9 text-muted">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-3 fw-bold text-dark">Location</div>
+                            <div class="col-sm-8 col-md-9">
+                                <i class="fas fa-map-marker-alt me-1"></i> 
                                 {{ user_profile.location|default:"Not Provided" }}
                             </div>
                         </div>
                     </div>
-        </div>
+                </div>
 
-
-            <!-- Edit Profile Form -->
-            <div class="modal fade" id="editProfileForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog mt-3 ">
-                    <div class="card mb-4 modal-content">
+                <!-- Order History -->
+                <div class="card order-history">
                     <div class="card-body">
-                        <h5 class="text-center">Update Profile</h5>
-                        <form id="profileForm" action="" method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Phone</label>
-                                <input type="text" name="phone" class="form-control" value="{{ user_profile.phone|default_if_none:'' }}">
-                            </div>
-                        
-                            <div class="mb-3">
-                                <label class="form-label">Address</label>
-                                <input type="text" name="address" class="form-control" value="{{user_profile.address|default_if_none:'' }}">
-                            </div>
-                        
-                            <div class="mb-3">
-                                <label class="form-label">Location</label>
-                                <input type="text" name="location" class="form-control" value="{{ user_profile.location|default_if_none:'' }}">
-                            </div>
-                        
-                            <div class="mb-3">
-                                <label class="form-label">Profile Image</label>
-                                <input type="file" name="profile_image" class="form-control">
-                                
-                            </div>
-                
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-success text-white">Save Changes</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                            
-                        </form>
-                    </div>
-                </div>
-                </div>
-              </div>
-                
-            
-
-            <!-- Order History -->
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Order History</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-dark">
-                                <tr >
-                                    <th>Order ID</th>
-                                    <th>Product</th>
-                                    <th>Date</th>
-                                    <th>Quantity</th>
-                                    <th>Total Price</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in orders %}
-                                <tr>
-                                    <td>#{{ order.id }}</td>
-                                    <td>{{ order.product_name }}</td>
-                                    <td>{{ order.order_date|date:"Y-m-d" }}</td>
-                                    <td>{{ order.quantity }}</td>
-                                    <td>₦{{ order.total_price|floatformat:2 }}</td>
-                                    <td <span class="badge bg-{{ order.status_class }}">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4><i class="fas fa-history me-2"></i> Order History</h4>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Product</th>
+                                        <th>Date</th>
+                                        <th>Quantity</th>
+                                        <th>Total Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.product_name }}</td>
+                                        <td>{{ order.order_date|date:"Y-m-d" }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>₦{{ order.total_price|floatformat:2|intcomma }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ order.status_class }} rounded-pill px-3 py-1">
                                                 {{ order.status }}
                                             </span>
-                                    </td>
-                                    
-
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No orders found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">No orders found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-</div>
 
-
-<style>
-    .loading{
-        background-color: white;
-        height: 100vh;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: visibility .5s, opacity .5s;
-    }    
-    .loading-hidden{
-        visibility: none;
-        opacity: 0;
-    }
-    .spinner-border{
-        margin-left: 20px;
-    }
-</style>
-
-<div class="loading">
-<div class="spinner-border text-warning" role="status">
-    <span class="visually-hidden">Loading...</span>
-</div>
-<div class="spinner-border text-warning" role="status">
-    <span class="visually-hidden">Loading...</span>
-</div>
-<div class="spinner-border text-warning" role="status">
-    <span class="visually-hidden">Loading...</span>
-</div>
-</div>
-
-<script>
-    const loading = document.querySelector('.loading');
-window.addEventListener('load', function () {
-    loading.classList.add('loading-hidden');
-
-    loading.addEventListener('transitionend', function () {
-        loading.classList.remove('loading');
-    });
-
-});    
-
-document.getElementById('profileForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    fetch(window.location.href, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            // Update the profile information on the page
-            const phoneElement = document.querySelector('.text-muted:nth-child(1)');
-            const addressElement = document.querySelector('.text-muted:nth-child(2)');
-            const locationElement = document.querySelector('.text-muted:nth-child(3)');
+    <!-- Bootstrap 5 Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background-color: var(--accent-color);">
+                    <h5 class="modal-title" id="editProfileModalLabel">
+                        <i class="fas fa-user-edit me-2"></i> Update Profile
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ user_profile.phone|default_if_none:'' }}">
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control" value="{{user_profile.address|default_if_none:'' }}">
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" name="location" class="form-control" value="{{ user_profile.location|default_if_none:'' }}">
+                        </div>
+                    
+                        <div class="mb-4">
+                            <label class="form-label">Profile Image</label>
+                            <input type="file" name="profile_image" class="form-control">
+                            <small class="text-muted">Max size: 2MB</small>
+                        </div>
             
-            if (phoneElement) phoneElement.textContent = formData.get('phone') || 'Not Provided';
-            if (addressElement) addressElement.textContent = formData.get('address') || 'Not Provided';
-            if (locationElement) locationElement.textContent = formData.get('location') || 'Not Provided';
-            
-            // Update profile image if changed
-            if (data.profile_image_url) {
-                const profileImage = document.querySelector('.rounded-circle.img-fluid');
-                if (profileImage) {
-                    profileImage.src = data.profile_image_url;
-                }
-            }
-            
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileForm'));
-            if (modal) {
-                modal.hide();
-            }
-            
-            // Show success message and reload page
-            alert(data.message);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-        } else {
-            alert(data.message || 'Error updating profile');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error updating profile. Please try again.');
-    });
-});
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-// Handle cancel button
-document.querySelector('[data-bs-dismiss="modal"]').addEventListener('click', function() {
-    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileForm'));
-    if (modal) {
-        modal.hide();
-    }
-});
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- Loading Screen -->
+    <div class="loading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
 
     <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js'%}"></script>
     <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js'%}"></script>
     <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/script.js'%}"></script>
+    
+    <script>
+        const loading = document.querySelector('.loading');
+        window.addEventListener('load', function () {
+            loading.classList.add('loading-hidden');
+
+            loading.addEventListener('transitionend', function () {
+                loading.classList.remove('loading');
+            });
+        });    
+
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update the profile information on the page
+                    const phoneElement = document.querySelector('.text-muted:nth-child(1)');
+                    const addressElement = document.querySelector('.text-muted:nth-child(2)');
+                    const locationElement = document.querySelector('.text-muted:nth-child(3)');
+                    
+                    if (phoneElement) phoneElement.textContent = formData.get('phone') || 'Not Provided';
+                    if (addressElement) addressElement.textContent = formData.get('address') || 'Not Provided';
+                    if (locationElement) locationElement.textContent = formData.get('location') || 'Not Provided';
+                    
+                    // Update profile image if changed
+                    if (data.profile_image_url) {
+                        const profileImage = document.querySelector('.rounded-circle.img-fluid');
+                        if (profileImage) {
+                            profileImage.src = data.profile_image_url;
+                        }
+                    }
+                    
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+                    
+                    // Show success message and reload page
+                    alert(data.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    alert(data.message || 'Error updating profile');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating profile. Please try again.');
+            });
+        });
+    </script>
 </body>
 </html>
