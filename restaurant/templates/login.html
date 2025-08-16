@@ -9,199 +9,49 @@
         <title>{% block title %} {% endblock title %}</title>
         <link rel="stylesheet" href="{% static 'bootstrap-5.3.2-dist/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'fontawesome-free-6.6.0-web/css/all.css' %}">
-        <link rel="stylesheet" href="{% static 'restaurant.css'%}">
         <link rel="stylesheet" href="{% static 'form.css'%}">
         <style>
-            /* Loading Animation */
-            .loading {
-                background-color: white;
-                height: 100vh;
-                width: 100%;
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 1000;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                transition: opacity 0.5s, visibility 0.5s;
+            .foot-lnk2{
+                margin-top: -100px;
             }
-
-            .loader {
-                width: 150px;
-                height: 150px;
-                position: relative;
-            }
-
-            .plate {
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                background-color: #f8f8f8;
-                border: 5px solid #ffbe33;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                animation: rotate 3s linear infinite;
-            }
-
-            .food {
-                position: relative;
-                width: 60%;
-                height: 60%;
-            }
-
-            .circle {
-                position: absolute;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                background-color: #ffbe33;
-            }
-
-            .circle:nth-child(1) {
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            .circle:nth-child(2) {
-                bottom: 0;
-                left: 20%;
-            }
-
-            .circle:nth-child(3) {
-                bottom: 0;
-                right: 20%;
-            }
-
-            @keyframes rotate {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-
-            .loading p {
-                margin-top: 20px;
-                font-size: 1.2rem;
-                color: #333;
-                font-weight: 500;
-            }
-
-            /* Login Container */
-            .login {
-                background-image: linear-gradient(300deg, rgba(0, 0, 0, 0.785), rgba(0, 0, 0, 0.785)), url('{% static "images/Background_2.jpg" %}');
-                background-size: cover;
-                background-repeat: no-repeat;
-                width: 100%;
-                min-height: 100vh;
-                position: relative;
-                padding: 20px 0;
-            }
-
-            /* Form Container */
-            .login-container {
-                display: flex;
-                align-items: center;
-                min-height: calc(100vh - 40px);
-                
-            }
-
-            .login-image {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .login-image img {
-                max-width: 100%;
-                height: auto;
-                object-fit: contain;
-            }
-
-            .login-form-container {
-                position: relative;
-                z-index: 2;
-            }
-
-            .login-wrap {
-                width: 100%;
-                max-width: 525px;
-                min-height: 650px;
-                position: relative;
-                box-shadow: 0 12px 15px 0 #1d1d1d65, 0 17px 50px 0 #050505c5;
-                margin: 0 auto;
-            }
-
-            .login-html {
-                width: 100%;
-                height: 100%;
-                border-radius: 40px;
-                position: absolute;
-                padding: 90px 70px 50px 70px;
-                background: rgba(247, 245, 244);
-            }
-
-            /* Responsive adjustments */
-            @media (min-width: 992px) {
-                .login-image {
-                    padding-right: 50px;
-                }
-                .login-form-container {
-                    padding-left: 50px;
-                }
-            }
-
+            
+            /* Only responsive adjustments that don't conflict with form.css */
             @media (max-width: 991.98px) {
-                .login-container {
-                    flex-direction: column;
-                }
                 .login-image {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 1;
-                    opacity: 0.2;
+                    display: none !important;
                 }
                 .login-form-container {
-                    width: 100%;
-                    padding: 20px;
-                    z-index: 2;
-                }
-                .login-wrap {
-                    min-height: auto;
-                }
-                .login-html {
-                    padding: 60px 40px;
-                    background: rgba(247, 245, 244, 0.9);
+                    max-width: 100% !important;
+                    padding: 20px !important;
                 }
             }
 
             @media (max-width: 767.98px) {
                 .login-html {
-                    padding: 50px 30px;
-                    border-radius: 30px;
+                    padding: 30px 20px !important;
+                    border-radius: 25px !important;
                 }
-                .container-fluid.mt-2 {
-                    text-align: center;
+                .login-html .tab {
+                    font-size: 18px !important;
                 }
             }
 
             @media (max-width: 575.98px) {
                 .login-html {
-                    padding: 40px 20px;
+                    padding: 25px 15px !important;
                 }
-                .login-html .tab {
-                    font-size: 18px;
+                .group .input {
+                    padding: 12px 40px !important;
+                }
+                .group .button {
+                    padding: 12px 20px !important;
                 }
             }
         </style>
     </head>
     
 <body>
-    <!-- Loading Animation -->
+    <!-- Loading Animation (keep this in HTML since it's unique) -->
     <div class="loading">
         <div class="loader">
             <div class="plate">
@@ -216,119 +66,124 @@
     </div>
 
     <div class="login">
-        <div class="container-fluid mt-2 px-5">
+        <div class="logo-container">
             <img src="{% static 'images/Restaurant_logo.jpg' %}" width="70" style="border-radius: 100%;">
             <span class="soft text-white">Soft Foods</span>
         </div>
 
         <div class="container login-container">
-            <!-- Image Column - Hidden on small screens (shown as background) -->
-            <div class="col-lg-6 login-image d-none d-lg-flex">
-                <img src="{% static 'images/Premium.png' %}" alt="Premium Food" class="img-fluid">
-            </div>
+            <div class="row justify-content-center align-items-center">
+                <!-- Image Column -->
+                <div class="col-lg-6 login-image">
+                    <img src="{% static 'images/Premium.png' %}" alt="Premium Food" class="img-fluid">
+                </div>
 
-            <!-- Form Column -->
-            <div class="col-lg-6 login-form-container">
-                <div class="login-wrap">
-                    <div class="login-html">
-                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
-                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+                <!-- Form Column -->
+                <div class="col-lg-6">
+                    <div class="login-form-container">
+                        <div class="login-wrap">
+                            <div class="login-html">
+                                <!-- Rest of your form HTML remains exactly the same -->
+                                <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+                                <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
 
-                        {% if messages %}
-                            <script>
-                                {% for message in messages %}
-                                    alert("{{ message }}");
-                                {% endfor %}
-                                window.location.reload();
-                            </script>
-                        {% endif %}
+                                {% if messages %}
+                                    <script>
+                                        {% for message in messages %}
+                                            alert("{{ message }}");
+                                        {% endfor %}
+                                        window.location.reload();
+                                    </script>
+                                {% endif %}
 
-                        <div class="login-form">
-                            <!-- Sign In Form -->
-                            <form method="POST" class="sign-in-htm" action="">
-                                {% csrf_token %}
-                                <div class="group">
-                                    <label for="user" class="label">Username</label>
-                                    <input id="user" name="get_username" type="text" class="input" required>
-                                    <span class="icon">
-                                        <i class="fa fa-user"></i>
-                                    </span>
-                                </div>
-                                <div class="group">
-                                    <label for="pass" class="label">Password</label>
-                                    <input id="pass" type="password" name="get_password" class="input" data-type="password" required>
-                                    <span class="icon">
-                                        <i class="fa fa-lock"></i>
-                                    </span>
-                                    <span id="toggle_password" class="icon pass">
-                                        <i id="eye_icon" class="fa fa-eye-slash"></i>
-                                    </span>
-                                </div>
-                                <div class="group">
-                                    <input id="check" type="checkbox" class="check" name="check" checked>
-                                    <label for="check"><span class="icons"></span> Keep me Signed in</label>
-                                </div>
-                                <div class="group">
-                                    <input type="submit" class="button" value="Sign In">
-                                </div>
-                                <div class="hr"></div>
-                                <div class="foot-lnk">
-                                    <a href="{% url 'forgot_password' %}">Forgot Password?</a>
-                                </div>
-                            </form>
+                                <div class="login-form">
+                                    <!-- Sign In Form -->
+                                    <form method="POST" class="sign-in-htm" action="">
+                                        {% csrf_token %}
+                                        <div class="group">
+                                            <label for="user" class="label">Username</label>
+                                            <input id="user" name="get_username" type="text" class="input" required>
+                                            <span class="icon">
+                                                <i class="fa fa-user"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <label for="pass" class="label">Password</label>
+                                            <input id="pass" type="password" name="get_password" class="input" data-type="password" required>
+                                            <span class="icon">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+                                            <span id="toggle_password" class="icon pass">
+                                                <i id="eye_icon" class="fa fa-eye-slash"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <input id="check" type="checkbox" class="check" name="check" checked>
+                                            <label for="check"><span class="icons"></span> Keep me Signed in</label>
+                                        </div>
+                                        <div class="group">
+                                            <input type="submit" class="button" value="Sign In">
+                                        </div>
+                                        <div class="hr"></div>
+                                        <div class="foot-lnk">
+                                            <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+                                        </div>
+                                    </form>
 
-                            <!-- Sign Up Form -->
-                            <form class="sign-up-htm" method="POST" action="">
-                                {% csrf_token %}
-                                <div class="group">
-                                    <label for="fullname" class="label">Full Name</label>
-                                    <input id="fullname" type="text" name="get_name" class="input form-control">
-                                    <span class="icon">
-                                        <i class="fa fa-user"></i>
-                                    </span>
+                                    <!-- Sign Up Form -->
+                                    <form class="sign-up-htm" method="POST" action="">
+                                        {% csrf_token %}
+                                        <div class="group">
+                                            <label for="fullname" class="label">Full Name</label>
+                                            <input id="fullname" type="text" name="get_name" class="input form-control">
+                                            <span class="icon">
+                                                <i class="fa fa-user"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <label for="newuser" class="label">Username</label>
+                                            <input id="newuser" type="text" name="get_username" class="input form-control">
+                                            <span class="icon">
+                                                <i class="fa fa-user"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <label for="email" class="label">Email Address</label>
+                                            <input id="email" type="text" name="get_email" class="input form-control">
+                                            <span class="icon">
+                                                <i class="fa fa-envelope"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <label for="newpass" class="label">Password</label>
+                                            <input id="newpass" type="password" name="get_password" class="input form-control" data-type="password">
+                                            <span class="icon">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+                                            <span id="toggle_password2" class="icon pass">
+                                                <i id="eye_icon2" class="fa fa-eye-slash"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <label for="confirmpass" class="label">Confirm Password</label>
+                                            <input id="confirmpass" type="password" name="confirm_password" class="input form-control" data-type="password">
+                                            <span class="icon">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+                                            <span id="toggle_password3" class="icon pass">
+                                                <i id="eye_icon3" class="fa fa-eye-slash"></i>
+                                            </span>
+                                        </div>
+                                        <div class="group">
+                                            <input type="submit" class="button" value="Sign Up">
+                                        </div>
+                                        <div class="hr"></div>
+                                        <div class="foot-lnk2 text-center">
+                                            <label for="tab-1">Already Member?</label>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="group">
-                                    <label for="newuser" class="label">Username</label>
-                                    <input id="newuser" type="text" name="get_username" class="input form-control">
-                                    <span class="icon">
-                                        <i class="fa fa-user"></i>
-                                    </span>
-                                </div>
-                                <div class="group">
-                                    <label for="email" class="label">Email Address</label>
-                                    <input id="email" type="text" name="get_email" class="input form-control">
-                                    <span class="icon">
-                                        <i class="fa fa-envelope"></i>
-                                    </span>
-                                </div>
-                                <div class="group">
-                                    <label for="newpass" class="label">Password</label>
-                                    <input id="newpass" type="password" name="get_password" class="input form-control" data-type="password">
-                                    <span class="icon">
-                                        <i class="fa fa-lock"></i>
-                                    </span>
-                                    <span id="toggle_password2" class="icon pass">
-                                        <i id="eye_icon2" class="fa fa-eye-slash"></i>
-                                    </span>
-                                </div>
-                                <div class="group">
-                                    <label for="confirmpass" class="label">Confirm Password</label>
-                                    <input id="confirmpass" type="password" name="confirm_password" class="input form-control" data-type="password">
-                                    <span class="icon">
-                                        <i class="fa fa-lock"></i>
-                                    </span>
-                                    <span id="toggle_password3" class="icon pass">
-                                        <i id="eye_icon3" class="fa fa-eye-slash"></i>
-                                    </span>
-                                </div>
-                                <div class="group">
-                                    <input type="submit" class="button" value="Sign Up">
-                                </div>
-                                <div class="hr"></div>
-                                <div class="foot-lnk2">
-                                    <label for="tab-1">Already Member?</label>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -362,8 +217,6 @@
                 }
             });
         });
-
-        
     </script>
 
     <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
