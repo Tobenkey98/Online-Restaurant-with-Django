@@ -107,28 +107,63 @@
             background-color: #e74a3b;
         }
         
+        /* New Modern Loading Animation */
         .loading {
-            background-color: white;
-            height: 100vh;
-            width: 100%;
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 1000;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: visibility .5s, opacity .5s;
-        }    
-        
-        .loading-hidden {
-            visibility: none;
-            opacity: 0;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
         }
-        
-        .spinner-border {
-            margin-left: 20px;
-            color: var(--accent-color);
+
+        .loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner-box {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .circle-border {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #ffbe33;
+            animation: spin 1s linear infinite;
+        }
+
+        .utensils-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffbe33;
+            font-size: 20px;
+        }
+
+        .loading-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            color: #666;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         @media (max-width: 768px) {
@@ -164,6 +199,11 @@
                         <button type="button" class="btn btn-edit rounded-pill" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                             <i class="fas fa-edit me-1"></i> Edit Profile
                         </button>
+                        <div class="mt-3">
+                            <a href="/home" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Home
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -309,17 +349,15 @@
         </div>
     </div>
 
-    <!-- Loading Screen -->
-    <div class="loading">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+    <!-- Loading Animation -->
+    <div class="loading" id="loading">
+        <div class="spinner-box">
+            <div class="circle-border"></div>
+            <div class="utensils-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
         </div>
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+        <div class="loading-text">Preparing your order...</div>
     </div>
 
     <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/js/bootstrap.bundle.js'%}"></script>
@@ -327,14 +365,25 @@
     <script src="{% static 'bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/CAOS.file/CAOS.file.v-1.5/script.js'%}"></script>
     
     <script>
-        const loading = document.querySelector('.loading');
-        window.addEventListener('load', function () {
-            loading.classList.add('loading-hidden');
+        // Loading animation
+        const loading = document.getElementById('loading');
+        
+        function hideLoading() {
+            if (loading && !loading.classList.contains('hidden')) {
+                loading.classList.add('hidden');
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 500);
+            }
+        }
 
-            loading.addEventListener('transitionend', function () {
-                loading.classList.remove('loading');
-            });
-        });    
+        window.addEventListener('load', function () {
+            // Slight delay to ensure smooth transition
+            setTimeout(hideLoading, 500);
+        });
+        
+        // Fallback: Force hide after 5 seconds to prevent endless loading
+        setTimeout(hideLoading, 5000);
 
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();

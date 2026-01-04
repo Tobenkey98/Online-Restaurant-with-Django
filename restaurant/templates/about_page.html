@@ -137,9 +137,77 @@
                     margin-bottom: 30px;
                 }
             }
+        /* New Modern Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner-box {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .circle-border {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #ffbe33;
+            animation: spin 1s linear infinite;
+        }
+
+        .utensils-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffbe33;
+            font-size: 20px;
+        }
+
+        .loading-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            color: #666;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         </style>
     </head>
     <body>
+        <!-- Loading Animation -->
+        <div class="loading" id="loading">
+            <div class="spinner-box">
+                <div class="circle-border"></div>
+                <div class="utensils-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+            </div>
+            <div class="loading-text">Preparing your order...</div>
+        </div>
         <!-- Header Section -->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgba(218, 145, 9, 0.993);">
             <div class="container">
@@ -476,6 +544,22 @@
 
         <script src="{% static 'bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
         <script src="{% static 'fontawesome-free-6.6.0-web/js/all.js' %}"></script>
+        
+        <script>
+            // Loading animation
+            window.addEventListener('load', function() {
+                const loading = document.getElementById('loading');
+                if (loading) {
+                    // Small delay to ensure content is ready
+                    setTimeout(() => {
+                        loading.classList.add('hidden');
+                        setTimeout(() => {
+                            loading.style.display = 'none';
+                        }, 500);
+                    }, 500);
+                }
+            });
+        </script>
         
         <script>
             // Navbar scroll effect

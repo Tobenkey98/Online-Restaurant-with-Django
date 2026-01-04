@@ -54,22 +54,78 @@
                     padding: 12px 20px !important;
                 }
             }
-        </style>
+        /* New Modern Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner-box {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .circle-border {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #ffbe33;
+            animation: spin 1s linear infinite;
+        }
+
+        .utensils-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffbe33;
+            font-size: 20px;
+        }
+
+        .loading-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            color: #666;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     </head>
     
 <body>
     <!-- Loading Animation (keep this in HTML since it's unique) -->
-    <div class="loading">
-        <div class="loader">
-            <div class="plate">
-                <div class="food">
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                </div>
+    <!-- Loading Animation -->
+    <div class="loading" id="loading">
+        <div class="spinner-box">
+            <div class="circle-border"></div>
+            <div class="utensils-icon">
+                <i class="fas fa-utensils"></i>
             </div>
         </div>
-        <p>Preparing your dining experience...</p>
+        <div class="loading-text">Preparing your order...</div>
     </div>
 
     <div class="login">

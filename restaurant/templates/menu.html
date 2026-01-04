@@ -20,76 +20,63 @@
 </head>
 <style>
   /* Loading Animation */
-  .loading-overlay {
+  /* Loading Animation */
+  .loading {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: #ffffff;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
   }
-  
-  .loader {
-      width: 150px;
-      height: 150px;
+
+  .loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+  }
+
+  .spinner-box {
       position: relative;
+      width: 60px;
+      height: 60px;
       margin-bottom: 20px;
   }
-  
-  .plate {
+
+  .circle-border {
       width: 100%;
       height: 100%;
-      background-color: #f8f9fa;
       border-radius: 50%;
-      border: 5px solid #ffbe33;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      border: 3px solid #f0f0f0;
+      border-top: 3px solid #ffbe33;
+      animation: spin 1s linear infinite;
   }
-  
-  .food {
-      position: relative;
-      width: 80px;
-      height: 80px;
-  }
-  
-  .circle {
+
+  .utensils-icon {
       position: absolute;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: #ff6b6b;
-      animation: bounce 1.5s infinite ease-in-out;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffbe33;
+      font-size: 20px;
   }
-  
-  .circle:nth-child(1) {
-      top: 0;
-      left: 30px;
-      animation-delay: 0s;
+
+  .loading-text {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      color: #666;
+      letter-spacing: 0.5px;
+      font-weight: 500;
   }
-  
-  .circle:nth-child(2) {
-      top: 30px;
-      left: 0;
-      animation-delay: 0.2s;
-  }
-  
-  .circle:nth-child(3) {
-      top: 30px;
-      right: 0;
-      animation-delay: 0.4s;
-  }
-  
-  @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+
+  @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
   }
 
   body{
@@ -244,17 +231,15 @@
 <body>
 
     <!-- Loading Animation -->
-    <div class="loading-overlay" id="loading">
-        <div class="loader">
-            <div class="plate">
-                <div class="food">
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                </div>
+    <!-- Loading Animation -->
+    <div class="loading" id="loading">
+        <div class="spinner-box">
+            <div class="circle-border"></div>
+            <div class="utensils-icon">
+                <i class="fas fa-utensils"></i>
             </div>
         </div>
-        <p class="fs-5">Preparing your dining experience...</p>
+        <div class="loading-text">Preparing your order...</div>
     </div>
 
     <header class="sticky-top head">
@@ -350,15 +335,25 @@
     <script src="{% static 'cart_utils.js' %}"></script>
     
     <script>
+    <script>
         // Loading animation
+        function hideLoadingScreen() {
+            const loader = document.getElementById('loading');
+            if (loader && !loader.classList.contains('hidden')) {
+                 loader.classList.add('hidden');
+                 setTimeout(function() {
+                     loader.style.display = 'none';
+                 }, 500);
+            }
+        }
+
+        // Hide when page is fully loaded
         window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loading').style.opacity = '0';
-                setTimeout(function() {
-                    document.getElementById('loading').style.display = 'none';
-                }, 500);
-            }, 1200);
+            setTimeout(hideLoadingScreen, 1200);
         });
+
+        // Fallback: Hide after 5 seconds even if resources are still loading
+        setTimeout(hideLoadingScreen, 5000);
     </script>
     
 </body>
